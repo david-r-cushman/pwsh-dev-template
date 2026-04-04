@@ -23,11 +23,11 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
     && apt-get update \
     && apt-get install gh -y \
-    && pwsh -Command "gh extension install github/gh-copilot --force"
+    # && pwsh -Command "gh extension install github/gh-copilot --force"
 
-# 5. User Experience: Force Predictive IntelliSense & Coloring
-# This creates a global profile that every session will load
-RUN pwsh -Command " \
+    # 5. User Experience: Force Predictive IntelliSense & Coloring
+    # This creates a global profile that every session will load
+    RUN pwsh -Command " \
     \$ProfilePath = \"\$PSHOME/Microsoft.PowerShell_profile.ps1\"; \
     'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8; \
     'Set-PSReadLineOption -PredictionSource History' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \

@@ -20,5 +20,6 @@
             }
         }
     },
-    "remoteUser": "root"
+    "remoteUser": "root",
+    "postCreateCommand": "gh extension install github/gh-copilot --force"
 }
