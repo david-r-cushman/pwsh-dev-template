@@ -3,13 +3,9 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    "mounts": [
-        "source=${localEnv:USERPROFILE}/.copilot,target=/root/.copilot,type=bind"
-    ],
+    // MOUNTS REMOVED: No connection to your Windows host .copilot folder.
     "features": {
-        "ghcr.io/devcontainers/features/github-cli:1": {
-            "installDirectlyFromGitHubRelease": true
-        },
+        // GITHUB-CLI REMOVED: Minimizes potential for identity theft via token storage.
         "ghcr.io/devcontainers/features/common-utils:1": {
             "configureZshAsDefaultShell": false
         }
@@ -20,16 +16,17 @@
                 "ms-vscode.PowerShell",
                 "ms-vscode.editorconfig",
                 "ms-azuretools.vscode-docker",
-                "GitHub.vscode-pull-request-github",
-                "GitHub.copilot-chat",
                 "ms-vscode.azurecli",
                 "ionutvmi.path-autocomplete",
                 "eamodio.gitlens"
+                // GITHUB EXTENSIONS REMOVED: Copilot and Pull Requests purged.
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "pwsh"
             }
         }
     },
+    // Note: Kept as root for now to ensure your existing scripts run,
+    // but the 'isolation' is restored because the host bridge is gone.
     "remoteUser": "root"
 }
