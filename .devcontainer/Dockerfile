@@ -1,12 +1,14 @@
 # 1. Foundation: Pinned LTS version
 FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
 
-# 2. System Tools (Clean and minimal)
-RUN apt-get update && apt-get install -y \
+# 2. System Tools & Modern Node.js v24 (LTS)
+RUN apt-get update && apt-get install -y curl ca-certificates gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y \
     git \
-    curl \
     nodejs \
-    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Cloud Identity: Azure CLI
