@@ -21,13 +21,11 @@ RUN pwsh -Command " \
 # This creates a global profile that every session will load
 RUN pwsh -Command " \
     \$ProfilePath = '/opt/microsoft/powershell/7/Microsoft.PowerShell_profile.ps1'; \
-    \$ProfileContent = @' \
-    Import-Module PSReadLine; \
-    Set-PSReadLineOption -PredictionSource History; \
-    Set-PSReadLineOption -PredictionViewStyle ListView; \
-    Set-PSReadLineOption -Colors @{ InlinePrediction = \"#888888\" }; \
-    Write-Host '--- PowerShell 7.6.0 Engineering Lab Loaded ---' -ForegroundColor Cyan; \
-    '@; \
+    \$ProfileContent = 'Import-Module PSReadLine`n' + \
+    'Set-PSReadLineOption -PredictionSource History`n' + \
+    'Set-PSReadLineOption -PredictionViewStyle ListView`n' + \
+    'Set-PSReadLineOption -Colors @{ InlinePrediction = \"#888888\" }`n' + \
+    'Write-Host \"--- PowerShell 7.6.0 Engineering Lab Loaded ---\" -ForegroundColor Cyan'; \
     Set-Content -Path \$ProfilePath -Value \$ProfileContent -Force; \
     "
 
