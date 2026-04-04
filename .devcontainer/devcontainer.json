@@ -1,0 +1,19 @@
+{
+    "name": "PowerShell Infrastructure Lab",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.PowerShell",
+                "ionutvmi.path-autocomplete",
+                "eamodio.gitlens"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "pwsh"
+            }
+        }
+    },
+    "remoteUser": "root"
+}
