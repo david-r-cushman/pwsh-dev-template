@@ -3,6 +3,14 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {
+            "installDirectlyFromGitHubRelease": true
+        },
+        "ghcr.io/devcontainers/features/common-utils:1": {
+            "configureZshAsDefaultShell": false
+        }
+    },
     "customizations": {
         "vscode": {
             "extensions": [
