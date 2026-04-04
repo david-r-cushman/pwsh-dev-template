@@ -8,6 +8,7 @@
             "extensions": [
                 "ms-vscode.PowerShell",
                 "ms-vscode.editorconfig",
+                "ms-azuretools.vscode-docker",
                 "GitHub.vscode-pull-request-github",
                 "GitHub.copilot",
                 "GitHub.copilot-chat",

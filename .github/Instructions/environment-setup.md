@@ -28,6 +28,7 @@ Before opening this project, ensure your host machine (Windows) is configured as
     * `ms-vscode-remote.remote-containers`
     * `ms-vscode.powershell`
     * `ms-vscode.editorconfig`
+    * `ms-azuretools.vscode-docker`
 
 ---
 
