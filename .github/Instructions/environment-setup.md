@@ -15,6 +15,7 @@ By moving the development engine into a Linux-based container, we ensure absolut
 * **Editor:** VS Code with Dev Containers extension.
 * **Governance:** `.editorconfig` (LF line endings) and `PSScriptAnalyzer`.
 * **Assistance:** GitHub Copilot configured via `.github/copilot-instructions.md`.
+* **Tooling:** Azure CLI, GitHub CLI (`gh`), and GitHub Copilot CLI extension.
 
 ---
 
