@@ -1,5 +1,5 @@
 # Use the official Microsoft PowerShell image as a base
-FROM mcr.microsoft.com/powershell:lts-ubuntu-22.04
+FROM mcr.microsoft.com/powershell:7.6.0-ubuntu-22.04
 
 # Install any system-level dependencies (like git for your GitOps work)
 RUN apt-get update && apt-get install -y \
