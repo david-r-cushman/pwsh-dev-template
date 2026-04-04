@@ -21,8 +21,7 @@ RUN pwsh -Command " \
     Install-Module -Name 'Pester', 'PSScriptAnalyzer', 'PSReadLine' -Force -AllowClobber -Scope AllUsers; \
     "
 
-# 5. User Experience & Copilot Function
-# This bakes the "copilot" command directly into the PowerShell profile.
+# 5. User Experience: PowerShell Profile
 RUN pwsh -Command " \
     \$ProfilePath = \"\$PSHOME/Microsoft.PowerShell_profile.ps1\"; \
     'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8; \
