@@ -20,13 +20,12 @@ RUN pwsh -Command " \
 # 5. User Experience: Force Predictive IntelliSense & Coloring
 # This creates a global profile that every session will load
 RUN pwsh -Command " \
-    \$ProfilePath = '/opt/microsoft/powershell/7/Microsoft.PowerShell_profile.ps1'; \
-    \$ProfileContent = 'Import-Module PSReadLine`n' + \
-    'Set-PSReadLineOption -PredictionSource History`n' + \
-    'Set-PSReadLineOption -PredictionViewStyle ListView`n' + \
-    'Set-PSReadLineOption -Colors @{ InlinePrediction = \"#888888\" }`n' + \
-    'Write-Host \"--- PowerShell 7.6.0 Engineering Lab Loaded ---\" -ForegroundColor Cyan'; \
-    Set-Content -Path \$ProfilePath -Value \$ProfileContent -Force; \
+    \$ProfilePath = \"\$PSHOME/Microsoft.PowerShell_profile.ps1\"; \
+    'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8; \
+    'Set-PSReadLineOption -PredictionSource History' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
+    'Set-PSReadLineOption -PredictionViewStyle ListView' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
+    'Set-PSReadLineOption -Colors @{ InlinePrediction = \"#888888\" }' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
+    'Write-Host \"--- PowerShell 7.6.0 Engineering Lab Loaded ---\" -ForegroundColor Cyan' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     "
 
 # 6. Workspace
