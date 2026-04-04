@@ -1,4 +1,4 @@
-# Environment Setup: PowerShell 7.6.0 Engineering Lab
+# Environment Setup: PowerShell 7.4.x Engineering Lab
 
 ## Overview
 
@@ -10,18 +10,17 @@ By moving the development engine into a Linux-based container, we ensure absolut
 
 ## Technical Stack
 
-* **Base Engine:** PowerShell 7.6.0 (LTS) on Ubuntu 22.04.
+* **Base Engine:** PowerShell 7.4.x (LTS) on Ubuntu 22.04.
 * **Isolation:** Docker Desktop via WSL 2 backend.
 * **Editor:** VS Code with Dev Containers extension.
 * **Governance:** `.editorconfig` (LF line endings) and `PSScriptAnalyzer`.
-* **Assistance:** GitHub Copilot configured via `.github/copilot-instructions.md`.
-* **Tooling:** Azure CLI, GitHub CLI (`gh`), and GitHub Copilot CLI extension.
+* **Tooling:** Azure CLI, Pester, and PSScriptAnalyzer.
 
 ---
 
 ## Prerequisites
 
-Before opening this project, ensure your host machine (Windows) is configured as follows:
+Before opening this project, ensure your host machine (Windows 11) is configured as follows:
 
 1. **WSL 2:** Installed and updated (`wsl --update`).
 2. **Docker Desktop:** Configured to use the WSL 2 engine.
@@ -30,7 +29,6 @@ Before opening this project, ensure your host machine (Windows) is configured as
     * `ms-vscode.powershell`
     * `ms-vscode.editorconfig`
     * `ms-azuretools.vscode-docker`
-    * `GitHub.copilot-chat`
 
 ---
 
@@ -48,7 +46,7 @@ When you open this folder in VS Code, you will see a prompt: **"Folder contains 
 The environment includes a global PowerShell profile located at `/opt/microsoft/powershell/7/Microsoft.PowerShell_profile.ps1`. Upon launch, this profile:
 
 * Enables **Predictive IntelliSense** (History-based).
-* Sets the terminal to **ListView** mode (F2 to toggle).
+* Sets the terminal to **ListView** mode.
 * Standardizes terminal colors for a professional engineering experience.
 
 ---
@@ -57,7 +55,7 @@ The environment includes a global PowerShell profile located at `/opt/microsoft/
 
 * **Environment Determinism:** We use **Pinned Versions** in the `Dockerfile` to prevent configuration drift over time.
 * **LF Line Endings:** All files are strictly **LF** (Line Feed) to ensure cross-platform compatibility between the Windows host and the Linux container.
-* **Security Isolation:** All Cloud CLI operations (Azure/Graph) are executed within the container's isolated context, protecting the host's primary identity.
+* **Security Isolation:** All Cloud CLI operations (Azure/Graph) are executed within the container's isolated context, protecting the host's primary identity and preventing credential leakage to the host OS.
 
 ---
 
@@ -76,6 +74,6 @@ This repository is built on a **"Zero Margin for Error"** philosophy—a standar
 
 ## Troubleshooting
 
-* **Module Not Found:** If a pre-installed module is missing, run `F1 > Dev Containers: Rebuild Container` to force a clean layer refresh.
+* **Module Not Found:** If a pre-installed module is missing, run `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh.
 * **Line Ending Errors:** If Git reports CRLF issues, verify your local `git config core.autocrlf` is set to `input` or `false`.
 * **Identity Issues:** If Azure CLI commands fail, run `az login` within the container terminal to re-authenticate the session.
