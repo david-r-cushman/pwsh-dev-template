@@ -1,5 +1,6 @@
 # 1. Foundation: Pinned LTS version
-FROM mcr.microsoft.com/powershell:7.6.0-ubuntu-22.04
+FROM mcr.microsoft.com/powershell:lts-ubuntu-22.04
+# FROM mcr.microsoft.com/powershell:7.6.0-ubuntu-22.04
 
 # 2. System Tools
 RUN apt-get update && apt-get install -y \
