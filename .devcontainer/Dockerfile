@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y curl ca-certificates gnupg \
     && apt-get update && apt-get install -y \
     git \
     nodejs \
+    && npm install -g @github/copilot \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Cloud Identity: Azure CLI
