@@ -43,7 +43,7 @@ GitHub Copilot must always:
 
 ## 2. PowerShell Version and Compatibility
 
-- Default target is PowerShell 7+ unless the repository explicitly requires Windows PowerShell 5.1 compatibility.
+- Default target is PowerShell 7.6.0 (LTS). Do not use features deprecated in 7.4+ or experimental features unless requested.
 - Do not use commands, syntax, or .NET APIs that break the repository’s supported PowerShell versions.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
 - If compatibility tradeoffs are necessary, explain them in comments or review feedback.
@@ -261,6 +261,7 @@ GitHub Copilot must always:
 - Do not vertically align assignment operators.
 - Prefer single quotes unless interpolation is required.
 - Place comments above the line they describe, not at the end of the line.
+- Always use LF (Line Feed) for end-of-line characters to ensure compatibility with the repository's Linux-based Dev Container.
 
 ---
 
