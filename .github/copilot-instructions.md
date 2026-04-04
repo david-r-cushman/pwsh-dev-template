@@ -43,7 +43,7 @@ GitHub Copilot must always:
 
 ## 2. PowerShell Version and Compatibility
 
-- Default target is PowerShell 7.6.0 (LTS). Do not use features deprecated in 7.4+ or experimental features unless requested.
+- Default target is PowerShell 7.4.7 (LTS). Do not use features deprecated in 7.4+ or experimental features unless requested.
 - Do not use commands, syntax, or .NET APIs that break the repository’s supported PowerShell versions.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
 - If compatibility tradeoffs are necessary, explain them in comments or review feedback.
