@@ -17,20 +17,20 @@ RUN pwsh -Command " \
     Install-Module -Name 'Pester', 'PSScriptAnalyzer', 'PSReadLine' -Force -AllowClobber -Scope AllUsers; \
     "
 
-# 4b. Install GitHub CLI & Copilot Extension
+# 4b. Install GitHub CLI & Bake-in Copilot Extension
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
     && apt-get update \
-    && apt-get install gh -y
+    && apt-get install gh git -y \
+    && mkdir -p /root/.local/share/gh/extensions/gh-copilot \
+    && git clone https://github.com/github/gh-copilot /root/.local/share/gh/extensions/gh-copilot
 
-# 5. User Experience: Force Predictive IntelliSense & Coloring
-# This creates a global profile that every session will load
+# 5. User Experience & Copilot Alias
 RUN pwsh -Command " \
     \$ProfilePath = \"\$PSHOME/Microsoft.PowerShell_profile.ps1\"; \
     'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8; \
     'Set-PSReadLineOption -PredictionSource History' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
-    'Set-PSReadLineOption -PredictionViewStyle ListView' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     'function copilot { gh copilot \$args }' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     'Write-Host \"--- PowerShell 7.4.x Engineering Lab Loaded ---\" -ForegroundColor Cyan' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     "

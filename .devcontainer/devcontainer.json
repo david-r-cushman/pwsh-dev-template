@@ -20,6 +20,5 @@
             }
         }
     },
-    "remoteUser": "root",
-    "postCreateCommand": "gh extension list | grep -q 'gh-copilot' || gh extension install github/gh-copilot --force"
+    "remoteUser": "root"
 }
