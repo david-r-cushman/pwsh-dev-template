@@ -29,6 +29,7 @@ Before opening this project, ensure your host machine (Windows) is configured as
     * `ms-vscode.powershell`
     * `ms-vscode.editorconfig`
     * `ms-azuretools.vscode-docker`
+    * `GitHub.copilot-chat`
 
 ---
 

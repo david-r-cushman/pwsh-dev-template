@@ -10,7 +10,6 @@
                 "ms-vscode.editorconfig",
                 "ms-azuretools.vscode-docker",
                 "GitHub.vscode-pull-request-github",
-                "GitHub.copilot",
                 "GitHub.copilot-chat",
                 "ms-vscode.azurecli",
                 "ionutvmi.path-autocomplete",
