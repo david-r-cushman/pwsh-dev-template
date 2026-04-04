@@ -3,11 +3,9 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    // Addition starts here
     "mounts": [
-        "source=${localEnv:HOME}/.config/github-copilot,target=/root/.config/github-copilot,type=bind"
+        "source=${localEnv:USERPROFILE}/.copilot,target=/root/.copilot,type=bind"
     ],
-    // Addition ends here
     "features": {
         "ghcr.io/devcontainers/features/github-cli:1": {
             "installDirectlyFromGitHubRelease": true
