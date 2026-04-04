@@ -7,6 +7,10 @@
         "vscode": {
             "extensions": [
                 "ms-vscode.PowerShell",
+                "GitHub.vscode-pull-request-github",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-vscode.azurecli",
                 "ionutvmi.path-autocomplete",
                 "eamodio.gitlens"
             ],
