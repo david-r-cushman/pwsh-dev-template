@@ -20,11 +20,14 @@ RUN pwsh -Command " \
 
 # 5. User Experience: PowerShell Profile
 RUN pwsh -Command " \
-    $ProfilePath = \"$PSHOME/Microsoft.PowerShell_profile.ps1\"; \
-    'Import-Module PSReadLine' | Out-File -FilePath $ProfilePath -Encoding utf8; \
-    'Set-PSReadLineOption -PredictionSource History' | Out-File -FilePath $ProfilePath -Append -Encoding utf8; \
-    'Set-PSReadLineOption -PredictionViewStyle ListView' | Out-File -FilePath $ProfilePath -Append -Encoding utf8; \
-    'Write-Host \"--- PowerShell 7.4.x Engineering Lab Loaded ---\" -ForegroundColor Cyan' | Out-File -FilePath $ProfilePath -Append -Encoding utf8; \
+    \$ProfilePath = '/opt/microsoft/powershell/7/Microsoft.PowerShell_profile.ps1'; \
+    \$profileContent = @' \
+    Import-Module PSReadLine \
+    Set-PSReadLineOption -PredictionSource History \
+    Set-PSReadLineOption -PredictionViewStyle ListView \
+    Write-Host '--- PowerShell 7.4.x Engineering Lab Loaded ---' -ForegroundColor Cyan \
+    '@; \
+    \$profileContent | Out-File -FilePath \$ProfilePath -Encoding utf8 -Force; \
     "
 
 # 6. Workspace
