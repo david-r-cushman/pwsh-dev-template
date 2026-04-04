@@ -31,7 +31,7 @@ RUN pwsh -Command " \
     'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8; \
     'Set-PSReadLineOption -PredictionSource History' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     'Set-PSReadLineOption -PredictionViewStyle ListView' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
-    'Set-PSReadLineOption -Colors @{ InlinePrediction = \"#888888\" }' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
+    'function copilot { gh copilot \$args }' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     'Write-Host \"--- PowerShell 7.4.x Engineering Lab Loaded ---\" -ForegroundColor Cyan' | Out-File -FilePath \$ProfilePath -Append -Encoding utf8; \
     "
 
