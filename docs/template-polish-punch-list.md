@@ -207,7 +207,66 @@ To:
 - Do not use `Write-Host` in project code unless there is a documented exception for interactive environment/bootstrap messaging.
 ```
 
-## 10. Tighten the Security Tone
+## 10. Reconcile Internal Contradictions in `copilot-instructions.md`
+
+### Issue
+
+The `copilot-instructions.md` file is generally strong, but some rules are internally inconsistent or more absolute than the later guidance supports.
+
+The most important example is `SupportsShouldProcess`:
+
+- one section states that every advanced function must include `[CmdletBinding(SupportsShouldProcess = $true)]`
+- a later section correctly says that read-only functions should not claim `SupportsShouldProcess` unless they change state
+
+Those two rules conflict and should be reconciled.
+
+### Recommended Change
+
+Revise the guidance so it says:
+
+```md
+- All PowerShell functions should be advanced functions.
+- State-changing functions must include `[CmdletBinding(SupportsShouldProcess = $true)]`.
+- Read-only functions should use `CmdletBinding()` without `SupportsShouldProcess`.
+```
+
+Then review the file for other absolute rules that should be conditional instead.
+
+## 11. Trim `copilot-instructions.md` Toward Practical Governance
+
+### Issue
+
+The file contains a lot of strong material, but parts of it read more like a full engineering standards manual than a practical Copilot governance file. That can make the guidance harder to maintain and less likely to be followed consistently.
+
+### Recommended Change
+
+During review, decide which instructions are:
+
+- core Copilot constraints that should always remain
+- preferred repository conventions
+- longer-form human engineering guidance that may belong in separate documentation instead
+
+The goal is to keep the Copilot instructions specific, enforceable, and easy to maintain.
+
+## 12. Review Module-Centric Assumptions in `copilot-instructions.md`
+
+### Issue
+
+Some of the file strongly assumes a module-oriented repository structure. That may be appropriate, but it should be confirmed against the template's intended scope.
+
+If some downstream repositories will be script-focused rather than module-focused, parts of the guidance may be too rigid.
+
+### Recommended Change
+
+Review whether the template is intended primarily for:
+
+- PowerShell module development
+- general PowerShell project development
+- both, with conditional guidance
+
+Then adjust instructions around manifests, exports, and repository structure so they align with that actual scope.
+
+## 13. Tighten the Security Tone
 
 ### Issue
 
@@ -231,5 +290,7 @@ This keeps the security intent while sounding more precise and credible.
 3. Fix README wording around isolation and bind mounts.
 4. Fix `devcontainer.json` comments about GitHub extensions and auth storage.
 5. Scope the `Write-Host` rule in `.github/copilot-instructions.md`.
-6. Add the host-vs-container trust boundary explanation.
-7. Add sections describing what generated repositories are expected to contain.
+6. Reconcile contradictions and overly absolute rules in `.github/copilot-instructions.md`.
+7. Review whether `.github/copilot-instructions.md` is too module-centric for the template's intended scope.
+8. Add the host-vs-container trust boundary explanation.
+9. Add sections describing what generated repositories are expected to contain.
