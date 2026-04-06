@@ -3,6 +3,9 @@
         "siblings_only": true
     },
     "MD013": {
-        "line_length": 120
+        "line_length": 300,
+        "code_blocks": false,
+        "tables": false,
+        "headings": false
     }
 }
