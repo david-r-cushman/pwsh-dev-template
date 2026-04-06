@@ -1,296 +1,121 @@
 # Template Polish Punch List
 
-This document captures a prioritized set of wording and documentation improvements to help this repository present a clearer, more polished template story.
+This document tracks the main polish and alignment work identified during review of this repository as a GitHub template for PowerShell development.
 
-The goal is not to change the template's purpose. The goal is to make the repository's stated intent, security boundary, and level of determinism line up cleanly with what the files actually implement.
+Several items from the original review have now been completed. This file has been updated to reflect the current state of the repository and to leave a smaller set of focused follow-up items.
 
-## 1. Clarify That This Repo Is a Template
+## Completed In Recent Passes
 
-### Issue
+The following areas have already been addressed:
 
-The README reads partly like a finished engineering environment and partly like a reusable baseline, but it does not quickly explain that this repo is intended to be used as a GitHub template for new PowerShell projects.
+- The README now clearly frames the repository as a GitHub template rather than a finished PowerShell project.
+- The README now uses more precise wording around determinism, isolation intent, and host-vs-container trust boundaries.
+- The README now explains what the template does not include and what downstream repositories are expected to add.
+- `devcontainer.json` now has clearer comments explaining why GitHub-authenticated extensions are excluded from the container environment.
+- `devcontainer.json` now documents the current `remoteUser: "root"` tradeoff.
+- `.github/copilot-instructions.md` has been rewritten into a more practical governance document.
+- The Copilot guidance now scopes `Write-Host` appropriately and no longer treats bootstrap UX the same as authored project code.
+- The Copilot guidance no longer contains the previous `SupportsShouldProcess` contradiction.
+- The Copilot guidance is now less rigidly module-only and better fits a general PowerShell project template.
 
-### Recommended Change
+## Remaining Review Items
 
-Add a short section near the top of the README:
+## 1. Decide Whether To Enforce Stronger Container Isolation In Configuration
 
-```md
-This repository is a GitHub template that provides a baseline development environment for new PowerShell projects.
+### Current State
 
-It is intended to give new repositories a consistent starting point for:
-- PowerShell 7.4 development
-- containerized local tooling
-- formatting and linting standards
-- Pester-based testing structure
-- secure-by-default development habits
+The README now describes isolation more carefully, but the repository still relies mostly on intent and documented boundary choices rather than explicit enforcement of a stronger isolation model.
 
-Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
-```
+### Follow-Up Question
 
-## 2. Soften the Version-Pinning Claim
+Decide whether the current design is sufficient, or whether the template should explicitly enforce stricter separation such as:
 
-### Issue
+- a custom workspace mount strategy
+- a non-root container user
+- additional restrictions around mounted host content
 
-The README currently suggests that versions are pinned in the Dockerfile, but the implementation only clearly pins the base image. Azure CLI and installed PowerShell modules are not version-pinned.
+### Recommendation
 
-### Recommended Change
+If stricter isolation is a core design requirement, implement it in configuration and then document it precisely. If not, keep the current wording modest and accurate.
 
-Replace the current deterministic-build wording with something more precise:
+## 2. Decide Whether Tool Versions Should Be Further Pinned
 
-```md
-* **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift.
-* **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned.
-```
+### Current State
 
-## 3. Reword the Bind-Mount / Isolation Claim
+The README now accurately distinguishes between the pinned base runtime and the not-fully-pinned tooling baseline.
 
-### Issue
+### Follow-Up Question
 
-The README currently makes a very strong "No Host Bind-Mounts" claim. That statement is stronger than what the visible configuration clearly proves.
+Decide whether the template should remain flexible or whether it should pin more of the installed toolchain, especially:
 
-### Recommended Change
+- Azure CLI installation behavior
+- PowerShell module versions installed in the Dockerfile
 
-If the configuration does not explicitly enforce that model, use wording like this instead:
+### Recommendation
 
-```md
-* **Isolation Strategy:** The container is intended to minimize exposure of host credentials and host-resident developer tooling inside the development environment.
-    * **Credential Separation:** GitHub Copilot and similar authenticated extensions are intentionally excluded from the container environment.
-    * **Ephemeral Cloud Identity:** Cloud authentication is expected to occur inside the container session when needed.
-```
+If reproducibility is one of the main selling points of the template, consider pinning additional tools and modules. If convenience matters more, keep the current implementation and wording aligned.
 
-If "no bind mounts" is a hard requirement, then the configuration should explicitly prove it.
+## 3. Review Whether Additional Human-Facing Engineering Standards Belong Outside Copilot Instructions
 
-## 4. Explain the Host-vs-Container Extension Boundary
+### Current State
 
-### Issue
+`.github/copilot-instructions.md` has been simplified to focus on practical Copilot behavior. That is an improvement, but it also means broader human engineering conventions may now live only implicitly in the repository.
 
-The repo has a deliberate split between host workspace convenience and container isolation, but the README does not explain that boundary clearly enough.
+### Follow-Up Question
 
-### Recommended Change
+Decide whether you want a separate human-facing standards document for things such as:
 
-Add a section like this:
+- repository conventions
+- review expectations
+- PowerShell engineering philosophy
+- testing and documentation norms
 
-```md
-## Editor vs Container Trust Boundary
+### Recommendation
 
-This template distinguishes between the host editor experience and the in-container development environment.
+Only add a separate standards document if you want to preserve those conventions for human collaborators. Keep Copilot instructions focused on actionable AI guidance.
 
-VS Code on the host may use convenience extensions such as GitHub Copilot or pull request tooling. The development container intentionally excludes those extensions and their authentication state so that code executed inside the container does not gain access to sensitive host credentials or cached tokens.
-```
+## 4. Re-Read The README With A "Stranger To The Repo" Lens
 
-## 5. Add a "What This Template Does Not Include" Section
+### Current State
 
-### Issue
+The README is much more aligned than before, but it should still be read again as if by someone encountering the repository for the first time.
 
-A reviewer may see empty `src` and `Tests` folders and assume the repo is incomplete instead of intentionally clean.
+### Follow-Up Question
 
-### Recommended Change
+Check whether a new reader can quickly answer:
 
-Add a short section like this:
+- what this repo is
+- what it gives a new project
+- what is intentionally excluded
+- what security boundary the container is trying to preserve
+- what is expected to happen in downstream repos
 
-```md
-## What This Template Does Not Include
+### Recommendation
 
-This template does not ship with project-specific module code, public functions, private helpers, or Pester test implementations.
+If any of those answers still require inference, tighten the wording further.
 
-Those are expected to be added in repositories created from this template. The goal is to provide a clean baseline without placeholder business logic that downstream projects must remove.
-```
+## 5. Review The Dockerfile Comments For Tone And Precision
 
-## 6. Add a "Generated Repo Expectations" Section
+### Current State
 
-### Issue
+The Dockerfile still contains a mix of practical build steps and commentary from earlier decision-making.
 
-The template structure is present, but the intended downstream shape is not described directly enough.
+### Follow-Up Question
 
-### Recommended Change
+Check whether the comments in `.devcontainer/Dockerfile` still reflect current intent cleanly, especially around:
 
-Add a section like this:
+- the security story
+- user experience choices
+- tool installation rationale
 
-```md
-## Expected Contents of Repositories Created From This Template
+### Recommendation
 
-Repositories created from this template are expected to add:
-- PowerShell source files under `src`
-- Pester tests under `Tests`
-- project-specific documentation under `docs`
-- optional module manifest and build/validation automation as needed
+Keep comments that explain why a choice exists. Remove or revise comments that reflect old iterations rather than the current design.
 
-This template provides the environment, conventions, and structure. Downstream repositories provide the implementation.
-```
+## Suggested Next Order
 
-## 7. Fix Comment Wording in `devcontainer.json`
-
-### Issue
-
-The current comments about GitHub extensions being removed are broad enough to suggest they were removed from the repo generally, when the actual intent is to exclude them from the container environment.
-
-### Recommended Change
-
-Replace:
-
-```jsonc
-// GITHUB EXTENSIONS REMOVED: Copilot and Pull Requests purged.
-```
-
-With:
-
-```jsonc
-// GitHub-authenticated extensions are intentionally excluded from the container.
-// They may still be available on the host workspace, but not inside this isolated environment.
-```
-
-Also replace:
-
-```jsonc
-// MOUNTS REMOVED: No connection to your Windows host .copilot folder.
-```
-
-With:
-
-```jsonc
-// No Copilot authentication storage is mounted into the container.
-// This helps keep host-resident credentials out of the in-container environment.
-```
-
-## 8. Explain the `remoteUser: "root"` Tradeoff
-
-### Issue
-
-The container currently runs as `root`. That may be an intentional compatibility choice, but without context it weakens the "hardened" story.
-
-### Recommended Change
-
-Use a comment like this:
-
-```jsonc
-// The container currently runs as root for compatibility with existing tooling and scripts.
-// If stricter least-privilege behavior becomes a priority, this should be revisited.
-```
-
-## 9. Scope the `Write-Host` Rule in `copilot-instructions.md`
-
-### Issue
-
-The repo guidance currently reads as though `Write-Host` is forbidden everywhere, but the actual intent is narrower: it should be avoided in authored project code, while environment/bootstrap messaging may still be acceptable.
-
-### Recommended Change
-
-Add a scope note near the top of the instructions:
-
-```md
-These instructions apply to authored PowerShell project code, tests, and automation created in repositories that use this template.
-
-They do not necessarily apply to container bootstrap behavior, editor configuration, or environment initialization messages where limited user-facing console output may be intentional.
-```
-
-Then update the rule wording from:
-
-```md
-- avoid `Write-Host`
-```
-
-To:
-
-```md
-- avoid `Write-Host` in authored project code; prefer pipeline output, `Write-Verbose`, `Write-Information`, or structured objects as appropriate
-```
-
-And update the stronger prohibition from:
-
-```md
-- Never use `Write-Host`.
-```
-
-To:
-
-```md
-- Do not use `Write-Host` in project code unless there is a documented exception for interactive environment/bootstrap messaging.
-```
-
-## 10. Reconcile Internal Contradictions in `copilot-instructions.md`
-
-### Issue
-
-The `copilot-instructions.md` file is generally strong, but some rules are internally inconsistent or more absolute than the later guidance supports.
-
-The most important example is `SupportsShouldProcess`:
-
-- one section states that every advanced function must include `[CmdletBinding(SupportsShouldProcess = $true)]`
-- a later section correctly says that read-only functions should not claim `SupportsShouldProcess` unless they change state
-
-Those two rules conflict and should be reconciled.
-
-### Recommended Change
-
-Revise the guidance so it says:
-
-```md
-- All PowerShell functions should be advanced functions.
-- State-changing functions must include `[CmdletBinding(SupportsShouldProcess = $true)]`.
-- Read-only functions should use `CmdletBinding()` without `SupportsShouldProcess`.
-```
-
-Then review the file for other absolute rules that should be conditional instead.
-
-## 11. Trim `copilot-instructions.md` Toward Practical Governance
-
-### Issue
-
-The file contains a lot of strong material, but parts of it read more like a full engineering standards manual than a practical Copilot governance file. That can make the guidance harder to maintain and less likely to be followed consistently.
-
-### Recommended Change
-
-During review, decide which instructions are:
-
-- core Copilot constraints that should always remain
-- preferred repository conventions
-- longer-form human engineering guidance that may belong in separate documentation instead
-
-The goal is to keep the Copilot instructions specific, enforceable, and easy to maintain.
-
-## 12. Review Module-Centric Assumptions in `copilot-instructions.md`
-
-### Issue
-
-Some of the file strongly assumes a module-oriented repository structure. That may be appropriate, but it should be confirmed against the template's intended scope.
-
-If some downstream repositories will be script-focused rather than module-focused, parts of the guidance may be too rigid.
-
-### Recommended Change
-
-Review whether the template is intended primarily for:
-
-- PowerShell module development
-- general PowerShell project development
-- both, with conditional guidance
-
-Then adjust instructions around manifests, exports, and repository structure so they align with that actual scope.
-
-## 13. Tighten the Security Tone
-
-### Issue
-
-Phrases such as "strictly governed" and "zero-footprint" may sound stronger than the current implementation clearly proves.
-
-### Recommended Change
-
-Prefer language like:
-
-- "designed to reduce credential exposure"
-- "intended to isolate development tooling from the host"
-- "minimizes sensitive host integration"
-- "container-first baseline for safer local PowerShell development"
-
-This keeps the security intent while sounding more precise and credible.
-
-## Recommended Order
-
-1. Fix README framing so the repository is clearly understood as a GitHub template.
-2. Fix README wording around version pinning and determinism.
-3. Fix README wording around isolation and bind mounts.
-4. Fix `devcontainer.json` comments about GitHub extensions and auth storage.
-5. Scope the `Write-Host` rule in `.github/copilot-instructions.md`.
-6. Reconcile contradictions and overly absolute rules in `.github/copilot-instructions.md`.
-7. Review whether `.github/copilot-instructions.md` is too module-centric for the template's intended scope.
-8. Add the host-vs-container trust boundary explanation.
-9. Add sections describing what generated repositories are expected to contain.
+1. Re-read the README from a first-time reader's perspective.
+2. Review `.devcontainer/Dockerfile` comments and tone.
+3. Decide whether stronger isolation should be implemented in configuration.
+4. Decide whether more tool and module versions should be pinned.
+5. Decide whether broader human engineering standards deserve their own document outside Copilot instructions.
