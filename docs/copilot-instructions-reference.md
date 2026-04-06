@@ -1,4 +1,4 @@
-# Adding Additional GitHub Copilot Instruction Files
+# GitHub Copilot Instructions Reference
 
 This file is a quick reference for maintaining GitHub Copilot instructions in this repository.
 
