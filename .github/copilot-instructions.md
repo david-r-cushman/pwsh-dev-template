@@ -108,7 +108,8 @@ GitHub Copilot should:
 
 ## Formatting And Style
 
-- Use 4 spaces for indentation.
+- Use 4 spaces for indentation in PowerShell files.
+- Follow repository formatting rules for other file types such as JSON, YAML, and Markdown.
 - Keep opening braces on the same line as the statement.
 - Prefer single quotes unless interpolation is required.
 - Place comments above the line they describe, not at end of line.
