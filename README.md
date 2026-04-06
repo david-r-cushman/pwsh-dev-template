@@ -15,7 +15,7 @@ This lab is built on a "Gold Image" philosophy, ensuring absolute environmental 
 * **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04.
 * **Virtualization:** Docker Desktop via WSL 2 backend.
 * **Isolation Strategy:** * **No Host Bind-Mounts:** Prevents "portal" leakage of Windows host credentials (SSH keys, browser cookies) into the container.
-    * **Non-Persistent Identity:** Designed for ephemeral authentication via Azure CLI (`az login`).
+* **Non-Persistent Identity:** Designed for ephemeral authentication via Azure CLI (`az login`).
 * **Governance:** Integrated `PSScriptAnalyzer` for linting and `EditorConfig` for cross-platform formatting (LF line endings).
 
 ---
@@ -25,6 +25,7 @@ This lab is built on a "Gold Image" philosophy, ensuring absolute environmental 
 ### 1. Automated Tooling Injection
 
 The `Dockerfile` automatically provisions a professional engineering toolkit:
+
 * **Pester:** For Unit and Integration testing.
 * **PSScriptAnalyzer:** To enforce community best practices and security rules.
 * **Azure CLI:** Pre-installed for cloud resource management.
@@ -33,6 +34,7 @@ The `Dockerfile` automatically provisions a professional engineering toolkit:
 ### 2. Tailored Developer Experience
 
 The environment injects a specialized PowerShell profile that activates:
+
 * **Predictive IntelliSense:** Leveraging local command history.
 * **ListView Completion:** High-visibility menu navigation (F2 toggle).
 * **Visual Feedback:** Cyan-coded environment verification upon successful container load.
