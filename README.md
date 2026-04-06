@@ -1,69 +1,94 @@
-# PowerShell 7.4 LTS: Hardened Engineering Lab
+# PowerShell 7.4 LTS Template: Container-First Engineering Lab
 
-## 🛡️ The Mission: "Zero-Footprint" Security
+This repository is a GitHub template that provides a baseline development environment for new PowerShell projects.
 
-In an era of increasing supply chain threats—such as the **March 2026 Axios RAT** incident—local development environments are often the weakest link. This repository provides a **Hardened Infrastructure Lab** designed to isolate the development process from the host operating system.
+It is intended to give new repositories a consistent starting point for:
 
-By utilizing **Docker Dev Containers**, this environment ensures that third-party module execution, cloud CLI operations, and script testing occur within a strictly governed, ephemeral Linux sandbox.
+- PowerShell 7.4 development
+- containerized local tooling
+- formatting and linting standards
+- Pester-based testing structure
+- secure-by-default development habits
 
----
+Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
 
-## 🏗️ Architecture & Stack
+## Mission
 
-This lab is built on a "Gold Image" philosophy, ensuring absolute environmental parity across any machine with Docker and VS Code.
+Local development environments are often the weakest link in an automation workflow. This template provides a container-first PowerShell development baseline intended to reduce credential exposure, improve environmental consistency, and give new repositories a clean place to start.
 
-* **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04.
-* **Virtualization:** Docker Desktop via WSL 2 backend.
-* **Isolation Strategy:** * **No Host Bind-Mounts:** Prevents "portal" leakage of Windows host credentials (SSH keys, browser cookies) into the container.
-* **Non-Persistent Identity:** Designed for ephemeral authentication via Azure CLI (`az login`).
-* **Governance:** Integrated `PSScriptAnalyzer` for linting and `EditorConfig` for cross-platform formatting (LF line endings).
+By using Docker Dev Containers, third-party module execution, cloud CLI operations, and script testing can be performed inside a Linux-based development environment instead of directly on the host operating system.
 
----
+## Architecture And Stack
 
-## 🚀 Key Features
+- **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
+- **Virtualization:** Docker Desktop via WSL 2 backend
+- **Isolation Strategy:** The container is intended to minimize exposure of host credentials and host-resident developer tooling inside the development environment
+- **Credential Separation:** GitHub Copilot and similar authenticated extensions are intentionally excluded from the container environment
+- **Ephemeral Cloud Identity:** Cloud authentication is expected to occur inside the container session when needed by using commands such as `az login`
+- **Governance:** Integrated `PSScriptAnalyzer`, `EditorConfig`, and Markdown linting support
 
-### 1. Automated Tooling Injection
+## Key Features
 
-The `Dockerfile` automatically provisions a professional engineering toolkit:
+### Automated Tooling Injection
 
-* **Pester:** For Unit and Integration testing.
-* **PSScriptAnalyzer:** To enforce community best practices and security rules.
-* **Azure CLI:** Pre-installed for cloud resource management.
-* **PSReadLine:** Configured for a high-performance terminal experience.
+The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 
-### 2. Tailored Developer Experience
+- **Pester:** For unit and integration testing
+- **PSScriptAnalyzer:** To enforce PowerShell best practices and security rules
+- **Azure CLI:** Pre-installed for cloud resource management
+- **PSReadLine:** Configured for a more efficient terminal experience
 
-The environment injects a specialized PowerShell profile that activates:
+### Tailored Developer Experience
 
-* **Predictive IntelliSense:** Leveraging local command history.
-* **ListView Completion:** High-visibility menu navigation (F2 toggle).
-* **Visual Feedback:** Cyan-coded environment verification upon successful container load.
+The environment injects a specialized PowerShell profile that enables:
 
----
+- **Predictive IntelliSense:** Leveraging local command history
+- **ListView Completion:** High-visibility completion menus
+- **Visual Feedback:** A clear startup message confirming the container environment has loaded
 
-## 🛠️ Prerequisites & Setup
+## Editor Vs Container Trust Boundary
 
-1. **Host OS:** Windows 11 with WSL 2 enabled.
-2. **Tools:** Docker Desktop and VS Code with the **Dev Containers** extension.
-3. **Launch:** Open the folder in VS Code and select **"Reopen in Container"** when prompted.
+This template distinguishes between the host editor experience and the in-container development environment.
 
----
+VS Code on the host may use convenience extensions such as GitHub Copilot or pull request tooling. The development container intentionally excludes those extensions and their authentication state so that code executed inside the container does not gain access to sensitive host credentials or cached tokens.
 
-## 📜 The Engineering Philosophy
+## What This Template Does Not Include
+
+This template does not ship with project-specific module code, public functions, private helpers, or Pester test implementations.
+
+Those are expected to be added in repositories created from this template. The goal is to provide a clean baseline without placeholder business logic that downstream projects must remove.
+
+## Expected Contents Of Repositories Created From This Template
+
+Repositories created from this template are expected to add:
+
+- PowerShell source files under `src`
+- Pester tests under `Tests`
+- project-specific documentation under `docs`
+- optional module manifest and build or validation automation as needed
+
+This template provides the environment, conventions, and structure. Downstream repositories provide the implementation.
+
+## Prerequisites And Setup
+
+1. **Host OS:** Windows 11 with WSL 2 enabled
+2. **Tools:** Docker Desktop and VS Code with the **Dev Containers** extension
+3. **Launch:** Open the folder in VS Code and select **Reopen in Container** when prompted
+
+## Engineering Philosophy
 
 > *"Zero Margin for Error"*
 
-This lab carries over a decade of high-stakes operational experience into the world of Infrastructure as Code (IaC).
+This template carries over a high-consequence operational mindset into Infrastructure as Code and automation work.
 
-* **Deterministic Builds:** We use pinned versions in the `Dockerfile` to eliminate "it works on my machine" variability.
-* **Process Integrity:** Code is not just logic; it is a service. We use strict linting (`PSScriptAnalyzer`) and comprehensive testing (`Pester`) to ensure that every script performs exactly as promised.
-* **Respect for the State:** Any function that changes a system's state must support `-WhatIf` and `-Confirm` parameters, treating production systems with the same care as a high-consequence physical environment.
-* **Clean Room Development:** Development tools should not pollute the host system, and the host system should not bias development.
+- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
+- **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
+- **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
+- **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
+- **Clean Development Boundary:** Development tools should not unnecessarily expose host credentials or host-resident auth state to code running in the container
 
----
+## Troubleshooting
 
-## 🔍 Troubleshooting
-
-* **Rebuilding:** For a clean state, use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh.
-* **Line Ending Errors:** Verify your local `git config core.autocrlf` is set to `input` or `false`.
-* **Identity Issues:** Run `az login` inside the container terminal to authenticate your cloud session; credentials remain scoped to the container instance.
+- **Rebuilding:** Use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh
+- **Line Ending Errors:** Verify your local `git config core.autocrlf` is set to `input` or `false`
+- **Identity Issues:** Run `az login` inside the container terminal to authenticate your cloud session for that environment

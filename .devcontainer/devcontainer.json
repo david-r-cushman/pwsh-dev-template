@@ -8,6 +8,8 @@
             "configureZshAsDefaultShell": false
         }
     },
+    // GitHub-authenticated extensions are intentionally excluded from the container.
+    // They may still be available on the host workspace, but not inside this environment.
     "customizations": {
         "vscode": {
             "extensions": [
@@ -25,5 +27,7 @@
             }
         }
     },
+    // The container currently runs as root for compatibility with existing tooling and scripts.
+    // If stricter least-privilege behavior becomes a priority, this should be revisited.
     "remoteUser": "root"
 }

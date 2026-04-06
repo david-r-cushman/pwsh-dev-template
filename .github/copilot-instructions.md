@@ -3,6 +3,10 @@
 This repository follows strict PowerShell engineering standards.
 GitHub Copilot must follow these rules when generating code, tests, documentation, refactoring suggestions, or pull request review comments.
 
+These instructions apply to authored PowerShell project code, tests, and automation created in repositories that use this template.
+
+They do not necessarily apply to container bootstrap behavior, editor configuration, or environment initialization messages where limited user-facing console output may be intentional.
+
 These instructions apply to:
 
 - inline code suggestions
@@ -22,7 +26,7 @@ GitHub Copilot must always:
 - use approved PowerShell verbs
 - include `param()` blocks
 - support `ShouldProcess` for state-changing functions
-- avoid `Write-Host`
+- avoid `Write-Host` in authored project code
 - return structured objects
 - generate Pester tests for new public functions
 - avoid live external service calls in tests
@@ -53,7 +57,7 @@ GitHub Copilot must always:
 ## 3. Function Design Standards
 
 - All PowerShell functions must be advanced functions.
-- Every advanced function must include `[CmdletBinding(SupportsShouldProcess = $true)]`.
+- State-changing functions must include `[CmdletBinding(SupportsShouldProcess = $true)]`.
 - All state-changing functions must support `-WhatIf` and `-Confirm`.
 - Read-only functions may still use `CmdletBinding()`, but must not claim `SupportsShouldProcess` unless they perform state changes.
 - All functions must include a `param()` block, even when no parameters are currently required.
@@ -138,7 +142,7 @@ GitHub Copilot must always:
 
 - Functions must return structured objects, preferably `[PSCustomObject]` or well-defined typed objects.
 - Do not return formatted text intended for humans as the primary output.
-- Do not use `Write-Host`.
+- Do not use `Write-Host` in authored project code unless there is a documented exception for interactive environment or bootstrap messaging.
 - Output object property names must use PascalCase.
 - Output shape must be stable and consistent across success paths.
 - Document output using `[OutputType()]` where practical.
@@ -174,7 +178,7 @@ GitHub Copilot must always:
 
 ## 11. Security Standards
 
-- Never use `Write-Host`.
+- Do not use `Write-Host` in project code unless there is a documented exception for interactive environment or bootstrap messaging.
 - Never log secrets or tokens.
 - Never hardcode credentials, secrets, tenant IDs, or environment-specific sensitive values.
 - Avoid plaintext secret handling.
@@ -235,15 +239,15 @@ GitHub Copilot must always:
 
 ## 15. Module and Repository Structure
 
-- Source code must reside in `/src`.
-- Tests must reside in `/tests`.
-- Documentation must reside in `/docs`.
-- Example scripts must reside in `/examples`.
-- Public functions must be exported explicitly in the module manifest.
+- Repository-created source code should normally reside in `/src`.
+- Tests should normally reside in `/Tests`.
+- Documentation should normally reside in `/docs`.
+- Example scripts, if included, should reside in `/examples`.
+- Module-oriented repositories should export public functions explicitly in the module manifest.
 - Private functions must not be exported.
 - Private helper functions should reside in a dedicated private location such as `/Private`.
-- Keep module manifest files current.
-- Do not place executable business logic in the module root.
+- Keep module manifest files current when the repository is module-based.
+- Do not place executable business logic in the repository root.
 
 ---
 
@@ -332,7 +336,7 @@ Suppress analyzer rules only when there is a documented, repository-approved jus
 - include parameter validation
 - honor `ShouldProcess` for state-changing functions
 - return structured output
-- avoid `Write-Host`
+- avoid `Write-Host` in authored project code
 - generate Pester tests alongside new public functions
 - prefer mockable helper functions for external dependencies
 - avoid introducing undocumented dependencies
@@ -356,7 +360,7 @@ Suppress analyzer rules only when there is a documented, repository-approved jus
 
 Copilot must not generate the following unless explicitly requested and justified:
 
-- `Write-Host`
+- `Write-Host` in authored project code, except for documented interactive environment or bootstrap messaging
 - global mutable state
 - live Graph calls in tests
 - `Invoke-Expression`
