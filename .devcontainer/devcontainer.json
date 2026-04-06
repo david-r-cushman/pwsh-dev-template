@@ -1,5 +1,5 @@
 {
-    "name": "PowerShell Infrastructure Lab",
+    "name": "PowerShell 7.4 Template",
     "build": {
         "dockerfile": "Dockerfile"
     },
