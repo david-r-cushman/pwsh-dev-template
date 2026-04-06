@@ -3,9 +3,7 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    // MOUNTS REMOVED: No connection to your Windows host .copilot folder.
     "features": {
-        // GITHUB-CLI REMOVED: Minimizes potential for identity theft via token storage.
         "ghcr.io/devcontainers/features/common-utils:1": {
             "configureZshAsDefaultShell": false
         }
@@ -27,7 +25,5 @@
             }
         }
     },
-    // Note: Kept as root for now to ensure your existing scripts run,
-    // but the 'isolation' is restored because the host bridge is gone.
     "remoteUser": "root"
 }
