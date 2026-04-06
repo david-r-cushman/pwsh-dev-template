@@ -14,6 +14,8 @@ It is intended to give new repositories a consistent starting point for:
 
 Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
 
+The template is designed to support both script-based and module-oriented PowerShell Core projects, with built-in structure for testing through Pester.
+
 ## Mission
 
 This template gives new PowerShell repositories a ready-to-use development baseline that can be used locally, in a Dev Container, or in GitHub Codespaces.
