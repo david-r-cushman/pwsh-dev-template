@@ -1,56 +1,56 @@
-# Providing Instructions To GitHup Copilot
+# Adding Additional GitHub Copilot Instruction Files
 
-## .github/Copilot-Instructions.md
+This file is a quick reference for maintaining GitHub Copilot instructions in this repository.
 
-- .github/Copilot-Instructions.md is automatically loaded
-- This file is global, always-on instructions for the entire repo
+## Repository-Wide Instructions
 
-Copilot loads it:
+`/.github/copilot-instructions.md` is the repository-wide instruction file.
 
-- for every suggestion
-- for every PR review
-- for everything you type
-- for every context
+Use it for guidance that should apply broadly across the repository, such as:
 
-## .github/Instructions
+- PowerShell coding expectations
+- testing expectations
+- review expectations
+- security and safety defaults
 
-- optional
-- domain specific
-- loaded when relevant
-- blended with global instructions
+## Additional Instruction Files
 
-Copilot discovers them automatically based on:
+The `/.github/Instructions/` folder can be used for narrower instruction files when you want Copilot guidance that is more specific than the repository-wide defaults.
 
-- file names
-- folder names
-- content
-- language
-- context
+These files are useful for topic-specific or context-specific guidance, such as:
 
-## Don't
+- Pester-specific conventions
+- module-structure guidance
+- documentation conventions
+- workflow-specific expectations
 
-Don't reference these files from Copilot-Instructions.md thinking that this will guide Copilot's actions, because it just doesn't work like that
+## When To Add Another Instruction File
 
-## Do
+Add another file in this folder when:
 
-Do reference these files from Copilot-Instructions.md when you want humans to understand your repo's governance structure
+- the guidance is too narrow to belong in `copilot-instructions.md`
+- the guidance applies only to a certain kind of work
+- keeping it separate will make the main instruction file easier to maintain
 
-Example:
+Do not create extra files just to restate the same rules in different places.
 
-``` Markdown
-## Additional Domain Instructions
-This file defines global rules. Domain-specific rules live in:
+## Suggested Naming
 
-- .github/instructions/powershell.instructions.md
-- .github/instructions/pester.instructions.md
-- .github/instructions/module-structure.instructions.md
-```
+Use descriptive names that make the file's purpose obvious.
 
-## Example Instrucionts folder contents
+Examples:
 
-- .github/instructions/powershell.instructions.md
-- .github/instructions/pester.instructions.md
-- .github/instructions/module-structure.instructions.md
-- .github/instructions/governance.instructions.md
-- .github/instructions/identity-governance.instructions.md
-- .github/instructions/automation-first.instructions.md
+- `pester.instructions.md`
+- `module-structure.instructions.md`
+- `documentation.instructions.md`
+- `governance.instructions.md`
+
+## Maintenance Notes
+
+- Keep repository-wide rules in `copilot-instructions.md`.
+- Use files in `/.github/Instructions/` only when the narrower scope is helpful.
+- If a helper file stops being useful, remove it instead of letting it drift.
+
+## Reference
+
+For the current GitHub behavior and supported instruction patterns, review the official GitHub Docs page on adding repository custom instructions for GitHub Copilot.
