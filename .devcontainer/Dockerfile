@@ -26,7 +26,7 @@ RUN pwsh -Command " \
     'Import-Module PSReadLine' | Out-File -FilePath \$ProfilePath -Encoding utf8 -Force; \
     'Set-PSReadLineOption -PredictionSource History' | Add-Content -Path \$ProfilePath; \
     'Set-PSReadLineOption -PredictionViewStyle ListView' | Add-Content -Path \$ProfilePath; \
-    'Write-Host \"--- PowerShell 7.4.x Engineering Lab Loaded ---\" -ForegroundColor Cyan' | Add-Content -Path \$ProfilePath; \
+    'Write-Host \"--- PowerShell 7.4 Template Environment Loaded ---\" -ForegroundColor Cyan' | Add-Content -Path \$ProfilePath; \
     "
 
 # Default workspace root used by the dev container.
