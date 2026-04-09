@@ -98,6 +98,12 @@ This template carries over a high-consequence operational mindset into Infrastru
 - **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
 - **Clean Development Boundary:** Development tools should not unnecessarily expose host credentials or host-resident auth state to code running in the container
 
+That same philosophy also shapes how AI assistance is used in this template and in repositories created from it.
+
+AI is treated as a drafting accelerator, not as a substitute for engineering ownership. Constraints, review standards, safety checks, and final accountability remain human responsibilities.
+
+For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md).
+
 ## Troubleshooting
 
 - **Rebuilding:** Use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh
