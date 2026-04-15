@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - Dev
+
+permissions:
+  contents: read
+
+jobs:
+  repo-checks:
+    name: Repo checks (pwsh)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PowerShell modules
+        shell: pwsh
+        run: |
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-Null
+          Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+          Install-Module Pester -Scope CurrentUser -Force -MinimumVersion 5.0.0
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+
+      - name: Run repo checks
+        shell: pwsh
+        run: |
+          ./scripts/Invoke-RepoChecks.ps1 -Verbose -OutputPath ./artifacts
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: artifacts/TestResults.xml
+          if-no-files-found: ignore

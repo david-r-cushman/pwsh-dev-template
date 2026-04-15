@@ -105,6 +105,9 @@ Available templates include:
 - `/templates/patterns/retry-pattern-template.ps1`
 - `/templates/tests/read-only-function-tests-template.ps1`
 - `/templates/tests/state-changing-function-tests-template.ps1`
+- `/templates/module/ModuleName/ModuleName.psd1`
+- `/templates/module/ModuleName/ModuleName.psm1`
+- `/templates/scripts/advanced-script-template.ps1`
 
 Expectations:
 - Prefer aligning new functions and tests to the closest matching template rather than inventing a new structure.

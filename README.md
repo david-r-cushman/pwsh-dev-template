@@ -82,7 +82,7 @@ This template provides the environment, conventions, and structure. Downstream r
 
 This repository includes approved templates under `templates/` for common PowerShell development patterns.
 
-Use these as starting points for new authored code and tests:
+Use these as starting points for new authored code, tests, scripts, and modules:
 
 - `templates/functions/read-only-function-template.ps1`
 - `templates/functions/state-changing-function-template.ps1`
@@ -90,7 +90,16 @@ Use these as starting points for new authored code and tests:
 - `templates/tests/read-only-function-tests-template.ps1`
 - `templates/tests/state-changing-function-tests-template.ps1`
 
+See `templates/README.md` for the full template index (including module and script scaffolds).
+
 For AI-assisted development, these templates are referenced by `/.github/copilot-instructions.md`.
+
+## Validation And CI
+
+- Local checks entrypoint: `scripts/Invoke-RepoChecks.ps1`
+- Analyzer settings: `PSScriptAnalyzerSettings.psd1`
+- Pester settings: `PesterConfiguration.psd1`
+- GitHub Actions workflow: `.github/workflows/ci.yml`
 
 ## Prerequisites And Setup
 
