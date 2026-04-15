@@ -78,6 +78,20 @@ Repositories created from this template are expected to add:
 
 This template provides the environment, conventions, and structure. Downstream repositories provide the implementation.
 
+## Repository Templates
+
+This repository includes approved templates under `templates/` for common PowerShell development patterns.
+
+Use these as starting points for new authored code and tests:
+
+- `templates/functions/read-only-function-template.ps1`
+- `templates/functions/state-changing-function-template.ps1`
+- `templates/patterns/retry-pattern-template.ps1`
+- `templates/tests/read-only-function-tests-template.ps1`
+- `templates/tests/state-changing-function-tests-template.ps1`
+
+For AI-assisted development, these templates are referenced by `/.github/copilot-instructions.md`.
+
 ## Prerequisites And Setup
 
 1. **Host OS:** Windows 11 with WSL 2 enabled
