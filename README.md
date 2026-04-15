@@ -132,3 +132,10 @@ For the deeper operating model behind that approach, see [`docs/powershell-ai-op
 - **Rebuilding:** Use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh
 - **Line Ending Errors:** Verify your local `git config core.autocrlf` is set to `input` or `false`
 - **Identity Issues:** Run `az login` inside the container terminal to authenticate your cloud session for that environment
+
+## Template Versioning
+
+This repository versions the template itself using Semantic Versioning.
+
+- Current version: see `VERSION`
+- Version history: see `CHANGELOG.md`
