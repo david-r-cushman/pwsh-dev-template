@@ -72,7 +72,7 @@ It does include optional scaffolding for both script-first and module-first proj
 Repositories created from this template are expected to add:
 
 - PowerShell source files under `src`
-- Pester tests under `Tests`
+- Pester tests under `tests`
 - project-specific documentation under `docs`
 - optional module manifest and build or validation automation as needed
 

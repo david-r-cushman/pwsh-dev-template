@@ -2,7 +2,7 @@
 
 This folder contains approved starting-point templates for common PowerShell development patterns.
 
-These are intended to be copied into real project locations (typically `src/`, `Tests/`, or `scripts/`) and then adapted.
+These are intended to be copied into real project locations (typically `src/`, `tests/`, or `scripts/`) and then adapted.
 
 ## Conventions
 
@@ -17,4 +17,3 @@ These are intended to be copied into real project locations (typically `src/`, `
 - `tests/`: Pester test scaffolds aligned with the function templates
 - `module/`: a minimal module folder scaffold (Public/Private + module manifest + entrypoint)
 - `scripts/`: script scaffolds for repo automation or one-off tooling
-

@@ -1,7 +1,7 @@
 @{
     Run        = @{
         Path        = @(
-            'Tests'
+            'tests'
         )
         PassThru    = $true
         Exit        = $false
@@ -21,4 +21,3 @@
         Enabled     = $false
     }
 }
-

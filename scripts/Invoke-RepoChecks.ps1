@@ -73,7 +73,7 @@ if (-not $SkipAnalyzer) {
     Write-Verbose 'Running PSScriptAnalyzer...'
 
     $analyzerResults = Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'src') -Recurse -Settings $analyzerSettingsPath
-    $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'Tests') -Recurse -Settings $analyzerSettingsPath
+    $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'tests') -Recurse -Settings $analyzerSettingsPath
     $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'scripts') -Recurse -Settings $analyzerSettingsPath
     $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'templates') -Recurse -Settings $analyzerSettingsPath
 
