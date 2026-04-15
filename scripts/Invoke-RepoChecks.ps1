@@ -32,18 +32,22 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-try {
-    Import-Module PSScriptAnalyzer -ErrorAction Stop
-}
-catch {
-    throw 'Required module not available: PSScriptAnalyzer. Install it and retry.'
+if (-not $SkipAnalyzer) {
+    try {
+        Import-Module PSScriptAnalyzer -ErrorAction Stop
+    }
+    catch {
+        throw 'Required module not available: PSScriptAnalyzer. Install it and retry.'
+    }
 }
 
-try {
-    Import-Module Pester -ErrorAction Stop
-}
-catch {
-    throw 'Required module not available: Pester (v5+). Install it and retry.'
+if (-not $SkipTests) {
+    try {
+        Import-Module Pester -ErrorAction Stop
+    }
+    catch {
+        throw 'Required module not available: Pester (v5+). Install it and retry.'
+    }
 }
 
 function Resolve-RepoPath {

@@ -1,0 +1,46 @@
+permissions:
+  contents: read
+
+name: Pester
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure Pester is available
+        shell: pwsh
+        run: |
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-Null
+          Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+
+          $pesterVersion = '5.7.1'
+          Install-Module -Name Pester -Repository PSGallery -RequiredVersion $pesterVersion -Force -Scope CurrentUser -ErrorAction Stop
+          Import-Module Pester -RequiredVersion $pesterVersion -Force -ErrorAction Stop
+          Get-Module Pester -ListAvailable | Where-Object Version -eq $pesterVersion | Select-Object -First 1 Name, Version
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          ./scripts/Invoke-RepoChecks.ps1 -SkipAnalyzer -Verbose -OutputPath ./artifacts
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: artifacts/TestResults.xml
+          if-no-files-found: ignore
+
