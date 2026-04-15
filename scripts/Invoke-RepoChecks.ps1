@@ -14,6 +14,9 @@
 .PARAMETER SkipTests
     Skips Pester tests.
 
+.PARAMETER IncludeTemplates
+    Includes the `templates/` folder in PSScriptAnalyzer scanning.
+
 .PARAMETER OutputPath
     Optional output folder for artifacts (currently used for test results).
 #>
@@ -24,6 +27,9 @@ param(
 
     [Parameter()]
     [switch]$SkipTests,
+
+    [Parameter()]
+    [switch]$IncludeTemplates,
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
@@ -75,7 +81,10 @@ if (-not $SkipAnalyzer) {
     $analyzerResults = Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'src') -Recurse -Settings $analyzerSettingsPath
     $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'tests') -Recurse -Settings $analyzerSettingsPath
     $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'scripts') -Recurse -Settings $analyzerSettingsPath
-    $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'templates') -Recurse -Settings $analyzerSettingsPath
+
+    if ($IncludeTemplates) {
+        $analyzerResults += Invoke-ScriptAnalyzer -Path (Resolve-RepoPath -RelativePath 'templates') -Recurse -Settings $analyzerSettingsPath
+    }
 
     if ($analyzerResults) {
         $analyzerResults | Format-Table -AutoSize | Out-String | Write-Output
