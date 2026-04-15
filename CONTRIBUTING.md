@@ -26,4 +26,3 @@ Run the repository checks before opening a PR:
 - Include a brief summary and rationale.
 - Call out risks, compatibility impacts, and migration steps (if any).
 - Keep documentation in sync with behavior.
-
