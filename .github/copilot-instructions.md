@@ -102,7 +102,7 @@ GitHub Copilot should prefer these templates as the starting point for new autho
 Available templates include:
 - `/templates/functions/read-only-function-template.ps1`
 - `/templates/functions/state-changing-function-template.ps1`
-- `/templates/patterns/retry_pattern_template.ps1`
+- `/templates/patterns/retry-pattern-template.ps1`
 - `/templates/tests/read-only-function-tests-template.ps1`
 - `/templates/tests/state-changing-function-tests-template.ps1`
 
@@ -163,4 +163,3 @@ Unless explicitly requested and justified, do not generate:
 ## General Expectation
 
 Consistency is more important than novelty. Generated code should align with PowerShell best practices, repository conventions, and the standards defined in this file.
-
