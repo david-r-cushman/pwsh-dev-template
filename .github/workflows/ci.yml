@@ -21,7 +21,6 @@ jobs:
       - name: Install PowerShell modules
         shell: pwsh
         run: |
-          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-Null
           Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
           Install-Module Pester -Scope CurrentUser -Force -MinimumVersion 5.0.0
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force

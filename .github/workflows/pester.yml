@@ -23,7 +23,6 @@ jobs:
       - name: Ensure Pester is available
         shell: pwsh
         run: |
-          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-Null
           Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 
           $pesterVersion = '5.7.1'
@@ -43,4 +42,3 @@ jobs:
           name: test-results
           path: artifacts/TestResults.xml
           if-no-files-found: ignore
-
