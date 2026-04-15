@@ -93,6 +93,26 @@ GitHub Copilot should:
 - Module manifests and explicit exports should be maintained when the repository is module-based.
 - Do not place executable business logic in the repository root.
 
+## Repository Templates
+
+This repository includes approved templates under `/templates` for common PowerShell development patterns.
+
+GitHub Copilot should prefer these templates as the starting point for new authored code and tests when they match the requested task.
+
+Available templates include:
+- `/templates/functions/read-only-function-template.ps1`
+- `/templates/functions/state-changing-function-template.ps1`
+- `/templates/patterns/retry_pattern_template.ps1`
+- `/templates/tests/read-only-function-tests-template.ps1`
+- `/templates/tests/state-changing-function-tests-template.ps1`
+
+Expectations:
+- Prefer aligning new functions and tests to the closest matching template rather than inventing a new structure.
+- Preserve the intent of the selected template while adapting parameters, output contract, dependency usage, and naming to the requested task.
+- Do not copy placeholder names or example values into final authored code without replacing them.
+- When no template is a strong fit, follow repository conventions and established patterns instead of forcing an inappropriate template.
+- If a task involves transient operations, prefer the retry pattern template rather than generating ad hoc retry logic.
+
 ## PowerShell Version And Compatibility
 
 - Default target is PowerShell 7.4.x unless the repository documents a different target.
@@ -143,3 +163,4 @@ Unless explicitly requested and justified, do not generate:
 ## General Expectation
 
 Consistency is more important than novelty. Generated code should align with PowerShell best practices, repository conventions, and the standards defined in this file.
+
