@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-function Import-TemplateModuleFiles {
+function Import-TemplateModuleScript {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -21,7 +21,7 @@ function Import-TemplateModuleFiles {
     }
 }
 
-Import-TemplateModuleFiles -BasePath $PSScriptRoot
+Import-TemplateModuleScript -BasePath $PSScriptRoot
 
 $publicFolder = Join-Path -Path $PSScriptRoot -ChildPath 'Public'
 if (Test-Path -LiteralPath $publicFolder) {
@@ -32,4 +32,3 @@ if (Test-Path -LiteralPath $publicFolder) {
         Export-ModuleMember -Function $publicFunctionNames
     }
 }
-
