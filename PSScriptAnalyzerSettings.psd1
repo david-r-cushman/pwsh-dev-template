@@ -1,24 +1,23 @@
 @{
-    Severity     = @('Error', 'Warning')
+    Severity = @('Error', 'Warning')
     ExcludeRules = @()
 
-    Rules        = @{
+    Rules = @{
         PSUseConsistentIndentation = @{
-            Enable              = $true
-            IndentationSize     = 4
+            Enable = $true
+            IndentationSize = 4
             PipelineIndentation = 'IncreaseIndentationForFirstPipeline'
-            Kind                = 'space'
+            Kind = 'space'
         }
 
         PSUseConsistentWhitespace = @{
-            Enable          = $true
-            CheckOpenBrace  = $true
-            CheckOpenParen  = $true
-            CheckOperator   = $true
-            CheckSeparator  = $true
-            CheckParameter  = $true
+            Enable = $true
+            CheckOpenBrace = $true
+            CheckOpenParen = $true
+            CheckOperator = $true
+            CheckSeparator = $true
+            CheckParameter = $true
             IgnoreWhitespaceAroundPipe = $false
         }
     }
 }
-

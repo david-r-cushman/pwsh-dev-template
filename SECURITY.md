@@ -19,4 +19,3 @@ Include:
 - Reproduction steps (as safe as possible)
 - Any logs or error output (redact secrets)
 - Suggested remediation (optional)
-

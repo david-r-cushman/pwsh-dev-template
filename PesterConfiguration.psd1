@@ -1,23 +1,23 @@
 @{
-    Run        = @{
-        Path        = @(
+    Run = @{
+        Path = @(
             'tests'
         )
-        PassThru    = $true
-        Exit        = $false
+        PassThru = $true
+        Exit = $false
     }
 
-    Output     = @{
-        Verbosity   = 'Detailed'
+    Output = @{
+        Verbosity = 'Detailed'
     }
 
     TestResult = @{
-        Enabled     = $true
-        OutputPath  = 'TestResults.xml'
+        Enabled = $true
+        OutputPath = 'TestResults.xml'
         OutputFormat = 'NUnitXml'
     }
 
     CodeCoverage = @{
-        Enabled     = $false
+        Enabled = $false
     }
 }

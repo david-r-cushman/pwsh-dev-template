@@ -26,4 +26,3 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 ### Added
 
 - Stable baseline devcontainer + repository structure and documentation
-
