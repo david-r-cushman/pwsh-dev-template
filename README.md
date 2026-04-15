@@ -63,9 +63,9 @@ That same repository structure also supports GitHub Codespaces, providing a brow
 
 ## What This Template Does Not Include
 
-This template does not ship with project-specific module code, public functions, private helpers, or Pester test implementations.
+This template does not ship with project-specific business logic, public functions, private helpers, or Pester test implementations.
 
-Those are expected to be added in repositories created from this template. The goal is to provide a clean baseline without placeholder business logic that downstream projects must remove.
+It does include optional scaffolding for both script-first and module-first projects, but downstream repositories are expected to replace placeholder module metadata and add real implementation code.
 
 ## Expected Contents Of Repositories Created From This Template
 
