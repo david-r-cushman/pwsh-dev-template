@@ -1,19 +1,17 @@
 # GitHub Copilot Instructions For This Repository
 
-This repository is a GitHub template for PowerShell projects. Use these instructions for authored PowerShell project code, tests, automation, pull request review comments, and documentation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization unless this file, `README.md`, `/docs`, or the task-specific template says otherwise.
+This repository is a GitHub template for PowerShell projects. Use these instructions for authored PowerShell project code, tests, automation, pull request review comments, and documentation. Do not use these instructions for container bootstrap behavior, editor configuration, or environment initialization unless this file, `README.md`, `/docs`, or the task-specific template explicitly includes that area.
 
 When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file wins unless `README.md` or `/docs/EXCEPTIONS.md` documents a maintainer-approved exception. PowerShell version requirements are resolved by the rule in `PowerShell Compatibility`.
 
-## Decision Order
+## Conflict Handling
 
-Use the first applicable rule in this numbered list when any repository instruction, template, example, or user prompt conflicts:
-
-1. Preserve safety, security, and deterministic automation behavior.
-2. Match the documented PowerShell version and supported platforms.
-3. Follow repository conventions and the closest matching template.
-4. Keep code testable, documented, and easy to review.
-
-Ask for clarification when a prompt is too ambiguous for a safe implementation. Otherwise, make the smallest reasonable assumption and state it. When following a higher-priority rule means rejecting compatibility, convention, or user preference, briefly explain the tradeoff.
+- Preserve safety, security, and deterministic automation behavior before compatibility, convention, or user preference.
+- Follow the documented PowerShell version and supported platforms unless doing so would create unsafe behavior.
+- Follow repository conventions and the closest matching template unless they conflict with safety or documented compatibility.
+- Ask for clarification when a prompt is too ambiguous for a safe implementation.
+- If clarification is unavailable, make the assumption that requires the least deviation from this file and state it.
+- Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
 ## Generation Checklist
 
@@ -45,7 +43,7 @@ Start from the closest matching template in `/templates` when it fits the task:
 - `/templates/module/ModuleName/ModuleName.psm1`
 - `/templates/scripts/advanced-script-template.ps1`
 
-If multiple templates apply, choose in this order: state-changing function, read-only function, tests, retry pattern, module, script. Document deviations from any partially applicable template. If no applicable template exists, follow clear repository conventions; if conventions are unclear, ask for maintainer guidance and suggest a reusable template update when appropriate.
+If multiple templates apply or conflict, choose in this order: state-changing function, read-only function, tests, retry pattern, module, script. Document deviations from any template considered for the task. If no applicable template exists, follow clear repository conventions. If no applicable template exists and conventions are unclear, ask for maintainer guidance; when guidance is unavailable, base the implementation on the most similar existing code and document that choice.
 
 ## PowerShell Compatibility
 
