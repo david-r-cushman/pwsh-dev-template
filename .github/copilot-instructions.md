@@ -12,11 +12,11 @@ These instructions apply to:
 
 These instructions apply to authored PowerShell project code, tests, and automation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization messages unless this file, `README.md`, `/docs`, or the relevant template explicitly says they do.
 
-When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file takes precedence unless a repository maintainer has documented an exception in a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception`.
+When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file takes precedence unless a repository maintainer has documented an exception in `README.md` or `/docs/EXCEPTIONS.md` under a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception`.
 
 ## Priority Order
 
-When instructions compete, GitHub Copilot should apply the highest matching priority from this list. A lower-priority item must not override a higher-priority item.
+When instructions compete, GitHub Copilot should apply the highest matching priority from this list. A lower-priority item must not override a higher-priority item. If priorities appear equally applicable, the earlier item in this list wins.
 
 - Preserve safety, security, and deterministic automation behavior.
 - Match the repository's documented PowerShell version, platform support, and existing conventions.
@@ -43,6 +43,7 @@ GitHub Copilot should:
 
 - If the user prompt is ambiguous, ask for clarification before making a high-impact change.
 - If the user prompt conflicts with repository instructions, flag the conflict and follow the highest matching priority from this file.
+- If the user prompt conflicts with repository conventions but is otherwise clear, follow repository conventions and explain the decision.
 - If a low-impact detail is unclear, make the smallest reasonable assumption and state it in the response.
 
 ## Function Design And Behavior
@@ -119,6 +120,7 @@ Expectations:
 - Prefer aligning new functions and tests to the closest matching template rather than inventing a new structure.
 - Preserve the intent of the selected template while adapting parameters, output contract, dependency usage, and naming to the requested task.
 - Do not copy placeholder names or example values into final authored code without replacing them.
+- If a matching template is missing or incomplete, follow repository conventions and suggest adding or updating a template when the gap is reusable.
 - When no template is a strong fit, follow repository conventions and established patterns instead of forcing an inappropriate template.
 - If a task involves transient operations, prefer the retry pattern template rather than generating ad hoc retry logic.
 
@@ -126,7 +128,7 @@ Expectations:
 
 - Default target is PowerShell 7.4.x unless `README.md`, `/docs`, or the relevant template declares a different target in a section or bullet labeled `PowerShell Version`, `Requirements`, or `Compatibility`.
 - Ensure generated code is compatible with the repository's documented PowerShell version and platform support.
-- If the documented PowerShell version is invalid, unsupported, or unclear, flag the issue and suggest the closest supported PowerShell version. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
+- If the documented PowerShell version is invalid, unsupported, not explicitly stated, or conflicts across documentation, flag the issue and suggest the closest supported PowerShell version. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
 - If a requested implementation conflicts with the documented PowerShell version, flag the conflict and choose the compatible approach when possible.
 - Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, keep it isolated, add a nearby warning comment explaining why, and provide a supported alternative or future migration note in documentation or review notes. If no supported alternative exists, document that limitation and justify the deprecated usage.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
