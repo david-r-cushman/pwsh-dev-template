@@ -12,7 +12,17 @@ These instructions apply to:
 
 These instructions apply to authored PowerShell project code, tests, and automation. They do not necessarily apply to container bootstrap behavior, editor configuration, or environment initialization messages where limited user-facing console output may be intentional.
 
-When repository examples and this file differ, this file takes precedence unless the repository explicitly documents an approved exception.
+When repository examples and this file differ, this file takes precedence unless an approved exception is documented in `README.md`, `/docs`, or the relevant template file.
+
+## Priority Order
+
+When instructions compete, GitHub Copilot should prioritize them in this order:
+
+- Preserve safety, security, and deterministic automation behavior.
+- Match the repository's documented PowerShell version, platform support, and existing conventions.
+- Use the closest repository template or established local pattern.
+- Keep generated code testable, documented, and easy to review.
+- If a requested change conflicts with these priorities, flag the conflict and suggest the closest compatible approach.
 
 ## Core Expectations
 
@@ -21,27 +31,21 @@ GitHub Copilot should:
 - generate production-quality PowerShell, not demo-style scripts
 - follow repository patterns before introducing new ones
 - optimize for clarity, determinism, testability, and safe automation behavior
-- avoid placeholder logic, fake implementations, or TODO-heavy output unless explicitly requested
+- avoid placeholder logic, fake implementations, or TODO-heavy output unless requested by the user prompt or repository documentation
 
-## Function Design
+## Function Design And Behavior
 
 - Use advanced functions for reusable PowerShell code.
 - Include a `param()` block, even when no parameters are currently required.
 - Use approved PowerShell verbs and singular, descriptive nouns.
 - Prefer one public function per file when the repository is function- or module-oriented.
 - Keep public functions small and composable, and move reusable logic into private helpers.
-- Do not place executable business logic at module import time unless module initialization explicitly requires it.
-
-## State Changes And Safety
-
+- Do not place executable business logic at module import time. Limit import-time work to required dependency loading, configuration setup, or explicit module initialization needed before exported functions can run.
 - State-changing functions must use `[CmdletBinding(SupportsShouldProcess = $true)]`.
 - Read-only functions should use `CmdletBinding()` without `SupportsShouldProcess`.
 - Any function that creates, updates, deletes, enables, disables, assigns, revokes, imports, exports, or otherwise changes state must support `-WhatIf` and `-Confirm`.
 - Use `if ($PSCmdlet.ShouldProcess(...))` around the actual mutation only.
 - Do not wrap validation, lookups, or harmless preparation steps in `ShouldProcess`.
-
-## Parameters And Pipeline Behavior
-
 - Use PascalCase parameter names.
 - Use descriptive names and avoid unclear abbreviations.
 - Use appropriate parameter attributes and validation where relevant.
@@ -119,7 +123,11 @@ Expectations:
 ## PowerShell Version And Compatibility
 
 - Default target is PowerShell 7.4.x unless the repository documents a different target.
+- Ensure generated code is compatible with the repository's documented PowerShell version and platform support.
+- If a requested implementation conflicts with the documented PowerShell version, flag the conflict and choose the compatible approach when possible.
+- Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, add a nearby comment explaining why and suggest a supported alternative in documentation or review notes when possible.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
+- When platform-specific behavior is necessary, isolate it behind clear checks such as `$IsWindows`, `$IsLinux`, or `$IsMacOS`, and include tests or mocks for each supported path.
 - Do not introduce syntax or APIs that conflict with the repository's supported PowerShell version.
 
 ## Microsoft Graph And External Services
@@ -165,4 +173,4 @@ Unless explicitly requested and justified, do not generate:
 
 ## General Expectation
 
-Consistency is more important than novelty. Generated code should align with PowerShell best practices, repository conventions, and the standards defined in this file.
+Consistency is more important than novelty. Generated code should align with PowerShell best practices, repository conventions, and the standards defined in this file. If a requested implementation conflicts with repository conventions, flag the conflict and provide a short justification or compatible alternative.
