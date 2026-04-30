@@ -6,10 +6,15 @@ When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-bas
 
 ## Conflict Handling
 
-- Preserve safety, security, and deterministic automation behavior before compatibility, convention, or user preference.
-- Follow the documented PowerShell version and supported platforms unless doing so would create unsafe behavior.
-- Follow repository conventions and the closest matching template unless they conflict with safety or documented compatibility.
-- Ask for clarification when a prompt is too ambiguous for a safe implementation.
+Resolve conflicts in this order:
+
+1. Safety and security.
+2. Deterministic automation behavior.
+3. Documented PowerShell version and supported platforms.
+4. Repository conventions and closest matching template.
+5. User preference.
+
+- Ask the user or maintainer for clarification when a prompt is too ambiguous for a safe implementation.
 - If clarification is unavailable, make the assumption that requires the least deviation from this file and state it.
 - Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
@@ -17,16 +22,10 @@ When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-bas
 
 For new or changed PowerShell code, prefer this checklist over adding one-off patterns:
 
-- Use production-quality PowerShell, not placeholder or demo code.
-- Use advanced functions with `CmdletBinding()`, a `param()` block, approved verbs, PascalCase parameters, and clear names.
-- Add `SupportsShouldProcess` and wrap only the mutation when a function changes state.
-- Return structured objects rather than display-formatted text.
-- Use terminating errors for unrecoverable failures and descriptive messages with useful context.
-- Avoid `Write-Host` in authored project code unless an exception is documented.
-- Never hardcode or log secrets, credentials, tenant IDs, tokens, or other sensitive values.
-- Validate external input such as paths, identifiers, and query values.
-- Keep public functions small, composable, and covered by comment-based help.
-- Add focused Pester tests for public functions and mock file I/O, network calls, service calls, time, and environment access.
+- Function shape: use production-quality advanced functions with `CmdletBinding()`, a `param()` block, approved verbs, PascalCase parameters, clear names, and small composable public functions.
+- State and output: add `SupportsShouldProcess` for mutations, wrap only the mutation, and return structured objects rather than display-formatted text.
+- Errors and security: use terminating errors with useful context, avoid undocumented `Write-Host`, validate external input, and never hardcode or log secrets, credentials, tenant IDs, or tokens.
+- Tests and help: include comment-based help for public functions and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
 
 ## Repository Structure And Templates
 
@@ -43,7 +42,7 @@ Start from the closest matching template in `/templates` when it fits the task:
 - `/templates/module/ModuleName/ModuleName.psm1`
 - `/templates/scripts/advanced-script-template.ps1`
 
-If multiple templates apply or conflict, choose in this order: state-changing function, read-only function, tests, retry pattern, module, script. Document deviations from any template considered for the task. If no applicable template exists, follow clear repository conventions. If no applicable template exists and conventions are unclear, ask for maintainer guidance; when guidance is unavailable, base the implementation on the most similar existing code and document that choice.
+If multiple templates apply or conflict, choose in this order: state-changing function, read-only function, tests, retry pattern, module, script. Document deviations from any template considered for the task. If no applicable template exists, follow clear repository conventions. If no applicable template exists and conventions are unclear, ask for maintainer guidance; when guidance is unavailable, base the implementation on the most similar existing code and document the reasoning for that choice.
 
 ## PowerShell Compatibility
 
@@ -58,6 +57,8 @@ Avoid deprecated cmdlets, modules, and features. If deprecated behavior is unavo
 Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK provides equivalent functionality for the required operation. If raw REST is required, document why.
 
 Wrap external service interactions in helper functions when it improves consistency, mocking, or testability. Generated external-service code must support unit tests without live service calls.
+
+Apply the deprecation guidance in `PowerShell Compatibility` to external service modules and service-specific cmdlets. Keep unavoidable deprecated service interactions behind helper functions and document the migration path or limitation.
 
 ## Formatting And Review
 
