@@ -10,13 +10,13 @@ These instructions apply to:
 - test generation
 - documentation generation
 
-These instructions apply to authored PowerShell project code, tests, and automation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization messages unless this file, `README.md`, `/docs`, or the relevant template explicitly says they do.
+These instructions apply to authored PowerShell project code, tests, and automation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization messages unless this file, `README.md`, `/docs`, or the template explicitly associated with the requested task or module says they do.
 
 When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file takes precedence unless a repository maintainer has documented an exception in `README.md` or `/docs/EXCEPTIONS.md` under a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception`.
 
 ## Priority Order
 
-When instructions compete, GitHub Copilot should apply the highest matching priority from this list. A lower-priority item must not override a higher-priority item. If priorities appear equally applicable, the earlier item in this list wins.
+When instructions compete, GitHub Copilot should apply the highest matching priority from this list. A lower-priority item must not override a higher-priority item. If priorities appear equally applicable, the earlier item in the priority list defined in this document wins. If security conflicts with compatibility, prioritize security and document the compatibility issue.
 
 - Preserve safety, security, and deterministic automation behavior.
 - Match the repository's documented PowerShell version, platform support, and existing conventions.
@@ -29,6 +29,16 @@ Examples:
 - If a newer syntax conflicts with the documented PowerShell version, use compatible syntax.
 - If security conflicts with compatibility, prioritize security and document the compatibility issue.
 - If a local convention conflicts with security guidance, choose the secure implementation and flag the convention conflict.
+
+## Quick Reference
+
+| Area | Default Decision |
+| --- | --- |
+| Safety and security | Preserve safe, deterministic behavior before compatibility or style. |
+| Function design | Use advanced functions with clear parameters, structured output, and `ShouldProcess` for mutations. |
+| Tests and docs | Add focused Pester coverage and comment-based help for public functions. |
+| Templates | Start from the closest matching template, then adapt to the requested task. |
+| Compatibility | Target PowerShell 7.4.x unless documented requirements say otherwise. |
 
 ## Core Expectations
 
@@ -120,15 +130,16 @@ Expectations:
 - Prefer aligning new functions and tests to the closest matching template rather than inventing a new structure.
 - Preserve the intent of the selected template while adapting parameters, output contract, dependency usage, and naming to the requested task.
 - Do not copy placeholder names or example values into final authored code without replacing them.
+- If multiple templates partially apply, use the template closest to the requested task and document any deviations.
 - If a matching template is missing or incomplete, follow repository conventions and suggest adding or updating a template when the gap is reusable.
 - When no template is a strong fit, follow repository conventions and established patterns instead of forcing an inappropriate template.
 - If a task involves transient operations, prefer the retry pattern template rather than generating ad hoc retry logic.
 
 ## PowerShell Version And Compatibility
 
-- Default target is PowerShell 7.4.x unless `README.md`, `/docs`, or the relevant template declares a different target in a section or bullet labeled `PowerShell Version`, `Requirements`, or `Compatibility`.
+- Default target is PowerShell 7.4.x unless `README.md`, `/docs`, or the template explicitly associated with the requested task or module declares a different target in a section or bullet labeled `PowerShell Version`, `Requirements`, or `Compatibility`.
 - Ensure generated code is compatible with the repository's documented PowerShell version and platform support.
-- If the documented PowerShell version is invalid, unsupported, not explicitly stated, or conflicts across documentation, flag the issue and suggest the closest supported PowerShell version. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
+- If the documented PowerShell version is invalid, outdated, unsupported, not explicitly stated, or conflicts across documentation, flag the issue and suggest the closest supported PowerShell version. When clarification is unavailable in the current task, provide a PowerShell 7.4.x-compatible fallback and document that assumption in the response or review note.
 - If a requested implementation conflicts with the documented PowerShell version, flag the conflict and choose the compatible approach when possible.
 - Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, keep it isolated, add a nearby warning comment explaining why, and provide a supported alternative or future migration note in documentation or review notes. If no supported alternative exists, document that limitation and justify the deprecated usage.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
