@@ -12,7 +12,7 @@ These instructions apply to:
 
 These instructions apply to authored PowerShell project code, tests, and automation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization messages unless this file, `README.md`, `/docs`, or the relevant template explicitly says they do.
 
-When repository examples and this file differ, this file takes precedence unless a repository maintainer has documented an exception in a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception` in `README.md`, `/docs`, or the relevant template file.
+When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file takes precedence unless a repository maintainer has documented an exception in a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception`.
 
 ## Priority Order
 
@@ -27,6 +27,7 @@ When instructions compete, GitHub Copilot should apply the highest matching prio
 Examples:
 - If a repository template conflicts with safe `ShouldProcess` behavior, preserve `ShouldProcess`.
 - If a newer syntax conflicts with the documented PowerShell version, use compatible syntax.
+- If security conflicts with compatibility, prioritize security and document the compatibility issue.
 - If a local convention conflicts with security guidance, choose the secure implementation and flag the convention conflict.
 
 ## Core Expectations
@@ -37,6 +38,12 @@ GitHub Copilot should:
 - follow repository patterns before introducing new ones
 - optimize for clarity, determinism, testability, and safe automation behavior
 - avoid placeholder logic, fake implementations, or TODO-heavy output unless requested by the user prompt or repository documentation
+
+## Prompt Handling
+
+- If the user prompt is ambiguous, ask for clarification before making a high-impact change.
+- If the user prompt conflicts with repository instructions, flag the conflict and follow the highest matching priority from this file.
+- If a low-impact detail is unclear, make the smallest reasonable assumption and state it in the response.
 
 ## Function Design And Behavior
 
@@ -59,7 +66,7 @@ GitHub Copilot should:
 - If pipeline input is supported, implement `begin`, `process`, and `end` blocks correctly.
 - Emit one output object per input object unless the contract explicitly requires something else.
 
-## Output And Error Handling
+## Output, Errors, And Security
 
 - Return structured objects, preferably `[PSCustomObject]` or other stable object shapes.
 - Do not return formatted text intended for humans as the primary output.
@@ -68,16 +75,13 @@ GitHub Copilot should:
 - Use `try/catch` around operations that can fail, including network calls, file I/O, deserialization, and service operations.
 - Error messages must be descriptive, actionable, and include relevant context.
 - Do not swallow exceptions without adding value.
-
-## Logging And Security
-
 - Use `Write-Verbose` for diagnostic output and `Write-Information` for user-facing informational messages when appropriate.
 - Never log secrets, tokens, credentials, or other sensitive values.
 - Never hardcode credentials, secrets, tenant IDs, or environment-specific sensitive values.
 - Validate external input, especially file paths, identifiers, and query values.
 - Prefer least-privilege access patterns and minimize persisted sensitive data.
 
-## Testing
+## Testing And Documentation
 
 - Generate Pester tests for new public functions.
 - Test files should use the naming convention `<FunctionName>.Tests.ps1`.
@@ -85,15 +89,12 @@ GitHub Copilot should:
 - Mock external dependencies including file I/O, network calls, service interactions, time-dependent behavior, and environment access.
 - Tests should cover parameter validation, error handling, output shape, edge cases, and `ShouldProcess` behavior where relevant.
 - Tests must not depend on live external systems.
-
-## Documentation
-
 - Public functions should include comment-based help.
 - At minimum, include `.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`, and `.OUTPUTS` for public functions.
 - Examples should be realistic and aligned with the function's actual contract.
 - Update documentation when behavior changes.
 
-## Repository Structure
+## Repository Structure And Templates
 
 - Source code should normally reside in `/src`.
 - Tests should normally reside in `/Tests`.
@@ -101,12 +102,8 @@ GitHub Copilot should:
 - Example scripts, if included, should reside in `/examples`.
 - Module manifests and explicit exports should be maintained when the repository is module-based.
 - Do not place executable business logic in the repository root.
-
-## Repository Templates
-
-This repository includes approved templates under `/templates` for common PowerShell development patterns.
-
-GitHub Copilot should prefer these templates as the starting point for new authored code and tests when they match the requested task.
+- This repository includes approved templates under `/templates` for common PowerShell development patterns.
+- GitHub Copilot should prefer these templates as the starting point for new authored code and tests when they match the requested task.
 
 Available templates include:
 - `/templates/functions/read-only-function-template.ps1`
@@ -129,9 +126,9 @@ Expectations:
 
 - Default target is PowerShell 7.4.x unless `README.md`, `/docs`, or the relevant template declares a different target in a section or bullet labeled `PowerShell Version`, `Requirements`, or `Compatibility`.
 - Ensure generated code is compatible with the repository's documented PowerShell version and platform support.
-- If the documented PowerShell version is invalid, unsupported, or unclear, flag the issue. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
+- If the documented PowerShell version is invalid, unsupported, or unclear, flag the issue and suggest the closest supported PowerShell version. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
 - If a requested implementation conflicts with the documented PowerShell version, flag the conflict and choose the compatible approach when possible.
-- Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, keep it isolated, add a nearby comment explaining why, and provide a supported alternative or migration note in documentation or review notes. If no supported alternative exists, document that limitation and justify the deprecated usage.
+- Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, keep it isolated, add a nearby warning comment explaining why, and provide a supported alternative or future migration note in documentation or review notes. If no supported alternative exists, document that limitation and justify the deprecated usage.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
 - When platform-specific behavior is necessary, isolate it behind clear checks such as `$IsWindows`, `$IsLinux`, or `$IsMacOS`. Tests should cover each supported path and mock or skip unsupported platform behavior explicitly.
 - Do not introduce syntax or APIs that conflict with the repository's supported PowerShell version.
@@ -141,7 +138,7 @@ Expectations:
 - Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK supports the required operation.
 - If raw REST is required, document why.
 - Wrap service interactions in helper functions when doing so improves consistency, mockability, and testability.
-- Generated code for external services must remain testable without live service calls.
+- Generated code for external services must support mocking and unit testing without live service calls.
 
 ## Formatting And Style
 
