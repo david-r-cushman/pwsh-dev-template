@@ -10,19 +10,24 @@ These instructions apply to:
 - test generation
 - documentation generation
 
-These instructions apply to authored PowerShell project code, tests, and automation. They do not necessarily apply to container bootstrap behavior, editor configuration, or environment initialization messages where limited user-facing console output may be intentional.
+These instructions apply to authored PowerShell project code, tests, and automation. They do not apply to container bootstrap behavior, editor configuration, or environment initialization messages unless this file, `README.md`, `/docs`, or the relevant template explicitly says they do.
 
-When repository examples and this file differ, this file takes precedence unless an approved exception is documented in `README.md`, `/docs`, or the relevant template file.
+When repository examples and this file differ, this file takes precedence unless a repository maintainer has documented an exception in a section or bullet explicitly labeled `Exception`, `Compatibility Exception`, or `Template Exception` in `README.md`, `/docs`, or the relevant template file.
 
 ## Priority Order
 
-When instructions compete, GitHub Copilot should prioritize them in this order:
+When instructions compete, GitHub Copilot should apply the highest matching priority from this list. A lower-priority item must not override a higher-priority item.
 
 - Preserve safety, security, and deterministic automation behavior.
 - Match the repository's documented PowerShell version, platform support, and existing conventions.
 - Use the closest repository template or established local pattern.
 - Keep generated code testable, documented, and easy to review.
 - If a requested change conflicts with these priorities, flag the conflict and suggest the closest compatible approach.
+
+Examples:
+- If a repository template conflicts with safe `ShouldProcess` behavior, preserve `ShouldProcess`.
+- If a newer syntax conflicts with the documented PowerShell version, use compatible syntax.
+- If a local convention conflicts with security guidance, choose the secure implementation and flag the convention conflict.
 
 ## Core Expectations
 
@@ -122,12 +127,13 @@ Expectations:
 
 ## PowerShell Version And Compatibility
 
-- Default target is PowerShell 7.4.x unless the repository documents a different target.
+- Default target is PowerShell 7.4.x unless `README.md`, `/docs`, or the relevant template declares a different target in a section or bullet labeled `PowerShell Version`, `Requirements`, or `Compatibility`.
 - Ensure generated code is compatible with the repository's documented PowerShell version and platform support.
+- If the documented PowerShell version is invalid, unsupported, or unclear, flag the issue. When clarification is unavailable in the current task, default to PowerShell 7.4.x and document that assumption in the response or review note.
 - If a requested implementation conflicts with the documented PowerShell version, flag the conflict and choose the compatible approach when possible.
-- Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, add a nearby comment explaining why and suggest a supported alternative in documentation or review notes when possible.
+- Avoid using deprecated cmdlets or modules unless explicitly required. If deprecated behavior is unavoidable, keep it isolated, add a nearby comment explaining why, and provide a supported alternative or migration note in documentation or review notes. If no supported alternative exists, document that limitation and justify the deprecated usage.
 - Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
-- When platform-specific behavior is necessary, isolate it behind clear checks such as `$IsWindows`, `$IsLinux`, or `$IsMacOS`, and include tests or mocks for each supported path.
+- When platform-specific behavior is necessary, isolate it behind clear checks such as `$IsWindows`, `$IsLinux`, or `$IsMacOS`. Tests should cover each supported path and mock or skip unsupported platform behavior explicitly.
 - Do not introduce syntax or APIs that conflict with the repository's supported PowerShell version.
 
 ## Microsoft Graph And External Services
