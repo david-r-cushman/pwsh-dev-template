@@ -1,5 +1,29 @@
 # GitHub Copilot Instructions For This Repository
 
+## AI Governance Model
+
+This repository follows a structured AI governance approach defined in:
+
+- `/docs/ai-behavioral-contract.md`
+- `/docs/ai-interaction-loop.md`
+
+These documents define:
+
+- expected AI behavior (truthfulness, transparency, verifiability, risk awareness, and integrity)
+- the interaction model used to evaluate and refine AI-generated output
+
+The instructions in this file translate those principles into concrete generation constraints.
+
+AI must prioritize:
+
+- correctness over fluency
+- transparency over completeness
+- verifiability over abstraction
+
+When uncertain, incomplete, or potentially unsafe, explicitly state assumptions, limitations, and risks rather than presenting information as fact.
+
+---
+
 This repository is a GitHub template for PowerShell projects. Use these instructions for authored PowerShell project code, tests, automation, pull request review comments, and documentation. Do not use these instructions for container bootstrap behavior, editor configuration, or environment initialization unless this file, `README.md`, `/docs`, or the task-specific template explicitly includes that area.
 
 When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file wins unless `README.md` or `/docs/EXCEPTIONS.md` documents a maintainer-approved exception. PowerShell version requirements are resolved by the rule in `PowerShell Compatibility`.
@@ -16,6 +40,7 @@ Resolve conflicts in this order:
 
 - Ask the user or maintainer for clarification when a prompt is too ambiguous for a safe implementation.
 - If clarification is unavailable, make the assumption that requires the least deviation from this file and state it.
+- Do not resolve ambiguity by guessing. State assumptions explicitly when required.
 - Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
 ## Generation Checklist
@@ -26,6 +51,7 @@ For new or changed PowerShell code, prefer this checklist over adding one-off pa
 - State and output: add `SupportsShouldProcess` for mutations, wrap only the mutation, and return structured objects rather than display-formatted text.
 - Errors and security: use terminating errors with useful context, avoid undocumented `Write-Host`, validate external input, and never hardcode or log secrets, credentials, tenant IDs, or tokens.
 - Tests and help: include comment-based help for public functions and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
+- Transparency and verifiability: clearly state assumptions, avoid fabricated or speculative behavior, and prefer outputs that can be tested or validated.
 
 ## Repository Structure And Templates
 
@@ -56,6 +82,8 @@ Avoid deprecated cmdlets, modules, and features. If deprecated behavior is unavo
 
 Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK provides equivalent functionality for the required operation. If raw REST is required, document why.
 
+Do not assume API behavior or parameters without confirmation. If uncertain, state limitations or provide a verifiable approach.
+
 Wrap external service interactions in helper functions when it improves consistency, mocking, or testability. Generated external-service code must support unit tests without live service calls.
 
 Apply the deprecation guidance in `PowerShell Compatibility` to external service modules and service-specific cmdlets. Keep unavoidable deprecated service interactions behind helper functions and document the migration path or limitation.
@@ -65,5 +93,7 @@ Apply the deprecation guidance in `PowerShell Compatibility` to external service
 Use 4 spaces for PowerShell indentation, same-line opening braces, single quotes unless interpolation is required, comments above the code they describe, no trailing whitespace, and LF line endings.
 
 In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, and speculative refactors outside the requested scope.
+
+Flag responses that appear correct but are not verifiable, or that present uncertain information as fact.
 
 Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.
