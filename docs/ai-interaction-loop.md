@@ -13,6 +13,7 @@ The goal is to ensure AI is used as a reliable drafting accelerator while mainta
 AI is not trusted by default.
 
 AI output is:
+
 - generated
 - evaluated
 - challenged
@@ -28,6 +29,7 @@ before it is accepted.
 ### 1. Define
 
 Clearly define:
+
 - the task
 - constraints
 - expectations (based on the AI Behavioral Contract)
@@ -62,6 +64,7 @@ Review the output against the AI Behavioral Contract:
 If the output violates any principle, explicitly challenge it.
 
 **Examples:**
+
 - "This violates Verifiability—provide something testable."
 - "State your assumptions explicitly."
 - "This is destructive—show a safe alternative."
@@ -109,8 +112,8 @@ Only accept output that meets these criteria.
 |------------|----------------------------------------------|
 | Define     | Transparency, Verifiability                  |
 | Evaluate   | Truthfulness, Transparency, Integrity        |
-| Challenge  | All                                         |
-| Refine     | All                                         |
+| Challenge  | All                                          |
+| Refine     | All                                          |
 | Validate   | Verifiability, Risk Awareness                |
 | Decide     | Human Accountability (Core Principle)        |
 
@@ -133,6 +136,7 @@ This loop should be applied to:
 Do not accept AI output at face value.
 
 Use the loop to ensure all outputs are:
+
 - correct
 - safe
 - verifiable
