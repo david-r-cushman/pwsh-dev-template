@@ -15,6 +15,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 - Added AI governance alignment to Copilot instructions, linking repository-wide generation behavior to the AI Behavioral Contract and AI Interaction Loop.
 - Added Copilot instructions reference updates documenting the layered AI governance model.
 
+### Changed
+
+- Clarified that Copilot instructions act as the enforcement layer for repository AI governance expectations.
+- Reorganized and simplified copilot-instructions.md as well as updated the "AI Governance Model."
+- Expanded AI usage guidance from code generation standards into a broader governance model for AI-assisted PowerShell development.
+
 ## 0.2.0 - 2026-04-15
 
 ### Added
