@@ -6,6 +6,15 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.2.1 - 2026-05-03
+
+### Added
+
+- Added AI Behavioral Contract documenting expected AI behavior for truthfulness, transparency, verifiability, risk awareness, integrity, and data reliability.
+- Added AI Interaction Loop documenting a repeatable workflow for defining, generating, evaluating, challenging, refining, validating, and accepting AI-assisted work.
+- Added AI governance alignment to Copilot instructions, linking repository-wide generation behavior to the AI Behavioral Contract and AI Interaction Loop.
+- Added Copilot instructions reference updates documenting the layered AI governance model.
+
 ## 0.2.0 - 2026-04-15
 
 ### Added
