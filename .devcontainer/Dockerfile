@@ -1,5 +1,5 @@
 # Base runtime for the template's development environment.
-FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
+FROM mcr.microsoft.com/powershell:7.5-ubuntu-24.04
 
 ARG PESTER_VERSION=5.7.1
 ARG PSSCRIPTANALYZER_VERSION=1.25.0
