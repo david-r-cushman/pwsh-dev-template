@@ -19,6 +19,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 - Simplified GitHub Actions validation to a single CI workflow.
 - Updated CI to run `Invoke-RepoChecks.ps1` with template validation enabled.
+- Updated GitHub Actions workflow dependencies to Node 24-compatible major versions.
 - Pinned CI and Dev Container PowerShell tooling versions for more predictable validation.
 - Reworked `docs/copilot-instructions-reference.md` into a maintainer reference instead of duplicating the canonical Copilot instructions.
 - Updated `CODEOWNERS` to identify the portfolio template maintainer while noting that downstream repositories should customize ownership.
