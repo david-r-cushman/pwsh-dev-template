@@ -1,165 +1,99 @@
 # GitHub Copilot Instructions For This Repository
 
-This repository is a GitHub template for PowerShell projects. GitHub Copilot should treat these instructions as practical generation and review constraints for authored project code created from this template.
+## AI Governance Model
 
-These instructions apply to:
+This repository follows a structured AI governance approach defined in:
 
-- inline suggestions
-- Copilot Chat responses
-- pull request review comments
-- test generation
-- documentation generation
+- `/docs/ai-behavioral-contract.md`
+- `/docs/ai-interaction-loop.md`
 
-These instructions apply to authored PowerShell project code, tests, and automation. They do not necessarily apply to container bootstrap behavior, editor configuration, or environment initialization messages where limited user-facing console output may be intentional.
+These documents define:
 
-When repository examples and this file differ, this file takes precedence unless the repository explicitly documents an approved exception.
+- expected AI behavior (truthfulness, transparency, verifiability, risk awareness, and integrity)
+- the interaction model used to evaluate and refine AI-generated output
 
-## Core Expectations
+The instructions in this file translate those principles into concrete generation constraints.
 
-GitHub Copilot should:
+AI must prioritize:
 
-- generate production-quality PowerShell, not demo-style scripts
-- follow repository patterns before introducing new ones
-- optimize for clarity, determinism, testability, and safe automation behavior
-- avoid placeholder logic, fake implementations, or TODO-heavy output unless explicitly requested
+- correctness over fluency
+- transparency over completeness
+- verifiability over abstraction
 
-## Function Design
+When uncertain, incomplete, or potentially unsafe, explicitly state assumptions, limitations, and risks rather than presenting information as fact.
 
-- Use advanced functions for reusable PowerShell code.
-- Include a `param()` block, even when no parameters are currently required.
-- Use approved PowerShell verbs and singular, descriptive nouns.
-- Prefer one public function per file when the repository is function- or module-oriented.
-- Keep public functions small and composable, and move reusable logic into private helpers.
-- Do not place executable business logic at module import time unless module initialization explicitly requires it.
+---
 
-## State Changes And Safety
+This repository is a GitHub template for PowerShell projects. Use these instructions for authored PowerShell project code, tests, automation, pull request review comments, and documentation. Do not use these instructions for container bootstrap behavior, editor configuration, or environment initialization unless this file, `README.md`, `/docs`, or the task-specific template explicitly includes that area.
 
-- State-changing functions must use `[CmdletBinding(SupportsShouldProcess = $true)]`.
-- Read-only functions should use `CmdletBinding()` without `SupportsShouldProcess`.
-- Any function that creates, updates, deletes, enables, disables, assigns, revokes, imports, exports, or otherwise changes state must support `-WhatIf` and `-Confirm`.
-- Use `if ($PSCmdlet.ShouldProcess(...))` around the actual mutation only.
-- Do not wrap validation, lookups, or harmless preparation steps in `ShouldProcess`.
+When examples in `/examples`, `/templates`, `/docs`, `README.md`, or comment-based help differ from this file, this file wins unless `README.md` or `/docs/EXCEPTIONS.md` documents a maintainer-approved exception. PowerShell version requirements are resolved by the rule in `PowerShell Compatibility`.
 
-## Parameters And Pipeline Behavior
+## Conflict Handling
 
-- Use PascalCase parameter names.
-- Use descriptive names and avoid unclear abbreviations.
-- Use appropriate parameter attributes and validation where relevant.
-- Prefer strongly typed parameters over loosely structured input where practical.
-- Support pipeline input only when it meaningfully improves usability.
-- If pipeline input is supported, implement `begin`, `process`, and `end` blocks correctly.
-- Emit one output object per input object unless the contract explicitly requires something else.
+Resolve conflicts in this order:
 
-## Output And Error Handling
+1. Safety and security.
+2. Deterministic automation behavior.
+3. Documented PowerShell version and supported platforms.
+4. Repository conventions and closest matching template.
+5. User preference.
 
-- Return structured objects, preferably `[PSCustomObject]` or other stable object shapes.
-- Do not return formatted text intended for humans as the primary output.
-- Avoid `Write-Host` in authored project code unless there is a documented exception for interactive environment or bootstrap messaging.
-- Use terminating errors for unrecoverable failures.
-- Use `try/catch` around operations that can fail, including network calls, file I/O, deserialization, and service operations.
-- Error messages must be descriptive, actionable, and include relevant context.
-- Do not swallow exceptions without adding value.
+- Ask the user or maintainer for clarification when a prompt is too ambiguous for a safe implementation.
+- If clarification is unavailable, make the assumption that requires the least deviation from this file and state it.
+- Do not resolve ambiguity by guessing. State assumptions explicitly when required.
+- Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
-## Logging And Security
+## Generation Checklist
 
-- Use `Write-Verbose` for diagnostic output and `Write-Information` for user-facing informational messages when appropriate.
-- Never log secrets, tokens, credentials, or other sensitive values.
-- Never hardcode credentials, secrets, tenant IDs, or environment-specific sensitive values.
-- Validate external input, especially file paths, identifiers, and query values.
-- Prefer least-privilege access patterns and minimize persisted sensitive data.
+For new or changed PowerShell code, prefer this checklist over adding one-off patterns:
 
-## Testing
+- Function shape: use production-quality advanced functions with `CmdletBinding()`, a `param()` block, approved verbs, PascalCase parameters, clear names, and small composable public functions.
+- State and output: add `SupportsShouldProcess` for mutations, wrap only the mutation, and return structured objects rather than display-formatted text.
+- Errors and security: use terminating errors with useful context, avoid undocumented `Write-Host`, validate external input, and never hardcode or log secrets, credentials, tenant IDs, or tokens.
+- Tests and help: include comment-based help for public functions and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
+- Transparency and verifiability: clearly state assumptions, avoid fabricated or speculative behavior, and prefer outputs that can be tested or validated.
 
-- Generate Pester tests for new public functions.
-- Test files should use the naming convention `<FunctionName>.Tests.ps1`.
-- Use `Describe`, `Context`, and `It` blocks.
-- Mock external dependencies including file I/O, network calls, service interactions, time-dependent behavior, and environment access.
-- Tests should cover parameter validation, error handling, output shape, edge cases, and `ShouldProcess` behavior where relevant.
-- Tests must not depend on live external systems.
+## Repository Structure And Templates
 
-## Documentation
+Place source code in `/src`, tests in `/tests`, docs in `/docs`, and examples in `/examples` unless an existing project structure clearly uses another convention. Do not place executable business logic in the repository root or at module import time, except for required dependency loading, configuration setup, or module initialization.
 
-- Public functions should include comment-based help.
-- At minimum, include `.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`, and `.OUTPUTS` for public functions.
-- Examples should be realistic and aligned with the function's actual contract.
-- Update documentation when behavior changes.
+Start from the closest matching template in `/templates` when it fits the task:
 
-## Repository Structure
-
-- Source code should normally reside in `/src`.
-- Tests should normally reside in `/Tests`.
-- Documentation should normally reside in `/docs`.
-- Example scripts, if included, should reside in `/examples`.
-- Module manifests and explicit exports should be maintained when the repository is module-based.
-- Do not place executable business logic in the repository root.
-
-## Repository Templates
-
-This repository includes approved templates under `/templates` for common PowerShell development patterns.
-
-GitHub Copilot should prefer these templates as the starting point for new authored code and tests when they match the requested task.
-
-Available templates include:
 - `/templates/functions/read-only-function-template.ps1`
 - `/templates/functions/state-changing-function-template.ps1`
 - `/templates/patterns/retry-pattern-template.ps1`
 - `/templates/tests/read-only-function-tests-template.ps1`
 - `/templates/tests/state-changing-function-tests-template.ps1`
+- `/templates/module/ModuleName/ModuleName.psd1`
+- `/templates/module/ModuleName/ModuleName.psm1`
+- `/templates/scripts/advanced-script-template.ps1`
 
-Expectations:
-- Prefer aligning new functions and tests to the closest matching template rather than inventing a new structure.
-- Preserve the intent of the selected template while adapting parameters, output contract, dependency usage, and naming to the requested task.
-- Do not copy placeholder names or example values into final authored code without replacing them.
-- When no template is a strong fit, follow repository conventions and established patterns instead of forcing an inappropriate template.
-- If a task involves transient operations, prefer the retry pattern template rather than generating ad hoc retry logic.
+If multiple templates apply or conflict, choose in this order: state-changing function, read-only function, tests, retry pattern, module, script. Document deviations from any template considered for the task. If no applicable template exists, follow clear repository conventions. If no applicable template exists and conventions are unclear, ask for maintainer guidance; when guidance is unavailable, base the implementation on the most similar existing code and document the reasoning for that choice.
 
-## PowerShell Version And Compatibility
+## PowerShell Compatibility
 
-- Default target is PowerShell 7.4.x unless the repository documents a different target.
-- Prefer cross-platform compatible approaches unless a Windows-only dependency is intentional and documented.
-- Do not introduce syntax or APIs that conflict with the repository's supported PowerShell version.
+Target PowerShell 7.4.x unless `README.md`, `/docs`, or the task-specific template declares another version under `PowerShell Version`, `Requirements`, or `Compatibility`. For version conflicts, use this precedence: `README.md`, then `/docs`, then task-specific template. If version requirements are missing, invalid, outdated, or unsupported, provide a PowerShell 7.4.x-compatible fallback and document the assumption.
 
-## Microsoft Graph And External Services
+Avoid syntax, APIs, cmdlets, or modules that conflict with the supported PowerShell version or platform support. Prefer cross-platform approaches; when platform-specific behavior is required, isolate it with `$IsWindows`, `$IsLinux`, or `$IsMacOS`, and test or explicitly mock/skip each supported path.
 
-- Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK supports the required operation.
-- If raw REST is required, document why.
-- Wrap service interactions in helper functions when doing so improves consistency, mockability, and testability.
-- Generated code for external services must remain testable without live service calls.
+Avoid deprecated cmdlets, modules, and features. If deprecated behavior is unavoidable, isolate it, add a nearby warning comment, justify the limitation, and include a supported alternative, workaround, or future migration note when one exists.
 
-## Formatting And Style
+## External Services
 
-- Use 4 spaces for indentation in PowerShell files.
-- Follow repository formatting rules for other file types such as JSON, YAML, and Markdown.
-- Keep opening braces on the same line as the statement.
-- Prefer single quotes unless interpolation is required.
-- Place comments above the line they describe, not at end of line.
-- Avoid trailing whitespace.
-- Use LF line endings.
+Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK provides equivalent functionality for the required operation. If raw REST is required, document why.
 
-## What Copilot Should Flag In Review
+Do not assume API behavior or parameters without confirmation. If uncertain, state limitations or provide a verifiable approach.
 
-- missing tests
-- missing comment-based help for public functions
-- analyzer violations
-- weak or missing parameter validation
-- missing `ShouldProcess` for state-changing functions
-- unsafe secret handling
-- unmockable external calls
-- unstable or human-only output contracts
-- speculative refactors outside the requested scope
+Wrap external service interactions in helper functions when it improves consistency, mocking, or testability. Generated external-service code must support unit tests without live service calls.
 
-## Forbidden By Default
+Apply the deprecation guidance in `PowerShell Compatibility` to external service modules and service-specific cmdlets. Keep unavoidable deprecated service interactions behind helper functions and document the migration path or limitation.
 
-Unless explicitly requested and justified, do not generate:
+## Formatting And Review
 
-- `Invoke-Expression`
-- empty catch blocks
-- plaintext secret handling
-- hardcoded credentials
-- live external service calls in tests
-- silent breaking changes to established output contracts
-- formatting-only refactors unrelated to the task
+Use 4 spaces for PowerShell indentation, same-line opening braces, single quotes unless interpolation is required, comments above the code they describe, no trailing whitespace, and LF line endings.
 
-## General Expectation
+In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, and speculative refactors outside the requested scope.
 
-Consistency is more important than novelty. Generated code should align with PowerShell best practices, repository conventions, and the standards defined in this file.
+Flag responses that appear correct but are not verifiable, or that present uncertain information as fact.
+
+Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.

@@ -141,9 +141,9 @@ function Invoke-OperationWithRetry {
             if ($IncludeAttemptMetadata) {
                 return [PSCustomObject]@{
                     OperationName = $OperationName
-                    Attempts      = $attempt
-                    Succeeded     = $true
-                    Result        = $result
+                    Attempts = $attempt
+                    Succeeded = $true
+                    Result = $result
                 }
             }
 
@@ -154,10 +154,11 @@ function Invoke-OperationWithRetry {
             $isRetryable = & $IsRetryable $_
 
             if (-not $isRetryable) {
-                $message = '{0} failed on attempt {1} and was classified as non-retryable. {2}' -f \
+                $message = '{0} failed on attempt {1} and was classified as non-retryable. {2}' -f @(
                     $OperationName,
                     $attempt,
                     $_.Exception.Message
+                )
 
                 $record = [System.Management.Automation.ErrorRecord]::new(
                     $_.Exception,
@@ -179,12 +180,13 @@ function Invoke-OperationWithRetry {
             }
 
             Write-Verbose (
-                '{0} failed on attempt {1} of {2}. Waiting {3} second(s) before retry. {4}' -f \
+                '{0} failed on attempt {1} of {2}. Waiting {3} second(s) before retry. {4}' -f @(
                     $OperationName,
                     $attempt,
                     $MaxAttempts,
                     $actualDelaySeconds,
                     $_.Exception.Message
+                )
             )
 
             if ($actualDelaySeconds -gt 0) {
@@ -195,10 +197,11 @@ function Invoke-OperationWithRetry {
         }
     }
 
-    $finalMessage = '{0} failed after {1} attempt(s). {2}' -f \
+    $finalMessage = '{0} failed after {1} attempt(s). {2}' -f @(
         $OperationName,
         $MaxAttempts,
         $lastError.Exception.Message
+    )
 
     $finalRecord = [System.Management.Automation.ErrorRecord]::new(
         $lastError.Exception,

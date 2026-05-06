@@ -1,6 +1,12 @@
 # PowerShell 7.4 Template: Available Anywhere
 
-This repository is a GitHub template that provides a baseline development environment for new PowerShell projects.
+[![CI](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml/badge.svg)](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml)
+![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
+![Template Version](https://img.shields.io/badge/template-0.4.0-blue)
+
+This repository is the baseline PowerShell development template used across my PowerShell-focused portfolio projects.
+
+It provides a repeatable starting point for script-based and module-oriented PowerShell work, with development environment setup, validation, scaffolding, GitHub project hygiene, and AI-assisted development governance included from the start.
 
 It is intended to give new repositories a consistent starting point for:
 
@@ -11,10 +17,37 @@ It is intended to give new repositories a consistent starting point for:
 - formatting and linting standards
 - Pester-based testing structure
 - secure-by-default development habits
+- AI-assisted development standards
 
 Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
 
-The template is designed to support both script-based and module-oriented PowerShell Core projects, with built-in structure for testing through Pester.
+## Portfolio Context
+
+The intent is to make the development standard visible in one place, then demonstrate that standard in downstream repositories built from this template.
+
+This repo provides:
+
+- a repeatable PowerShell development environment
+- reusable script, function, module, and test scaffolds
+- validation through PSScriptAnalyzer and Pester
+- GitHub project hygiene for issues, pull requests, security, and dependency updates
+- AI-assisted development governance for safe, reviewable, and verifiable engineering work
+
+Downstream portfolio repositories provide the project-specific implementation and show these standards applied to real PowerShell projects.
+
+## Use This Template
+
+1. Create a new repository from this template.
+2. Open the repository locally in VS Code or in a Dev Container.
+3. Replace placeholder module metadata if the project is module-oriented.
+4. Add scripts, functions, modules, or automation under `src`.
+5. Add project-specific Pester tests under `tests`.
+6. Copy and adapt scaffolds from `templates` when they fit the work.
+7. Run local validation:
+
+   ```powershell
+   pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
+   ```
 
 ## Mission
 
@@ -45,6 +78,8 @@ The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 - **Azure CLI:** Pre-installed for cloud resource management
 - **PSReadLine:** Configured for a more efficient terminal experience
 
+Core PowerShell tooling is version-pinned in the Dev Container so validation behavior is more predictable across rebuilds.
+
 ### Tailored Developer Experience
 
 The environment injects a specialized PowerShell profile that enables:
@@ -63,16 +98,16 @@ That same repository structure also supports GitHub Codespaces, providing a brow
 
 ## What This Template Does Not Include
 
-This template does not ship with project-specific module code, public functions, private helpers, or Pester test implementations.
+This template does not ship with project-specific business logic, public functions, private helpers, or Pester test implementations.
 
-Those are expected to be added in repositories created from this template. The goal is to provide a clean baseline without placeholder business logic that downstream projects must remove.
+It does include optional scaffolding for both script-first and module-first projects, but downstream repositories are expected to replace placeholder module metadata and add real implementation code.
 
 ## Expected Contents Of Repositories Created From This Template
 
 Repositories created from this template are expected to add:
 
 - PowerShell source files under `src`
-- Pester tests under `Tests`
+- Pester tests under `tests`
 - project-specific documentation under `docs`
 - optional module manifest and build or validation automation as needed
 
@@ -82,7 +117,7 @@ This template provides the environment, conventions, and structure. Downstream r
 
 This repository includes approved templates under `templates/` for common PowerShell development patterns.
 
-Use these as starting points for new authored code and tests:
+Use these as starting points for new authored code, tests, scripts, and modules:
 
 - `templates/functions/read-only-function-template.ps1`
 - `templates/functions/state-changing-function-template.ps1`
@@ -90,7 +125,18 @@ Use these as starting points for new authored code and tests:
 - `templates/tests/read-only-function-tests-template.ps1`
 - `templates/tests/state-changing-function-tests-template.ps1`
 
+See `templates/README.md` for the full template index (including module and script scaffolds).
+
 For AI-assisted development, these templates are referenced by `/.github/copilot-instructions.md`.
+
+## Validation And CI
+
+- Local checks entrypoint: `scripts/Invoke-RepoChecks.ps1`
+- Analyzer settings: `PSScriptAnalyzerSettings.psd1`
+- Pester settings: `PesterConfiguration.psd1`
+- GitHub Actions workflow: `.github/workflows/ci.yml`
+
+The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
 ## Prerequisites And Setup
 
@@ -123,3 +169,10 @@ For the deeper operating model behind that approach, see [`docs/powershell-ai-op
 - **Rebuilding:** Use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh
 - **Line Ending Errors:** Verify your local `git config core.autocrlf` is set to `input` or `false`
 - **Identity Issues:** Run `az login` inside the container terminal to authenticate your cloud session for that environment
+
+## Template Versioning
+
+This repository versions the template itself using Semantic Versioning.
+
+- Current version: see `VERSION`
+- Version history: see `CHANGELOG.md`

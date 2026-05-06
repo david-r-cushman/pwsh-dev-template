@@ -5,5 +5,10 @@
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
     "files.eol": "\n",
-    "powershell.scriptAnalysis.enable": true
+    "powershell.scriptAnalysis.enable": true,
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
+        "https://json.schemastore.org/github-issue-forms.json": ".github/ISSUE_TEMPLATE/*.{yml,yaml}",
+        "https://json.schemastore.org/dependabot-2.0.json": ".github/dependabot.yml"
+    }
 }

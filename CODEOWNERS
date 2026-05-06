@@ -1,0 +1,7 @@
+# CODEOWNERS
+#
+# This template repository is owned by the portfolio maintainer.
+# Repositories created from this template should update CODEOWNERS to match
+# their own maintainer, team, or review model.
+#
+* @david-r-cushman
