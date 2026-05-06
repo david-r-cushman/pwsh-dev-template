@@ -60,10 +60,10 @@ function Set-ExampleThing {
             Write-Verbose ('No change required for [{0}].' -f $InputObject)
 
             return [PSCustomObject]@{
-                Name          = $InputObject
+                Name = $InputObject
                 PreviousState = $currentState
-                DesiredState  = $DesiredState
-                Changed       = $false
+                DesiredState = $DesiredState
+                Changed = $false
             }
         }
 
@@ -88,17 +88,18 @@ function Set-ExampleThing {
         Write-Verbose ('Completed {0}.' -f $MyInvocation.MyCommand.Name)
 
         return [PSCustomObject]@{
-            Name          = $InputObject
+            Name = $InputObject
             PreviousState = if ($changed) { 'Disabled' } else { $currentState }
-            DesiredState  = $DesiredState
-            Changed       = $changed
+            DesiredState = $DesiredState
+            Changed = $changed
         }
     }
     catch {
-        $message = 'Failed to execute {0} for input [{1}]. {2}' -f \
+        $message = 'Failed to execute {0} for input [{1}]. {2}' -f @(
             $MyInvocation.MyCommand.Name,
             $InputObject,
             $_.Exception.Message
+        )
 
         $record = [System.Management.Automation.ErrorRecord]::new(
             $_.Exception,

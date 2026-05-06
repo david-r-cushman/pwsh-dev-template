@@ -21,6 +21,10 @@ $ErrorActionPreference = 'Stop'
 try {
     Write-Verbose ('Starting {0}.' -f $MyInvocation.MyCommand.Name)
 
+    if ($Force) {
+        Write-Verbose 'Force mode requested.'
+    }
+
     # TODO: Replace with real script logic.
 
     Write-Verbose ('Completed {0}.' -f $MyInvocation.MyCommand.Name)
@@ -29,4 +33,3 @@ catch {
     $message = 'Script failed: {0}' -f $_.Exception.Message
     throw $message
 }
-

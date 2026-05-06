@@ -13,8 +13,7 @@ function Get-Example {
     param()
 
     [PSCustomObject]@{
-        Name   = 'Example'
+        Name = 'Example'
         Status = 'ReplaceMe'
     }
 }
-

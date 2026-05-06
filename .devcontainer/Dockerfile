@@ -1,6 +1,10 @@
 # Base runtime for the template's development environment.
 FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
 
+ARG PESTER_VERSION=5.7.1
+ARG PSSCRIPTANALYZER_VERSION=1.25.0
+ARG PSREADLINE_VERSION=2.4.5
+
 # Minimal system tooling required for package installation and source control.
 RUN apt-get update && apt-get install -y \
     curl \
@@ -15,8 +19,10 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # Baseline PowerShell tooling for testing, analysis, and shell usability.
 RUN pwsh -Command " \
-    $ErrorActionPreference = 'Stop'; \
-    Install-Module -Name 'Pester', 'PSScriptAnalyzer', 'PSReadLine' -Force -AllowClobber -Scope AllUsers; \
+    \$ErrorActionPreference = 'Stop'; \
+    Install-Module -Name 'Pester' -RequiredVersion '${PESTER_VERSION}' -Force -AllowClobber -Scope AllUsers; \
+    Install-Module -Name 'PSScriptAnalyzer' -RequiredVersion '${PSSCRIPTANALYZER_VERSION}' -Force -AllowClobber -Scope AllUsers; \
+    Install-Module -Name 'PSReadLine' -RequiredVersion '${PSREADLINE_VERSION}' -Force -AllowClobber -Scope AllUsers; \
     "
 
 # The container profile enables a predictable interactive shell experience for

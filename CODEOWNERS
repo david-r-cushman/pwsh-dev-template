@@ -1,10 +1,7 @@
 # CODEOWNERS
 #
-# This is a template placeholder.
-# Update patterns and owners to match the downstream repository.
+# This template repository is owned by the portfolio maintainer.
+# Repositories created from this template should update CODEOWNERS to match
+# their own maintainer, team, or review model.
 #
-# Examples:
-# * @org/team-name
-# /src/ @org/pwsh-maintainers
-# /.github/ @org/repo-admins
-
+* @david-r-cushman

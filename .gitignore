@@ -3,3 +3,12 @@
 
 # Ignore all .log files
 *.log
+
+# Ignore local validation artifacts
+artifacts/
+artifacts-review/
+TestResults.xml
+
+# Ignore local environment files
+.env
+.env.*

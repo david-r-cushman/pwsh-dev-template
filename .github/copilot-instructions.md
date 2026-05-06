@@ -55,7 +55,7 @@ For new or changed PowerShell code, prefer this checklist over adding one-off pa
 
 ## Repository Structure And Templates
 
-Place source code in `/src`, tests in `/Tests`, docs in `/docs`, and examples in `/examples` unless an existing project structure clearly uses another convention. Do not place executable business logic in the repository root or at module import time, except for required dependency loading, configuration setup, or module initialization.
+Place source code in `/src`, tests in `/tests`, docs in `/docs`, and examples in `/examples` unless an existing project structure clearly uses another convention. Do not place executable business logic in the repository root or at module import time, except for required dependency loading, configuration setup, or module initialization.
 
 Start from the closest matching template in `/templates` when it fits the task:
 

@@ -55,8 +55,8 @@ function Get-TargetState {
         # - compare expected and actual state
 
         $result = [PSCustomObject]@{
-            Name        = $InputObject
-            Status      = 'Unknown'
+            Name = $InputObject
+            Status = 'Unknown'
             IsCompliant = $false
         }
 
@@ -64,10 +64,11 @@ function Get-TargetState {
         return $result
     }
     catch {
-        $message = 'Failed to execute {0} for input [{1}]. {2}' -f \
+        $message = 'Failed to execute {0} for input [{1}]. {2}' -f @(
             $MyInvocation.MyCommand.Name,
             $InputObject,
             $_.Exception.Message
+        )
 
         $record = [System.Management.Automation.ErrorRecord]::new(
             $_.Exception,

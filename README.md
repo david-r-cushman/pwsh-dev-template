@@ -1,6 +1,12 @@
 # PowerShell 7.4 Template: Available Anywhere
 
-This repository is a GitHub template that provides a baseline development environment for new PowerShell projects.
+[![CI](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml/badge.svg)](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml)
+![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
+![Template Version](https://img.shields.io/badge/template-0.4.0-blue)
+
+This repository is the baseline PowerShell development template used across my PowerShell-focused portfolio projects.
+
+It provides a repeatable starting point for script-based and module-oriented PowerShell work, with development environment setup, validation, scaffolding, GitHub project hygiene, and AI-assisted development governance included from the start.
 
 It is intended to give new repositories a consistent starting point for:
 
@@ -11,10 +17,37 @@ It is intended to give new repositories a consistent starting point for:
 - formatting and linting standards
 - Pester-based testing structure
 - secure-by-default development habits
+- AI-assisted development standards
 
 Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
 
-The template is designed to support both script-based and module-oriented PowerShell Core projects, with built-in structure for testing through Pester.
+## Portfolio Context
+
+The intent is to make the development standard visible in one place, then demonstrate that standard in downstream repositories built from this template.
+
+This repo provides:
+
+- a repeatable PowerShell development environment
+- reusable script, function, module, and test scaffolds
+- validation through PSScriptAnalyzer and Pester
+- GitHub project hygiene for issues, pull requests, security, and dependency updates
+- AI-assisted development governance for safe, reviewable, and verifiable engineering work
+
+Downstream portfolio repositories provide the project-specific implementation and show these standards applied to real PowerShell projects.
+
+## Use This Template
+
+1. Create a new repository from this template.
+2. Open the repository locally in VS Code or in a Dev Container.
+3. Replace placeholder module metadata if the project is module-oriented.
+4. Add scripts, functions, modules, or automation under `src`.
+5. Add project-specific Pester tests under `tests`.
+6. Copy and adapt scaffolds from `templates` when they fit the work.
+7. Run local validation:
+
+   ```powershell
+   pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
+   ```
 
 ## Mission
 
@@ -44,6 +77,8 @@ The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 - **PSScriptAnalyzer:** To enforce PowerShell best practices and security rules
 - **Azure CLI:** Pre-installed for cloud resource management
 - **PSReadLine:** Configured for a more efficient terminal experience
+
+Core PowerShell tooling is version-pinned in the Dev Container so validation behavior is more predictable across rebuilds.
 
 ### Tailored Developer Experience
 
@@ -100,6 +135,8 @@ For AI-assisted development, these templates are referenced by `/.github/copilot
 - Analyzer settings: `PSScriptAnalyzerSettings.psd1`
 - Pester settings: `PesterConfiguration.psd1`
 - GitHub Actions workflow: `.github/workflows/ci.yml`
+
+The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
 ## Prerequisites And Setup
 

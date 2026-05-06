@@ -6,6 +6,30 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.4.0 - 2026-05-06
+
+### Added
+
+- Added portfolio context and practical usage guidance to `README.md`.
+- Added CI, PowerShell version, and template version badges to `README.md`.
+- Added scaffold smoke tests that validate PowerShell script templates parse and PowerShell data files import.
+- Added ignore rules for local validation artifacts and environment files.
+
+### Changed
+
+- Simplified GitHub Actions validation to a single CI workflow.
+- Updated CI to run `Invoke-RepoChecks.ps1` with template validation enabled.
+- Pinned CI and Dev Container PowerShell tooling versions for more predictable validation.
+- Reworked `docs/copilot-instructions-reference.md` into a maintainer reference instead of duplicating the canonical Copilot instructions.
+- Updated `CODEOWNERS` to identify the portfolio template maintainer while noting that downstream repositories should customize ownership.
+- Aligned AI governance path guidance with the lowercase `tests` folder.
+
+### Fixed
+
+- Fixed invalid Bash-style line continuation syntax in PowerShell templates.
+- Fixed PSScriptAnalyzer result accumulation in `Invoke-RepoChecks.ps1`.
+- Cleaned template analyzer warnings so shipped scaffolds validate cleanly.
+
 ## 0.3.0 - 2026-05-03
 
 ### Added
