@@ -40,6 +40,18 @@ Updates to this template should generally follow these principles:
 - separate durable guidance from temporary working notes
 - keep security boundaries explicit
 
+## Runtime Update Workflow
+
+Dependabot Docker pull requests are treated as runtime upgrade notifications, not as ordinary one-file dependency bumps.
+
+When the pinned PowerShell or Ubuntu runtime changes:
+
+- update `eng/runtime-policy.json` first
+- update the Dockerfile, CI runner, and pinned tooling only as part of the same deliberate runtime change
+- run `scripts/Update-GeneratedMarkdown.ps1` to refresh managed documentation blocks
+- run `scripts/Invoke-RepoChecks.ps1 -IncludeTemplates` before merging
+- leave historical version references in `CHANGELOG.md` unchanged unless a release note is being added
+
 ## What This Means For Downstream Repositories
 
 Repositories created from this template should be treated as their own projects.
