@@ -20,7 +20,67 @@ $resolvedPolicyPath = (Resolve-Path -LiteralPath $PolicyPath).Path
 $policy = Get-Content -Raw -LiteralPath $resolvedPolicyPath | ConvertFrom-Json
 $failures = [System.Collections.Generic.List[object]]::new()
 
-function Test-PolicyValue {
+function Add-PolicyFailure {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RelativePath,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Expected,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Description,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Reason,
+
+        [Parameter()]
+        [string]$Actual
+    )
+
+    $failure = [pscustomobject]@{
+        Path = $RelativePath
+        Description = $Description
+        Expected = $Expected
+        Actual = $Actual
+        Reason = $Reason
+    }
+
+    $failures.Add($failure)
+}
+
+function Get-RepoFileContent {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RelativePath,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Description,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Expected
+    )
+
+    $path = Join-Path -Path $repoRoot -ChildPath $RelativePath
+
+    if (-not (Test-Path -LiteralPath $path)) {
+        Add-PolicyFailure -RelativePath $RelativePath -Description $Description -Expected $Expected -Reason 'File not found'
+        return
+    }
+
+    return Get-Content -Raw -LiteralPath $path
+}
+
+function Test-PolicyText {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -36,49 +96,69 @@ function Test-PolicyValue {
         [string]$Description
     )
 
-    $path = Join-Path -Path $repoRoot -ChildPath $RelativePath
-
-    if (-not (Test-Path -LiteralPath $path)) {
-        $failure = [pscustomobject]@{
-            Path = $RelativePath
-            Expected = $ExpectedText
-            Description = $Description
-            Reason = 'File not found'
-        }
-
-        $failures.Add($failure)
+    $content = Get-RepoFileContent -RelativePath $RelativePath -Description $Description -Expected $ExpectedText
+    if ($null -eq $content) {
         return
     }
 
-    $content = Get-Content -Raw -LiteralPath $path
     if (-not $content.Contains($ExpectedText)) {
-        $failure = [pscustomobject]@{
-            Path = $RelativePath
-            Expected = $ExpectedText
-            Description = $Description
-            Reason = 'Expected text not found'
-        }
-
-        $failures.Add($failure)
+        Add-PolicyFailure -RelativePath $RelativePath -Description $Description -Expected $ExpectedText -Reason 'Expected text not found'
     }
 }
 
-Test-PolicyValue -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('FROM {0}' -f $policy.runtime.dockerImage) -Description 'Dev container base image'
-Test-PolicyValue -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('ARG PESTER_VERSION={0}' -f $policy.tooling.pesterVersion) -Description 'Dev container Pester version'
-Test-PolicyValue -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('ARG PSSCRIPTANALYZER_VERSION={0}' -f $policy.tooling.psScriptAnalyzerVersion) -Description 'Dev container PSScriptAnalyzer version'
-Test-PolicyValue -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('ARG PSREADLINE_VERSION={0}' -f $policy.tooling.psReadLineVersion) -Description 'Dev container PSReadLine version'
-Test-PolicyValue -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('PowerShell {0} Template Environment Loaded' -f $policy.runtime.powershellVersion) -Description 'Dev container profile banner'
-Test-PolicyValue -RelativePath '.devcontainer/devcontainer.json' -ExpectedText ('PowerShell {0} Template' -f $policy.runtime.powershellVersion) -Description 'Dev container display name'
+function Test-PolicyRegexValue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RelativePath,
 
-Test-PolicyValue -RelativePath '.github/workflows/ci.yml' -ExpectedText ('runs-on: {0}' -f $policy.githubActions.runnerImage) -Description 'GitHub Actions runner image'
-Test-PolicyValue -RelativePath '.github/workflows/ci.yml' -ExpectedText ('Install-Module Pester -Scope CurrentUser -Force -RequiredVersion {0}' -f $policy.tooling.pesterVersion) -Description 'CI Pester version'
-Test-PolicyValue -RelativePath '.github/workflows/ci.yml' -ExpectedText ('Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -RequiredVersion {0}' -f $policy.tooling.psScriptAnalyzerVersion) -Description 'CI PSScriptAnalyzer version'
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Pattern,
 
-Test-PolicyValue -RelativePath 'README.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'README PowerShell version'
-Test-PolicyValue -RelativePath 'README.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'README Ubuntu version'
-Test-PolicyValue -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'Environment setup PowerShell version'
-Test-PolicyValue -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'Environment setup Ubuntu version'
-Test-PolicyValue -RelativePath '.github/copilot-instructions.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersionLabel) -Description 'Copilot instruction PowerShell compatibility target'
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ExpectedValue,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Description
+    )
+
+    $content = Get-RepoFileContent -RelativePath $RelativePath -Description $Description -Expected $ExpectedValue
+    if ($null -eq $content) {
+        return
+    }
+
+    $match = [regex]::Match($content, $Pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
+    if (-not $match.Success) {
+        Add-PolicyFailure -RelativePath $RelativePath -Description $Description -Expected $ExpectedValue -Reason 'Pattern not found'
+        return
+    }
+
+    $actualValue = $match.Groups['Value'].Value
+    if ($actualValue -ne $ExpectedValue) {
+        Add-PolicyFailure -RelativePath $RelativePath -Description $Description -Expected $ExpectedValue -Actual $actualValue -Reason 'Value mismatch'
+    }
+}
+
+Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^FROM\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.runtime.dockerImage -Description 'Dev container base image'
+Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PESTER_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.pesterVersion -Description 'Dev container Pester version'
+Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PSSCRIPTANALYZER_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psScriptAnalyzerVersion -Description 'Dev container PSScriptAnalyzer version'
+Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PSREADLINE_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psReadLineVersion -Description 'Dev container PSReadLine version'
+Test-PolicyText -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('PowerShell {0} Template Environment Loaded' -f $policy.runtime.powershellVersion) -Description 'Dev container profile banner'
+Test-PolicyText -RelativePath '.devcontainer/devcontainer.json' -ExpectedText ('PowerShell {0} Template' -f $policy.runtime.powershellVersion) -Description 'Dev container display name'
+
+Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*runs-on:\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.githubActions.runnerImage -Description 'GitHub Actions runner image'
+Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*Install-Module\s+Pester\s+.*?-RequiredVersion\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.pesterVersion -Description 'CI Pester version'
+Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*Install-Module\s+PSScriptAnalyzer\s+.*?-RequiredVersion\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psScriptAnalyzerVersion -Description 'CI PSScriptAnalyzer version'
+
+Test-PolicyText -RelativePath 'README.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'README PowerShell version'
+Test-PolicyText -RelativePath 'README.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'README Ubuntu version'
+Test-PolicyText -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'Environment setup PowerShell version'
+Test-PolicyText -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'Environment setup Ubuntu version'
+Test-PolicyText -RelativePath '.github/copilot-instructions.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersionLabel) -Description 'Copilot instruction PowerShell compatibility target'
 
 if ($failures.Count -gt 0) {
     $failures | Format-Table -AutoSize | Out-String | Write-Output
