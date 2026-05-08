@@ -1,4 +1,4 @@
-# Environment Setup: PowerShell 7.4 Template
+# Environment Setup: PowerShell Development Template
 
 ## Overview
 

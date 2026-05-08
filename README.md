@@ -1,4 +1,4 @@
-# PowerShell 7.4 Template: Available Anywhere
+# PowerShell Development Template: Available Anywhere
 
 [![CI](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml/badge.svg)](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml)
 <!-- BEGIN generated:readme-powershell-badge -->
