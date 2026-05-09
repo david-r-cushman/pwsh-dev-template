@@ -51,13 +51,14 @@ function Set-GeneratedMarkdownBlock {
     $escapedBeginMarker = [regex]::Escape($beginMarker)
     $escapedEndMarker = [regex]::Escape($endMarker)
     $pattern = '(?s){0}.*?{1}' -f $escapedBeginMarker, $escapedEndMarker
+    $regex = [regex]::new($pattern)
 
-    if ($content -notmatch $pattern) {
+    if (-not $regex.IsMatch($content)) {
         throw ('Generated block "{0}" not found in {1}' -f $BlockName, $RelativePath)
     }
 
     $replacement = @($beginMarker) + $Lines + @($endMarker)
-    $updatedContent = [regex]::Replace($content, $pattern, ($replacement -join "`n"), 1)
+    $updatedContent = $regex.Replace($content, ($replacement -join "`n"), 1)
 
     if ($updatedContent -ne $content) {
         if ($checkOnly) {
