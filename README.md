@@ -146,6 +146,8 @@ For AI-assisted development, these templates are referenced by `/.github/copilot
 
 The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
+Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
+
 ## Prerequisites And Setup
 
 1. **Host OS:** Windows 11 with WSL 2 enabled
