@@ -57,7 +57,7 @@ function Set-GeneratedMarkdownBlock {
     }
 
     $replacement = @($beginMarker) + $Lines + @($endMarker)
-    $updatedContent = [regex]::Replace($content, $pattern, ($replacement -join "`r`n"), 1)
+    $updatedContent = [regex]::Replace($content, $pattern, ($replacement -join "`n"), 1)
 
     if ($updatedContent -ne $content) {
         if ($checkOnly) {
