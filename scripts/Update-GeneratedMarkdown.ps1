@@ -73,7 +73,7 @@ function Set-GeneratedMarkdownBlock {
         }
 
         if ($PSCmdlet.ShouldProcess($RelativePath, ('Update generated block {0}' -f $BlockName))) {
-            Set-Content -LiteralPath $path -Value $updatedContent -NoNewline
+            [System.IO.File]::WriteAllText($path, $updatedContent, [System.Text.UTF8Encoding]::new($false))
         }
     }
 }
