@@ -6,6 +6,30 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.5.0 - 2026-05-09
+
+### Added
+
+- Added `eng/runtime-policy.json` as the source of truth for pinned PowerShell, Ubuntu, GitHub Actions runner, and baseline tooling versions.
+- Added version policy validation for Dev Container, CI, tooling, and documentation references.
+- Added generated Markdown block support for policy-managed runtime and tooling documentation.
+- Added runtime update workflow documentation for coordinated policy, container, CI, tooling, and generated documentation changes.
+
+### Changed
+
+- Updated repo checks to validate generated Markdown freshness and runtime policy alignment.
+- Updated README and environment setup documentation to use generated blocks for runtime and tooling version references.
+- Removed runtime versions from live documentation headings so versions stay in policy-managed content.
+- Classified Dependabot Docker image updates as runtime upgrade candidates with conventional commit prefixes.
+- Pinned the GitHub Actions runner image to `ubuntu-22.04`.
+- Pinned CI PSScriptAnalyzer installation to `1.25.0`.
+
+### Fixed
+
+- Fixed generated Markdown replacement so only the intended block is updated.
+- Fixed generated Markdown writes to preserve LF line endings and a final newline.
+- Fixed repo check orchestration to avoid forwarding verbose preferences as switch values.
+
 ## 0.4.0 - 2026-05-06
 
 ### Added

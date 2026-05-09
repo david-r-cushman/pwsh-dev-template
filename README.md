@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.4.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.5.0-blue)
 
 This repository is the baseline PowerShell development template used across my PowerShell-focused portfolio projects.
 
