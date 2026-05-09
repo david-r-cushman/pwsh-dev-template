@@ -91,7 +91,7 @@ if (-not $SkipGeneratedMarkdown) {
     }
 
     Write-Verbose 'Validating generated Markdown...'
-    & $generatedMarkdownScriptPath -Check -Verbose:$VerbosePreference
+    & $generatedMarkdownScriptPath -Check
 }
 
 if (-not $SkipVersionPolicy) {
@@ -100,7 +100,7 @@ if (-not $SkipVersionPolicy) {
     }
 
     Write-Verbose 'Validating version policy...'
-    & $versionPolicyScriptPath -Verbose:$VerbosePreference
+    & $versionPolicyScriptPath
 }
 
 if (-not $SkipAnalyzer) {

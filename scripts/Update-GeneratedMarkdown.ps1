@@ -58,7 +58,7 @@ function Set-GeneratedMarkdownBlock {
     }
 
     $replacement = @($beginMarker) + $Lines + @($endMarker)
-    $updatedContent = $regex.Replace($content, ($replacement -join "`n"), 1)
+    $updatedContent = $regex.Replace($content, ($replacement -join "`n"), 1).TrimEnd("`r", "`n") + "`n"
 
     if ($updatedContent -ne $content) {
         if ($checkOnly) {
