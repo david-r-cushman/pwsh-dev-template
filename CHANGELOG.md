@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Changed
+
+- Updated CI triggers to remove the retired `Dev` branch and add manual `workflow_dispatch` runs for validating short-lived branches before opening a pull request.
+
 ## 0.5.0 - 2026-05-09
 
 ### Added
