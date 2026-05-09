@@ -1,7 +1,9 @@
-# PowerShell 7.4 Template: Available Anywhere
+# PowerShell Development Template: Available Anywhere
 
 [![CI](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml/badge.svg)](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml)
+<!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
+<!-- END generated:readme-powershell-badge -->
 ![Template Version](https://img.shields.io/badge/template-0.4.0-blue)
 
 This repository is the baseline PowerShell development template used across my PowerShell-focused portfolio projects.
@@ -10,7 +12,9 @@ It provides a repeatable starting point for script-based and module-oriented Pow
 
 It is intended to give new repositories a consistent starting point for:
 
+<!-- BEGIN generated:readme-runtime-focus -->
 - PowerShell 7.4 development
+<!-- END generated:readme-runtime-focus -->
 - local VS Code development
 - Docker Dev Container development
 - GitHub Codespaces development
@@ -59,7 +63,9 @@ By using Docker-based development environments, third-party module execution, cl
 
 ## Architecture And Stack
 
+<!-- BEGIN generated:readme-runtime-stack -->
 - **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
+<!-- END generated:readme-runtime-stack -->
 - **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces
 - **Container Runtime:** Docker Desktop via WSL 2 backend for local container use
 - **Isolation Strategy:** The container is intended to minimize exposure of host credentials and host-resident developer tooling inside the development environment
@@ -73,10 +79,12 @@ By using Docker-based development environments, third-party module execution, cl
 
 The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 
-- **Pester:** For unit and integration testing
-- **PSScriptAnalyzer:** To enforce PowerShell best practices and security rules
+<!-- BEGIN generated:readme-tooling-list -->
+- **Pester 5.7.1:** For unit and integration testing
+- **PSScriptAnalyzer 1.25.0:** To enforce PowerShell best practices and security rules
 - **Azure CLI:** Pre-installed for cloud resource management
-- **PSReadLine:** Configured for a more efficient terminal experience
+- **PSReadLine 2.4.5:** Configured for a more efficient terminal experience
+<!-- END generated:readme-tooling-list -->
 
 Core PowerShell tooling is version-pinned in the Dev Container so validation behavior is more predictable across rebuilds.
 
@@ -138,6 +146,8 @@ For AI-assisted development, these templates are referenced by `/.github/copilot
 
 The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
+Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
+
 ## Prerequisites And Setup
 
 1. **Host OS:** Windows 11 with WSL 2 enabled
@@ -152,7 +162,9 @@ If you are using GitHub Codespaces instead, create a new Codespace from a reposi
 
 This template carries over a high-consequence operational mindset into Infrastructure as Code and automation work.
 
+<!-- BEGIN generated:readme-runtime-philosophy -->
 - **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
+<!-- END generated:readme-runtime-philosophy -->
 - **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
 - **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
 - **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters

@@ -16,7 +16,7 @@ permissions:
 jobs:
   repo-checks:
     name: Repo checks (pwsh)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
         run: |
           Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
           Install-Module Pester -Scope CurrentUser -Force -RequiredVersion 5.7.1
-          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -RequiredVersion 1.25.0
 
       - name: Run repo checks
         shell: pwsh

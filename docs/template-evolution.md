@@ -40,6 +40,58 @@ Updates to this template should generally follow these principles:
 - separate durable guidance from temporary working notes
 - keep security boundaries explicit
 
+## Runtime Update Workflow
+
+Dependabot Docker pull requests are treated as runtime upgrade notifications, not as ordinary one-file dependency bumps.
+
+The source of truth for the current runtime, CI runner, and pinned PowerShell tooling versions is `eng/runtime-policy.json`. Files such as the Dockerfile, GitHub Actions workflow, and generated Markdown blocks should agree with that policy.
+
+When the pinned PowerShell or Ubuntu runtime changes:
+
+- update `eng/runtime-policy.json` first
+- update the Dockerfile, CI runner, and pinned tooling only as part of the same deliberate runtime change
+- run `scripts/Update-GeneratedMarkdown.ps1` to refresh managed documentation blocks
+- run `scripts/Invoke-RepoChecks.ps1 -IncludeTemplates` before merging
+- leave historical version references in `CHANGELOG.md` unchanged unless a release note is being added
+
+### Generated Markdown Blocks
+
+Some Markdown content is managed by generated block markers:
+
+```markdown
+<!-- BEGIN generated:block-name -->
+...
+<!-- END generated:block-name -->
+```
+
+Do not edit the content inside those blocks by hand. Update `eng/runtime-policy.json`, then run:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Update-GeneratedMarkdown.ps1
+```
+
+To check whether generated blocks are current without changing files, run:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Update-GeneratedMarkdown.ps1 -Check
+```
+
+### Version Policy Validation
+
+The repository checks validate that policy-managed values stay aligned across configuration and documentation:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
+```
+
+For focused troubleshooting, run the version policy check directly:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Test-VersionPolicy.ps1
+```
+
+The validation intentionally focuses on the development environment, CI runner, and pinned tooling. PowerShell module compatibility metadata, such as `PowerShellVersion` in module manifests, remains a compatibility decision for each project and is not automatically changed by this workflow.
+
 ## What This Means For Downstream Repositories
 
 Repositories created from this template should be treated as their own projects.

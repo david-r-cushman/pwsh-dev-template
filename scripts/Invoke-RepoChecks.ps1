@@ -17,6 +17,12 @@
 .PARAMETER IncludeTemplates
     Includes the `templates/` folder in PSScriptAnalyzer scanning.
 
+.PARAMETER SkipVersionPolicy
+    Skips runtime and tooling version policy validation.
+
+.PARAMETER SkipGeneratedMarkdown
+    Skips generated Markdown validation.
+
 .PARAMETER OutputPath
     Optional output folder for artifacts (currently used for test results).
 #>
@@ -30,6 +36,12 @@ param(
 
     [Parameter()]
     [switch]$IncludeTemplates,
+
+    [Parameter()]
+    [switch]$SkipVersionPolicy,
+
+    [Parameter()]
+    [switch]$SkipGeneratedMarkdown,
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
@@ -70,6 +82,26 @@ function Resolve-RepoPath {
 
 $analyzerSettingsPath = Resolve-RepoPath -RelativePath 'PSScriptAnalyzerSettings.psd1'
 $pesterConfigPath = Resolve-RepoPath -RelativePath 'PesterConfiguration.psd1'
+$versionPolicyScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-VersionPolicy.ps1'
+$generatedMarkdownScriptPath = Resolve-RepoPath -RelativePath 'scripts/Update-GeneratedMarkdown.ps1'
+
+if (-not $SkipGeneratedMarkdown) {
+    if (-not (Test-Path -LiteralPath $generatedMarkdownScriptPath)) {
+        throw ('Generated Markdown script not found: {0}' -f $generatedMarkdownScriptPath)
+    }
+
+    Write-Verbose 'Validating generated Markdown...'
+    & $generatedMarkdownScriptPath -Check
+}
+
+if (-not $SkipVersionPolicy) {
+    if (-not (Test-Path -LiteralPath $versionPolicyScriptPath)) {
+        throw ('Version policy validation script not found: {0}' -f $versionPolicyScriptPath)
+    }
+
+    Write-Verbose 'Validating version policy...'
+    & $versionPolicyScriptPath
+}
 
 if (-not $SkipAnalyzer) {
     if (-not (Test-Path -LiteralPath $analyzerSettingsPath)) {
