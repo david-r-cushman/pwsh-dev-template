@@ -6,10 +6,6 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
-### Changed
-
-- Updated CI triggers to remove the retired `Dev` branch and add manual `workflow_dispatch` runs for validating short-lived branches before opening a pull request.
-
 ## 0.5.0 - 2026-05-09
 
 ### Added
@@ -21,6 +17,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ### Changed
 
+- Updated CI triggers to remove the retired `Dev` branch and add manual `workflow_dispatch` runs for validating short-lived branches before opening a pull request.
 - Updated repo checks to validate generated Markdown freshness and runtime policy alignment.
 - Updated README and environment setup documentation to use generated blocks for runtime and tooling version references.
 - Removed runtime versions from live documentation headings so versions stay in policy-managed content.
