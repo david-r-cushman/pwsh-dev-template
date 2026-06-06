@@ -114,3 +114,46 @@ In review, flag missing tests, missing comment-based help, analyzer violations, 
 Flag responses that appear correct but are not verifiable, or that present uncertain information as fact.
 
 Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.
+
+## Commit Messages
+
+When asked to generate, review, or revise commit messages, use the Conventional Commits format:
+
+```Markdown
+
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footers(s)]
+
+```
+
+Prefer these commit types unless the repository documetns another standard:
+
+- `feat`: new user-facing or maintainer-facing functionality
+- `fix`: bug fixes or corrected behavior
+- `docs`: documentation-only changes
+- `test`: adding or updating tests
+- `refactor`: code restructuring that does not change behavior
+- `style`: formatting, whitespace, or other non-behavioral style changes
+- `ci`: CI workflow or automation changes
+- `build`: build system, packaging, or dependency changes
+- `chore`: maintenance changes that do not fit another type
+
+Use a consise, imperative, lowercase description without a trailing period.
+
+Prefer a scoped commit when it improves clarity, for example:
+
+- feat(templates): add state-changing function scaffold
+- fix(tests): mock filesystem access in module tests
+- docs(copilot): add simplicity guidance
+- ci(pester): run tests on pull requests
+
+Use `!` after the type or scope for breaking changes:
+
+feat(module)!: require PowerShell 7.4
+
+Include a footer beginning with `BREAKING CHANGE:` when the change breaks existing behavior.
+
+Do not invent commit details that are not supported by the diff, staged changes, or user-provided context. If the change is ambiguous, provide the best commit message candidate and briefly state the assumption.
