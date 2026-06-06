@@ -6,6 +6,18 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.6.0 - 2026-06-06
+
+### Added
+
+- Added root-level `AGENTS.md` to direct coding agents to the repository's authoritative AI guidance.
+- Added complexity management guidance to Copilot instructions to discourage unnecessary abstractions, speculative architecture, and unsolicited refactoring.
+- Added Conventional Commits guidance for AI-generated commit messages.
+
+### Changed
+
+- Clarified AI generation expectations for simplicity, maintainability, and commit message quality.
+
 ## 0.5.0 - 2026-05-09
 
 ### Added
