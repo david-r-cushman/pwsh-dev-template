@@ -43,6 +43,23 @@ Resolve conflicts in this order:
 - Do not resolve ambiguity by guessing. State assumptions explicitly when required.
 - Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
+## Simplicity And Complexity Management
+
+Code is a liability. Every line of codee adds maintenance cost, testing requirements, and potential failure modes.
+
+When generating code:
+
+- Prefer the simplest solution that safely satisfies the requirement.
+- Prefer native PowerShell features and standard language capabilities over additional abstractions, wrappers, frameworks, or dependencies.
+- Do note introduct helper functions, classes, configuration layers, design patters, or reusable abstractions unless they provide clear value for the stated requirement.
+- Optimize for readability and maintainability over cleverness or theoretical extensibility.
+- Keep the happy path easy to follow.
+- Apply error handling and validation where risk exists, but avoid uneccessary defensive code that obscures intent.
+- When modifying existing code, solve the requested problem with the smallest reasonable change and avoid unreleated refactoring.
+- Do not create future-proofing, scalability mechanisesm or architectural layers unless explicitly requested or clearly justified by the requirement.
+
+When multiple valid implementations exist, prefer the solution with the lowest operational and cognitive complexity.
+
 ## Generation Checklist
 
 For new or changed PowerShell code, prefer this checklist over adding one-off patterns:
