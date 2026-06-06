@@ -43,6 +43,23 @@ Resolve conflicts in this order:
 - Do not resolve ambiguity by guessing. State assumptions explicitly when required.
 - Briefly explain any decision that rejects compatibility, convention, template guidance, or user preference.
 
+## Simplicity And Complexity Management
+
+Code is a liability. Every line of code adds maintenance cost, testing requirements, and potential failure modes.
+
+When generating code:
+
+- Prefer the simplest solution that safely satisfies the requirement.
+- Prefer native PowerShell features and standard language capabilities over additional abstractions, wrappers, frameworks, or dependencies.
+- Do not introduce helper functions, classes, configuration layers, design patterns, or reusable abstractions unless they provide clear value for the stated requirement.
+- Optimize for readability and maintainability over cleverness or theoretical extensibility.
+- Keep the happy path easy to follow.
+- Apply error handling and validation where risk exists, but avoid unnecessary defensive code that obscures intent.
+- When modifying existing code, solve the requested problem with the smallest reasonable change and avoid unrelated refactoring.
+- Do not create future-proofing, scalability mechanisms or architectural layers unless explicitly requested or clearly justified by the requirement.
+
+When multiple valid implementations exist, prefer the solution with the lowest operational and cognitive complexity.
+
 ## Generation Checklist
 
 For new or changed PowerShell code, prefer this checklist over adding one-off patterns:
@@ -97,3 +114,48 @@ In review, flag missing tests, missing comment-based help, analyzer violations, 
 Flag responses that appear correct but are not verifiable, or that present uncertain information as fact.
 
 Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.
+
+## Commit Messages
+
+When asked to generate, review, or revise commit messages, use the Conventional Commits format:
+
+```Markdown
+
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+
+```
+
+Prefer these commit types unless the repository documents another standard:
+
+- `feat`: new user-facing or maintainer-facing functionality
+- `fix`: bug fixes or corrected behavior
+- `docs`: documentation-only changes
+- `test`: adding or updating tests
+- `refactor`: code restructuring that does not change behavior
+- `style`: formatting, whitespace, or other non-behavioral style changes
+- `ci`: CI workflow or automation changes
+- `build`: build system, packaging, or dependency changes
+- `chore`: maintenance changes that do not fit another type
+
+Use a concise, imperative, lowercase description without a trailing period.
+
+Prefer a scoped commit when it improves clarity, for example:
+
+- feat(templates): add state-changing function scaffold
+- fix(tests): mock filesystem access in module tests
+- docs(copilot): add simplicity guidance
+- ci(pester): run tests on pull requests
+
+Use `!` after the type or scope for breaking changes:
+
+feat(module)!: require PowerShell 7.4
+
+Include a footer beginning with `BREAKING CHANGE:` when the change breaks existing behavior.
+
+Generate commit messages from the actual change being made. Avoid generic descriptions such as "update code", "fix issue", "changes", or "improvements".
+
+Do not invent commit details that are not supported by the diff, staged changes, or user-provided context. If the change is ambiguous, provide the best commit message candidate and briefly state the assumption.
