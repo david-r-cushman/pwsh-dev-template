@@ -45,18 +45,18 @@ Resolve conflicts in this order:
 
 ## Simplicity And Complexity Management
 
-Code is a liability. Every line of codee adds maintenance cost, testing requirements, and potential failure modes.
+Code is a liability. Every line of code adds maintenance cost, testing requirements, and potential failure modes.
 
 When generating code:
 
 - Prefer the simplest solution that safely satisfies the requirement.
 - Prefer native PowerShell features and standard language capabilities over additional abstractions, wrappers, frameworks, or dependencies.
-- Do note introduct helper functions, classes, configuration layers, design patters, or reusable abstractions unless they provide clear value for the stated requirement.
+- Do not introduce helper functions, classes, configuration layers, design patterns, or reusable abstractions unless they provide clear value for the stated requirement.
 - Optimize for readability and maintainability over cleverness or theoretical extensibility.
 - Keep the happy path easy to follow.
-- Apply error handling and validation where risk exists, but avoid uneccessary defensive code that obscures intent.
-- When modifying existing code, solve the requested problem with the smallest reasonable change and avoid unreleated refactoring.
-- Do not create future-proofing, scalability mechanisesm or architectural layers unless explicitly requested or clearly justified by the requirement.
+- Apply error handling and validation where risk exists, but avoid unnecessary defensive code that obscures intent.
+- When modifying existing code, solve the requested problem with the smallest reasonable change and avoid unrelated refactoring.
+- Do not create future-proofing, scalability mechanisms or architectural layers unless explicitly requested or clearly justified by the requirement.
 
 When multiple valid implementations exist, prefer the solution with the lowest operational and cognitive complexity.
 
@@ -125,11 +125,11 @@ When asked to generate, review, or revise commit messages, use the Conventional 
 
 [optional body]
 
-[optional footers(s)]
+[optional footer(s)]
 
 ```
 
-Prefer these commit types unless the repository documetns another standard:
+Prefer these commit types unless the repository documents another standard:
 
 - `feat`: new user-facing or maintainer-facing functionality
 - `fix`: bug fixes or corrected behavior
@@ -141,7 +141,7 @@ Prefer these commit types unless the repository documetns another standard:
 - `build`: build system, packaging, or dependency changes
 - `chore`: maintenance changes that do not fit another type
 
-Use a consise, imperative, lowercase description without a trailing period.
+Use a concise, imperative, lowercase description without a trailing period.
 
 Prefer a scoped commit when it improves clarity, for example:
 
@@ -155,5 +155,7 @@ Use `!` after the type or scope for breaking changes:
 feat(module)!: require PowerShell 7.4
 
 Include a footer beginning with `BREAKING CHANGE:` when the change breaks existing behavior.
+
+Generate commit messages from the actual change being made. Avoid generic descriptions such as "update code", "fix issue", "changes", or "improvements".
 
 Do not invent commit details that are not supported by the diff, staged changes, or user-provided context. If the change is ambiguous, provide the best commit message candidate and briefly state the assumption.
