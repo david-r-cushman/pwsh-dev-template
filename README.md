@@ -46,8 +46,9 @@ Downstream portfolio repositories provide the project-specific implementation an
 3. Replace placeholder module metadata if the project is module-oriented.
 4. Add scripts, functions, modules, or automation under `src`.
 5. Add project-specific Pester tests under `tests`.
-6. Copy and adapt scaffolds from `templates` when they fit the work.
-7. Run local validation:
+6. Copy and adapt scaffolds from `templates` for new functions, scripts, modules, and tests when they fit the work.
+7. Review the AI-assisted development guidance in `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.
+8. Run local validation:
 
    ```powershell
    pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates

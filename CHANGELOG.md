@@ -13,10 +13,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 - Added root-level `AGENTS.md` to direct coding agents to the repository's authoritative AI guidance.
 - Added complexity management guidance to Copilot instructions to discourage unnecessary abstractions, speculative architecture, and unsolicited refactoring.
 - Added Conventional Commits guidance for AI-generated commit messages.
+- Added `README.md` guidance to review `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.
 
 ### Changed
 
 - Clarified AI generation expectations for simplicity, maintainability, and commit message quality.
+- Clarified `README.md` template usage guidance for adapting scaffolds for functions, scripts, modules, and tests.
 
 ## 0.5.0 - 2026-05-09
 
