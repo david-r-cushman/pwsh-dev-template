@@ -6,24 +6,25 @@
 <!-- END generated:readme-powershell-badge -->
 ![Template Version](https://img.shields.io/badge/template-0.6.0-blue)
 
-This repository is the baseline PowerShell development template used across my PowerShell-focused portfolio projects.
+A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
-It provides a repeatable starting point for script-based and module-oriented PowerShell work, with development environment setup, validation, scaffolding, GitHub project hygiene, and AI-assisted development governance included from the start.
-
-It is intended to give new repositories a consistent starting point for:
+This template provides a standardized starting point for PowerShell development with:
 
 <!-- BEGIN generated:readme-runtime-focus -->
 - PowerShell 7.4 development
 <!-- END generated:readme-runtime-focus -->
-- local VS Code development
-- Docker Dev Container development
-- GitHub Codespaces development
-- formatting and linting standards
-- Pester-based testing structure
-- secure-by-default development habits
-- AI-assisted development standards
+- Pester testing
+- PSScriptAnalyzer validation
+- GitHub Actions CI
+- Dev Containers and GitHub Codespaces
+- reusable script, function, module, and test scaffolds
+- AI governance and GitHub Copilot guidance
+- Conventional Commit standards
+- repository hygiene for issues, pull requests, security, and dependency updates
 
-Project-specific scripts, modules, tests, and automation are expected to be added in repositories created from this template.
+Designed for engineers who want a consistent, AI-assisted PowerShell development workflow with validation and review guardrails.
+
+This repository also serves as the baseline template for my PowerShell-focused portfolio projects, where downstream repositories demonstrate these standards applied to real automation work.
 
 ## Portfolio Context
 
