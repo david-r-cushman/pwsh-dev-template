@@ -1,4 +1,4 @@
-# Agents.md
+# AGENTS.md
 
 ## Repository Instructions
 
@@ -8,7 +8,9 @@ This repository's primary AI guidance is maintained in:
 .github/copilot-instructions.md
 ```
 
-All coding agents should follow the guidance in that file, including:
+Before performing coding, review, documentation, test, automation, or repository-maintenance work, coding agents must read and follow `.github/copilot-instructions.md`.
+
+That file is the authoritative instruction source for:
 
 - AI governance requirements
 - conflict resolution rules
@@ -19,4 +21,6 @@ All coding agents should follow the guidance in that file, including:
 - commit message conventions
 - review expectations
 
-If guidance in this file conflicts with `.github/copilot-instructions.md`, that file is authoritative.
+If `.github/copilot-instructions.md` is missing or unavailable, stop and report that the repository guidance cannot be loaded rather than guessing.
+
+If guidance in this file conflicts with `.github/copilot-instructions.md`, `.github/copilot-instructions.md` is authoritative.
