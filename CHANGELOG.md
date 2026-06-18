@@ -6,7 +6,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
-### 2026-06-18
+## 0.6.1 - 2026-06-18
 
 ### Changed
 
