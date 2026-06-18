@@ -6,6 +6,8 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### 2026-06-18
+
 ### Changed
 
 - Clarified template versioning documentation and reduced duplicated AI instruction guidance.
