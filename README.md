@@ -190,3 +190,10 @@ This repository versions the template itself using Semantic Versioning.
 
 - Current version: see `VERSION`
 - Version history: see `CHANGELOG.md`
+- Versioning policy: see [`docs/template-evolution.md`](docs/template-evolution.md)
+
+Version changes apply to the template baseline, not to downstream repositories created from it. In general:
+
+- Major versions indicate breaking template, workflow, or compatibility changes.
+- Minor versions indicate new template capabilities, tooling, templates, or conventions.
+- Patch versions indicate fixes, documentation clarifications, and low-risk maintenance updates.

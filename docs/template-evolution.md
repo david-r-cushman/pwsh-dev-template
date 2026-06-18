@@ -40,6 +40,18 @@ Updates to this template should generally follow these principles:
 - separate durable guidance from temporary working notes
 - keep security boundaries explicit
 
+## Template Versioning
+
+This repository versions the template itself with Semantic Versioning. The version describes the reusable baseline maintained by this repository, not the version of any downstream project created from it.
+
+Use version changes to communicate the impact of template evolution:
+
+- Major versions: breaking changes to template structure, workflows, supported runtime compatibility, generated project expectations, or migration assumptions.
+- Minor versions: new template capabilities, scaffolds, workflows, tooling support, or conventions that add value without intentionally breaking existing template consumers.
+- Patch versions: corrections, documentation clarifications, policy wording updates, validation fixes, and low-risk maintenance that preserve the current template contract.
+
+Update `VERSION` and `CHANGELOG.md` together when preparing a release. Keep unreleased maintenance notes under the `Unreleased` heading until a release version is chosen.
+
 ## Runtime Update Workflow
 
 Dependabot Docker pull requests are treated as runtime upgrade notifications, not as ordinary one-file dependency bumps.
