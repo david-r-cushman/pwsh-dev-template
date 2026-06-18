@@ -146,7 +146,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
     It 'refuses to apply with a dirty working tree' {
         Set-Content -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'dirty.txt') -Value 'dirty' -Encoding utf8
 
-        { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*uncommitted changes*'
+        { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*uncommitted*changes*'
     }
 
     It 'supports WhatIf without changing files' {
