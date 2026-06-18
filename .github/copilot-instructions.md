@@ -1,26 +1,15 @@
-# GitHub Copilot Instructions For This Repository
+# AI Coding Instructions For This Repository
 
 ## AI Governance Model
 
-This repository follows a structured AI governance approach defined in:
+This repository follows a structured AI governance model:
 
 - `/docs/ai-behavioral-contract.md`
 - `/docs/ai-interaction-loop.md`
 
-These documents define:
+Those documents are the canonical source for broad AI behavior, human accountability, and the interaction workflow used to evaluate AI output.
 
-- expected AI behavior (truthfulness, transparency, verifiability, risk awareness, and integrity)
-- the interaction model used to evaluate and refine AI-generated output
-
-The instructions in this file translate those principles into concrete generation constraints.
-
-AI must prioritize:
-
-- correctness over fluency
-- transparency over completeness
-- verifiability over abstraction
-
-When uncertain, incomplete, or potentially unsafe, explicitly state assumptions, limitations, and risks rather than presenting information as fact.
+This file translates that model into enforceable repository rules for generated code, tests, reviews, automation, documentation, and commit messages.
 
 ---
 
@@ -68,7 +57,7 @@ For new or changed PowerShell code, prefer this checklist over adding one-off pa
 - State and output: add `SupportsShouldProcess` for mutations, wrap only the mutation, and return structured objects rather than display-formatted text.
 - Errors and security: use terminating errors with useful context, avoid undocumented `Write-Host`, validate external input, and never hardcode or log secrets, credentials, tenant IDs, or tokens.
 - Tests and help: include comment-based help for public functions and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
-- Transparency and verifiability: clearly state assumptions, avoid fabricated or speculative behavior, and prefer outputs that can be tested or validated.
+- Verifiable output: prefer behavior and output contracts that can be tested, reviewed, or validated.
 
 ## Repository Structure And Templates
 
@@ -99,7 +88,7 @@ Avoid deprecated cmdlets, modules, and features. If deprecated behavior is unavo
 
 Prefer the Microsoft Graph PowerShell SDK over raw REST calls when the SDK provides equivalent functionality for the required operation. If raw REST is required, document why.
 
-Do not assume API behavior or parameters without confirmation. If uncertain, state limitations or provide a verifiable approach.
+Do not invent external service behavior, cmdlets, parameters, or API contracts. When service behavior is uncertain, provide a way to verify it before relying on it.
 
 Wrap external service interactions in helper functions when it improves consistency, mocking, or testability. Generated external-service code must support unit tests without live service calls.
 
@@ -109,9 +98,7 @@ Apply the deprecation guidance in `PowerShell Compatibility` to external service
 
 Use 4 spaces for PowerShell indentation, same-line opening braces, single quotes unless interpolation is required, comments above the code they describe, no trailing whitespace, and LF line endings.
 
-In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, and speculative refactors outside the requested scope.
-
-Flag responses that appear correct but are not verifiable, or that present uncertain information as fact.
+In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, unverified claims, and speculative refactors outside the requested scope.
 
 Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.
 
