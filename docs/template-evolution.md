@@ -110,6 +110,21 @@ Repositories created from this template should be treated as their own projects.
 
 This template may continue to evolve after a downstream repository is created, but that does not mean every downstream repository must continuously adopt every template change. Future updates should be evaluated intentionally based on project needs.
 
+### Downstream Guidance Sync
+
+AI guidance and guardrail documentation are the default downstream sync targets because they describe how AI-assisted changes should be generated, reviewed, and validated. Keeping those files aligned helps downstream repositories inherit the current operating model without replacing project-specific implementation choices.
+
+The downstream guidance sync process is intentionally narrow. It may update:
+
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
+- AI governance and operating-model documents under `docs`
+- the README template-version badge
+
+It does not update source code, tests, Pester configuration, PSScriptAnalyzer settings, GitHub Actions workflows, Dev Container files, runtime policy, module manifests, or scaffolds. Those files become downstream-owned after repository creation.
+
+Any broader synchronization should be explicit, repo-specific, and reviewed as normal project work.
+
 ## Maintenance Mindset
 
 The template should be reviewed periodically with questions such as:

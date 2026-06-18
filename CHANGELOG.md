@@ -6,6 +6,18 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.6.2 - 2026-06-18
+
+### Added
+
+- Added a template-owned downstream guidance sync script for auditing and updating AI guidance files and README template-version badges.
+- Added Pester coverage for downstream guidance sync behavior and safety checks.
+- Added README documentation for the downstream guidance sync workflow.
+
+### Changed
+
+- Clarified downstream sync boundaries so project-owned tooling, CI, source, tests, and scaffolds are not treated as default sync targets.
+
 ## 0.6.1 - 2026-06-18
 
 ### Changed

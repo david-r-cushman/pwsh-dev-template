@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.6.1-blue)
+![Template Version](https://img.shields.io/badge/template-0.6.2-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -149,6 +149,25 @@ For AI-assisted development, these templates are referenced by `/.github/copilot
 The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
 Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
+
+## Downstream Guidance Sync
+
+This template includes a local sync tool for repositories created from it. The sync updates only AI guidance and guardrail documentation, plus the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, or scaffolds.
+
+Run the tool from this template repository and pass the downstream repository path:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo
+```
+
+Audit mode is the default and reports drift without changing files. To apply the safe sync set, create or switch the downstream repo to a non-main branch first, then run:
+
+```powershell
+git -C ../downstream-repo switch -c chore/sync-template-guidance-0.6.2
+pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
+```
+
+The README template badge means the downstream repo's AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
 
 ## Prerequisites And Setup
 
