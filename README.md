@@ -19,6 +19,7 @@ This template provides a standardized starting point for PowerShell development 
 - Dev Containers and GitHub Codespaces
 - reusable script, function, module, and test scaffolds
 - AI governance and GitHub Copilot guidance
+- downstream AI guidance sync for repositories created from this template
 - Conventional Commit standards
 - repository hygiene for issues, pull requests, security, and dependency updates
 
