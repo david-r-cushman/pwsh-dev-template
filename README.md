@@ -152,6 +152,10 @@ The CI workflow runs the same repo check entrypoint with template validation ena
 
 Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
 
+## Repo-Local Agent Workflows
+
+This template includes repo-local agent skills for repeatable maintenance workflows. See [`docs/agent-workflows.md`](docs/agent-workflows.md) for the human-readable workflow index and validation expectations.
+
 ## Downstream Guidance Sync
 
 This template includes a local sync tool for repositories created from it. The sync updates only AI guidance and guardrail documentation, plus the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, or scaffolds.
