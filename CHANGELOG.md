@@ -6,8 +6,11 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.10.0 - 2026-06-19
+
 ### Added
 
+- Added a maintainer-facing template health report for generated Markdown, runtime policy, template version metadata, repo-local agent workflow discoverability, and Git release posture.
 - Added a human-readable guide for repo-local agent workflows.
 
 ### Changed

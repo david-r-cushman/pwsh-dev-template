@@ -18,6 +18,8 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 
 Use the repo-local skill when the task matches one of the workflow areas above. The skill should guide the agent through the expected branch, script, validation, diff review, commit, and pull request process.
 
+Before planning template maintenance work, agents can run `scripts/Get-TemplateHealth.ps1` for a quick report of generated Markdown, runtime policy, template version metadata, workflow discoverability, and Git release posture.
+
 The agent should not invent a separate process when a deterministic script already exists. If a script reports an error, the correct response is to inspect the failure, fix the cause, and rerun the documented validation. Recovery should still be explicit, reviewable, and consistent with the repository guidance.
 
 Pester is the repository validation standard for repo-local skill behavior and discoverability. When skills or workflow documentation change, update `tests/unit/SkillScaffold.Tests.ps1` so the repository can detect stale skill references, missing metadata, and missing documentation pointers. Codex `quick_validate.py` may still be useful while authoring a skill, but it is not the repository's required validation path.

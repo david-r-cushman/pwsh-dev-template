@@ -129,6 +129,14 @@ Any broader synchronization should be explicit, repo-specific, and reviewed as n
 
 ## Maintenance Mindset
 
+For a quick maintainer posture check, run:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Get-TemplateHealth.ps1
+```
+
+The health report summarizes generated Markdown, runtime policy, template version metadata, repo-local agent workflow discoverability, and Git release posture. It is a report by default, not a replacement for the full repository checks.
+
 The template should be reviewed periodically with questions such as:
 
 - does the documentation still match the implementation

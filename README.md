@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.9.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.10.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -151,6 +151,16 @@ For AI-assisted development, these templates are referenced by `/.github/copilot
 The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
 
 Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
+
+## Template Health
+
+Run the template health report for a quick maintainer view of generated Markdown, runtime policy, template version metadata, repo-local agent workflow discoverability, and Git release posture:
+
+```powershell
+pwsh -NoProfile -File ./scripts/Get-TemplateHealth.ps1
+```
+
+Use `-AsJson` for agent-readable output or `-FailOnIssue` when a non-healthy item should fail automation.
 
 ## Repo-Local Agent Workflows
 
