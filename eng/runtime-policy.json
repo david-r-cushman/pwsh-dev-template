@@ -3,7 +3,7 @@
     "powershellVersion": "7.4",
     "powershellVersionLabel": "7.4.x",
     "ubuntuVersion": "22.04",
-    "dockerImage": "mcr.microsoft.com/powershell:7.4-ubuntu-22.04"
+    "dockerImage": "mcr.microsoft.com/powershell:lts-7.4-ubuntu-22.04"
   },
   "githubActions": {
     "runnerImage": "ubuntu-22.04"
