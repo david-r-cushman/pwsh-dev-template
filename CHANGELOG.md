@@ -6,8 +6,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.10.1 - 2026-06-19
+
 ### Changed
 
+- Aligned the Dev Container base image tag with the PowerShell 7.4 LTS Ubuntu 22.04 image published in Microsoft Artifact Registry.
+- Updated Dev Container profile setup to use PowerShell's all-users profile path instead of a hardcoded installation directory.
 - Clarified why repo-local sync and runtime policy workflows exist and where their boundaries come from.
 - Added success criteria to repo-local skills so agents can identify completed workflows more clearly.
 
