@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Changed
+
+- Clarified that repo-local skill changes should use Pester as the repository validation standard, with Codex `quick_validate.py` as an optional authoring check.
+
 ## 0.9.0 - 2026-06-19
 
 ### Added
