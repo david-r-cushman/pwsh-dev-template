@@ -58,6 +58,16 @@ pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
 
 Report any validation failure with the policy value, file path, expected value, and actual value when available.
 
+## Success Criteria
+
+The workflow is complete when:
+
+- `eng/runtime-policy.json` remains the source of truth for the requested version changes
+- policy-managed files and generated Markdown agree with the policy
+- generated Markdown was updated through `scripts/Update-GeneratedMarkdown.ps1`, not by hand
+- `scripts/Update-GeneratedMarkdown.ps1 -Check`, `scripts/Test-VersionPolicy.ps1`, and `scripts/Invoke-RepoChecks.ps1 -IncludeTemplates` pass
+- the diff is limited to the intended runtime, tooling, generated documentation, and release metadata surfaces
+
 ## Stop Conditions
 
 Stop and report instead of improvising when:

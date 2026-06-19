@@ -64,6 +64,16 @@ When the user requests sync changes, use this sequence:
 
 7. Open or draft a PR when requested, summarizing changed guidance and validation results.
 
+## Success Criteria
+
+The workflow is complete when:
+
+- audit output has been reviewed and explained in plain language
+- apply mode, when used, ran only from a non-main downstream branch
+- the downstream diff is limited to the sync allowlist
+- downstream validation was run, or a clear reason was reported when validation was unavailable or skipped
+- the commit or PR summary states the synced template guidance version and validation result
+
 ## Stop Conditions
 
 Stop and report instead of improvising when:
