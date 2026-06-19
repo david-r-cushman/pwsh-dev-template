@@ -24,3 +24,9 @@ That file is the authoritative instruction source for:
 If `.github/copilot-instructions.md` is missing or unavailable, stop and report that the repository guidance cannot be loaded rather than guessing.
 
 If guidance in this file conflicts with `.github/copilot-instructions.md`, `.github/copilot-instructions.md` is authoritative.
+
+## Repo-Local Skills
+
+Repo-local Codex skills are stored under `.codex/skills/`.
+
+For downstream AI guidance synchronization, agents should use `.codex/skills/downstream-guidance-sync/SKILL.md` together with `scripts/Invoke-TemplateGuidanceSync.ps1` instead of manually copying guidance files.
