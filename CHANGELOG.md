@@ -6,6 +6,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.9.0 - 2026-06-19
+
+### Added
+
+- Added a repo-local Codex skill and version metadata validator for template release preparation and tagging.
+
 ## 0.8.0 - 2026-06-19
 
 ### Added

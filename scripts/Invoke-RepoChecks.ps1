@@ -23,6 +23,9 @@
 .PARAMETER SkipGeneratedMarkdown
     Skips generated Markdown validation.
 
+.PARAMETER SkipTemplateVersion
+    Skips template release version metadata validation.
+
 .PARAMETER OutputPath
     Optional output folder for artifacts (currently used for test results).
 #>
@@ -42,6 +45,9 @@ param(
 
     [Parameter()]
     [switch]$SkipGeneratedMarkdown,
+
+    [Parameter()]
+    [switch]$SkipTemplateVersion,
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
@@ -84,6 +90,7 @@ $analyzerSettingsPath = Resolve-RepoPath -RelativePath 'PSScriptAnalyzerSettings
 $pesterConfigPath = Resolve-RepoPath -RelativePath 'PesterConfiguration.psd1'
 $versionPolicyScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-VersionPolicy.ps1'
 $generatedMarkdownScriptPath = Resolve-RepoPath -RelativePath 'scripts/Update-GeneratedMarkdown.ps1'
+$templateVersionScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-TemplateVersion.ps1'
 
 if (-not $SkipGeneratedMarkdown) {
     if (-not (Test-Path -LiteralPath $generatedMarkdownScriptPath)) {
@@ -101,6 +108,14 @@ if (-not $SkipVersionPolicy) {
 
     Write-Verbose 'Validating version policy...'
     & $versionPolicyScriptPath
+}
+if (-not $SkipTemplateVersion) {
+    if (-not (Test-Path -LiteralPath $templateVersionScriptPath)) {
+        throw ('Template version validation script not found: {0}' -f $templateVersionScriptPath)
+    }
+
+    Write-Verbose 'Validating template version metadata...'
+    & $templateVersionScriptPath
 }
 
 if (-not $SkipAnalyzer) {

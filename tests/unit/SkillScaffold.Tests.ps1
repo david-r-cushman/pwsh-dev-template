@@ -5,6 +5,8 @@ Describe 'Repo-local skills' {
         $script:SkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/agents/openai.yaml'
         $script:RuntimeSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/SKILL.md'
         $script:RuntimeSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/agents/openai.yaml'
+        $script:VersionSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/SKILL.md'
+        $script:VersionSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/agents/openai.yaml'
         $script:SyncScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1'
         $script:RuntimePolicyPath = Join-Path -Path $script:RepoRoot -ChildPath 'eng/runtime-policy.json'
     }
@@ -115,5 +117,49 @@ Describe 'Repo-local skills' {
         $agentsContent | Should -Match 'eng/runtime-policy\.json'
         $copilotContent | Should -Match '\.codex/skills/runtime-policy-update/SKILL\.md'
         $copilotContent | Should -Match 'eng/runtime-policy\.json'
+    }
+
+    It 'includes the template version release skill' {
+        Test-Path -LiteralPath $script:VersionSkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:VersionSkillMetadataPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid required template version skill frontmatter' {
+        $content = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $content | Should -Match '^---\s*\r?\nname: template-version-release\r?\n'
+        $content | Should -Match '\r?\ndescription: .+version.+release.+\r?\n---'
+    }
+
+    It 'references release metadata surfaces and tag workflow' {
+        $content = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $content | Should -Match 'VERSION'
+        $content | Should -Match 'CHANGELOG\.md'
+        $content | Should -Match 'README template badge'
+        $content | Should -Match 'Test-TemplateVersion\.ps1'
+        $content | Should -Match 'docs/template-evolution\.md'
+        $content | Should -Match 'README\.md'
+        $content | Should -Match 'vX\.Y\.Z'
+    }
+
+    It 'uses valid template version skill UI metadata with an explicit skill prompt' {
+        $content = Get-Content -Raw -LiteralPath $script:VersionSkillMetadataPath
+
+        $content | Should -Match 'display_name: "Template Version Release"'
+        $content | Should -Match 'short_description: "Manage template version releases"'
+        $content | Should -Match 'default_prompt: "Use \$template-version-release'
+    }
+
+    It 'documents the version skill in repository docs and agent instructions' {
+        $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
+        $evolutionContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'docs/template-evolution.md')
+        $agentsContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
+        $copilotContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
+
+        $readmeContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+        $evolutionContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+        $agentsContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+        $copilotContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
     }
 }
