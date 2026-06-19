@@ -6,6 +6,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.7.0 - 2026-06-19
+
+### Added
+
+- Added a repo-local Codex skill that guides agents through the downstream AI guidance sync workflow.
+
 ## 0.6.2 - 2026-06-18
 
 ### Added

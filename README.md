@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.6.2-blue)
+![Template Version](https://img.shields.io/badge/template-0.7.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -155,6 +155,8 @@ Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the 
 
 This template includes a local sync tool for repositories created from it. The sync updates only AI guidance and guardrail documentation, plus the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, or scaffolds.
 
+A repo-local Codex skill is also provided at `.codex/skills/downstream-guidance-sync/SKILL.md` so agents can operate the sync script through the intended audit, branch, validation, commit, and pull request workflow.
+
 Run the tool from this template repository and pass the downstream repository path:
 
 ```powershell
@@ -164,7 +166,7 @@ pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstr
 Audit mode is the default and reports drift without changing files. To apply the safe sync set, create or switch the downstream repo to a non-main branch first, then run:
 
 ```powershell
-git -C ../downstream-repo switch -c chore/sync-template-guidance-0.6.2
+git -C ../downstream-repo switch -c chore/sync-template-guidance-0.7.0
 pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
 ```
 
