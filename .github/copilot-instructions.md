@@ -84,6 +84,8 @@ When asked to update the template runtime, Ubuntu image, GitHub Actions runner, 
 
 When asked to prepare, validate, tag, or clean up a template release version, use `.codex/skills/template-version-release/SKILL.md`. Keep `VERSION`, the README template-version badge, and `CHANGELOG.md` aligned, validate with `scripts/Test-TemplateVersion.ps1`, and create annotated `vX.Y.Z` tags only after the release PR is merged to `main`.
 
+When adding or updating repo-local skills, add or update Pester coverage in `tests/unit/SkillScaffold.Tests.ps1` for the skill file, metadata, required references, and agent discoverability. The Codex `quick_validate.py` helper may be used as an optional authoring check, but Pester is the repository validation standard.
+
 ## PowerShell Compatibility
 
 Target PowerShell 7.4.x unless `README.md`, `/docs`, or the task-specific template declares another version under `PowerShell Version`, `Requirements`, or `Compatibility`. For version conflicts, use this precedence: `README.md`, then `/docs`, then task-specific template. If version requirements are missing, invalid, outdated, or unsupported, provide a PowerShell 7.4.x-compatible fallback and document the assumption.
