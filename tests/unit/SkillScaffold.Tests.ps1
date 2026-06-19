@@ -51,4 +51,16 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'short_description: "Sync template AI guidance into downstream repos"'
         $content | Should -Match 'default_prompt: "Use \$downstream-guidance-sync'
     }
+
+    It 'is discoverable from repository agent instructions' {
+        $agentsPath = Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md'
+        $copilotPath = Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md'
+        $agentsContent = Get-Content -Raw -LiteralPath $agentsPath
+        $copilotContent = Get-Content -Raw -LiteralPath $copilotPath
+
+        $agentsContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
+        $agentsContent | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
+        $copilotContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
+        $copilotContent | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
+    }
 }
