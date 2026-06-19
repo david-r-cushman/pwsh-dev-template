@@ -42,6 +42,26 @@ This repo provides:
 
 Downstream portfolio repositories provide the project-specific implementation and show these standards applied to real PowerShell projects.
 
+## Engineering Philosophy
+
+> *"Zero Margin for Error"*
+
+This template carries over a high-consequence operational mindset into Infrastructure as Code and automation work.
+
+<!-- BEGIN generated:readme-runtime-philosophy -->
+- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
+<!-- END generated:readme-runtime-philosophy -->
+- **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
+- **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
+- **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
+- **Clean Development Boundary:** Development tools should not unnecessarily expose host credentials or host-resident auth state to code running in the container
+
+That same philosophy also shapes how AI assistance is used in this template and in repositories created from it.
+
+AI is treated as a drafting accelerator, not as a substitute for engineering ownership. Constraints, review standards, safety checks, and final accountability remain human responsibilities.
+
+For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md).
+
 ## Use This Template
 
 1. Create a new repository from this template.
@@ -110,7 +130,9 @@ That same repository structure also supports GitHub Codespaces, providing a brow
 
 ## What This Template Does Not Include
 
-This template does not ship with project-specific business logic, public functions, private helpers, or Pester test implementations.
+This template does not ship with project-specific business logic, public functions, private helpers, or downstream project test implementations.
+
+This repository does include Pester tests for validating the template itself, including scaffolds, repo health behavior, version policy, and sync tooling. Repositories created from this template are expected to add their own project-specific Pester tests for their scripts, modules, and automation logic.
 
 It does include optional scaffolding for both script-first and module-first projects, but downstream repositories are expected to replace placeholder module metadata and add real implementation code.
 
@@ -194,26 +216,6 @@ The README template badge means the downstream repo's AI guidance and guardrails
 3. **Launch:** Open the folder in VS Code and select **Reopen in Container** when prompted
 
 If you are using GitHub Codespaces instead, create a new Codespace from a repository generated from this template and open the project in the browser-based editor.
-
-## Engineering Philosophy
-
-> *"Zero Margin for Error"*
-
-This template carries over a high-consequence operational mindset into Infrastructure as Code and automation work.
-
-<!-- BEGIN generated:readme-runtime-philosophy -->
-- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
-<!-- END generated:readme-runtime-philosophy -->
-- **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
-- **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
-- **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
-- **Clean Development Boundary:** Development tools should not unnecessarily expose host credentials or host-resident auth state to code running in the container
-
-That same philosophy also shapes how AI assistance is used in this template and in repositories created from it.
-
-AI is treated as a drafting accelerator, not as a substitute for engineering ownership. Constraints, review standards, safety checks, and final accountability remain human responsibilities.
-
-For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md).
 
 ## Troubleshooting
 

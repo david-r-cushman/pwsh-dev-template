@@ -6,6 +6,11 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Changed
+
+- Clarified README wording that distinguishes template validation tests from downstream project test implementations.
+- Moved the README engineering philosophy section higher for earlier reader context.
+
 ## 0.10.1 - 2026-06-19
 
 ### Changed
