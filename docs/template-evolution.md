@@ -58,6 +58,8 @@ Dependabot Docker pull requests are treated as runtime upgrade notifications, no
 
 The source of truth for the current runtime, CI runner, and pinned PowerShell tooling versions is `eng/runtime-policy.json`. Files such as the Dockerfile, GitHub Actions workflow, and generated Markdown blocks should agree with that policy.
 
+Agents should use `.codex/skills/runtime-policy-update/SKILL.md` when coordinating this workflow.
+
 When the pinned PowerShell or Ubuntu runtime changes:
 
 - update `eng/runtime-policy.json` first

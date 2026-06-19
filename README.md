@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.7.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.8.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
