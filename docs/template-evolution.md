@@ -50,7 +50,7 @@ Use version changes to communicate the impact of template evolution:
 - Minor versions: new template capabilities, scaffolds, workflows, tooling support, or conventions that add value without intentionally breaking existing template consumers.
 - Patch versions: corrections, documentation clarifications, policy wording updates, validation fixes, and low-risk maintenance that preserve the current template contract.
 
-Update `VERSION` and `CHANGELOG.md` together when preparing a release. Keep unreleased maintenance notes under the `Unreleased` heading until a release version is chosen.
+Update `VERSION`, the README template-version badge, and `CHANGELOG.md` together when preparing a release. Keep unreleased maintenance notes under the `Unreleased` heading until a release version is chosen. Use `scripts/Test-TemplateVersion.ps1` to verify release metadata before opening a PR. After the release PR is merged, create an annotated `vX.Y.Z` tag on `main` and push the tag. Agents should use `.codex/skills/template-version-release/SKILL.md` when coordinating this workflow.
 
 ## Runtime Update Workflow
 

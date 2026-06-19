@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.8.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.9.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -212,6 +212,7 @@ This repository versions the template itself using Semantic Versioning.
 
 - Current version: see `VERSION`
 - Version history: see `CHANGELOG.md`
+- Version validation: run `scripts/Test-TemplateVersion.ps1`
 - Versioning policy: see [`docs/template-evolution.md`](docs/template-evolution.md)
 
 Version changes apply to the template baseline, not to downstream repositories created from it. In general:
@@ -219,3 +220,5 @@ Version changes apply to the template baseline, not to downstream repositories c
 - Major versions indicate breaking template, workflow, or compatibility changes.
 - Minor versions indicate new template capabilities, tooling, templates, or conventions.
 - Patch versions indicate fixes, documentation clarifications, and low-risk maintenance updates.
+
+A repo-local Codex skill is provided at `.codex/skills/template-version-release/SKILL.md` for version preparation and post-merge release tagging. Release tags use the `vX.Y.Z` format and are applied to `main` after the release PR is merged.

@@ -1,0 +1,3 @@
+display_name: "Template Version Release"
+short_description: "Manage template version releases"
+default_prompt: "Use $template-version-release to prepare or finalize a template release version."
