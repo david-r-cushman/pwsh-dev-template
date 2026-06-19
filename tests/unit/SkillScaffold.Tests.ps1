@@ -204,4 +204,24 @@ Describe 'Repo-local skills' {
         $versionContent | Should -Match 'vX\.Y\.Z'
         $versionContent | Should -Match 'Test-TemplateVersion\.ps1 -CheckTag'
     }
+
+    It 'documents rationale for workflow boundaries' {
+        $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
+        $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
+        $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $syncContent | Should -Match '## Why This Exists'
+        $syncContent | Should -Match 'independent projects'
+        $syncContent | Should -Match 'AI guidance'
+        $syncContent | Should -Match 'project-owned'
+        $syncContent | Should -Match 'should not be clobbered'
+
+        $runtimeContent | Should -Match '## Why This Exists'
+        $runtimeContent | Should -Match 'Runtime and tooling pins'
+        $runtimeContent | Should -Match 'eng/runtime-policy\.json'
+        $runtimeContent | Should -Match 'Generated Markdown'
+        $runtimeContent | Should -Match 'repeatable, reviewable'
+
+        $versionContent | Should -Not -Match '## Why This Exists'
+    }
 }

@@ -11,6 +11,12 @@ Use this skill to update the template repository's pinned runtime, CI runner, an
 
 This skill is for `pwsh-dev-template` itself. Do not apply it to downstream repositories unless the user explicitly asks for a separate repo-specific runtime migration.
 
+## Why This Exists
+
+Runtime and tooling pins appear across the Dockerfile, Dev Container metadata, GitHub Actions workflow, generated documentation, and validation behavior. Updating only one surface can leave the template inconsistent even when the individual file looks correct.
+
+`eng/runtime-policy.json` keeps those values coordinated from one source of truth. Generated Markdown and validation scripts make the update repeatable, reviewable, and easier to audit.
+
 ## Required Context
 
 Before acting, identify:

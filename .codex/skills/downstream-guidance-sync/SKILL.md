@@ -11,6 +11,12 @@ Use this skill to synchronize template-owned AI guidance from `pwsh-dev-template
 
 The sync scope is intentionally narrow. Do not manually copy, edit, or invent files outside the script allowlist.
 
+## Why This Exists
+
+Repositories created from this template become independent projects after creation. Their source, tests, CI, analyzer settings, runtime policy, and scaffolds are project-owned and should not be clobbered by template updates.
+
+AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. Keeping that guidance aligned helps downstream repositories inherit the current operating model without overwriting implementation choices.
+
 ## Required Context
 
 Before acting, identify:
