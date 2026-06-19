@@ -11,6 +11,13 @@ Use this skill to manage template release versioning for `pwsh-dev-template`. Th
 
 Use `scripts/Test-TemplateVersion.ps1` as the deterministic validator for version metadata.
 
+## Reference Docs
+
+Use these repository docs for release policy context:
+
+- `docs/template-evolution.md` for SemVer policy, release metadata expectations, and post-merge tag guidance
+- `README.md` for the public Template Versioning summary and badge expectations
+
 ## Required Context
 
 Before acting, identify:

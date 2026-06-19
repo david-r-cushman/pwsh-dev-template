@@ -138,6 +138,8 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'CHANGELOG\.md'
         $content | Should -Match 'README template badge'
         $content | Should -Match 'Test-TemplateVersion\.ps1'
+        $content | Should -Match 'docs/template-evolution\.md'
+        $content | Should -Match 'README\.md'
         $content | Should -Match 'vX\.Y\.Z'
     }
 
