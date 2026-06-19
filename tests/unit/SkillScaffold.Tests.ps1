@@ -179,4 +179,29 @@ Describe 'Repo-local skills' {
         $workflowContent | Should -Match 'tests/unit/SkillScaffold\.Tests\.ps1'
         $readmeContent | Should -Match 'docs/agent-workflows\.md'
     }
+
+    It 'documents success criteria for each repo-local workflow' {
+        $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
+        $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
+        $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $syncContent | Should -Match '## Success Criteria'
+        $syncContent | Should -Match 'audit output'
+        $syncContent | Should -Match 'non-main downstream branch'
+        $syncContent | Should -Match 'sync allowlist'
+        $syncContent | Should -Match 'synced template guidance version'
+
+        $runtimeContent | Should -Match '## Success Criteria'
+        $runtimeContent | Should -Match 'eng/runtime-policy\.json'
+        $runtimeContent | Should -Match 'generated Markdown agree with the policy'
+        $runtimeContent | Should -Match 'Update-GeneratedMarkdown\.ps1 -Check'
+        $runtimeContent | Should -Match 'Invoke-RepoChecks\.ps1 -IncludeTemplates'
+
+        $versionContent | Should -Match '## Success Criteria'
+        $versionContent | Should -Match 'VERSION'
+        $versionContent | Should -Match 'README template badge'
+        $versionContent | Should -Match 'CHANGELOG\.md'
+        $versionContent | Should -Match 'vX\.Y\.Z'
+        $versionContent | Should -Match 'Test-TemplateVersion\.ps1 -CheckTag'
+    }
 }

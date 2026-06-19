@@ -84,6 +84,16 @@ After the release PR is merged:
 
 8. Delete the merged local branch only after the remote branch is deleted or the merge is confirmed.
 
+## Success Criteria
+
+The workflow is complete when:
+
+- `VERSION`, the README template badge, and `CHANGELOG.md` agree on the release version
+- `scripts/Test-TemplateVersion.ps1` passes before the release PR is opened or updated
+- after merge, `main` is fast-forwarded and the annotated `vX.Y.Z` tag is pushed
+- `scripts/Test-TemplateVersion.ps1 -CheckTag` passes after tagging
+- the merged local branch has been cleaned up after the remote branch deletion or merge is confirmed
+
 ## Stop Conditions
 
 Stop and report instead of improvising when:

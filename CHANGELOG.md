@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Changed
+
+- Added success criteria to repo-local skills so agents can identify completed workflows more clearly.
+
 ## 0.10.0 - 2026-06-19
 
 ### Added
