@@ -9,6 +9,7 @@ Describe 'Repo-local skills' {
         $script:VersionSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/agents/openai.yaml'
         $script:SyncScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1'
         $script:RuntimePolicyPath = Join-Path -Path $script:RepoRoot -ChildPath 'eng/runtime-policy.json'
+        $script:AgentWorkflowsPath = Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md'
     }
 
     It 'includes the downstream guidance sync skill' {
@@ -161,5 +162,21 @@ Describe 'Repo-local skills' {
         $evolutionContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
         $agentsContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
         $copilotContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+    }
+
+    It 'documents repo-local agent workflows for human discovery' {
+        Test-Path -LiteralPath $script:AgentWorkflowsPath -PathType Leaf | Should -BeTrue
+
+        $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
+        $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
+
+        $workflowContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Invoke-TemplateGuidanceSync\.ps1'
+        $workflowContent | Should -Match '\.codex/skills/runtime-policy-update/SKILL\.md'
+        $workflowContent | Should -Match 'eng/runtime-policy\.json'
+        $workflowContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Test-TemplateVersion\.ps1'
+        $workflowContent | Should -Match 'tests/unit/SkillScaffold\.Tests\.ps1'
+        $readmeContent | Should -Match 'docs/agent-workflows\.md'
     }
 }

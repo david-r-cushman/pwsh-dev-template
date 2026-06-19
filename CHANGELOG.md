@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Added
+
+- Added a human-readable guide for repo-local agent workflows.
+
 ### Changed
 
 - Clarified that repo-local skill changes should use Pester as the repository validation standard, with Codex `quick_validate.py` as an optional authoring check.
