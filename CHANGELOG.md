@@ -6,6 +6,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.8.0 - 2026-06-19
+
+### Added
+
+- Added a repo-local Codex skill that guides agents through the runtime and tooling policy update workflow.
+
 ## 0.7.0 - 2026-06-19
 
 ### Added

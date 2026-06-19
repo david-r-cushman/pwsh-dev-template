@@ -30,3 +30,5 @@ If guidance in this file conflicts with `.github/copilot-instructions.md`, `.git
 Repo-local Codex skills are stored under `.codex/skills/`.
 
 For downstream AI guidance synchronization, agents should use `.codex/skills/downstream-guidance-sync/SKILL.md` together with `scripts/Invoke-TemplateGuidanceSync.ps1` instead of manually copying guidance files.
+
+For template runtime and tooling policy updates, agents should use `.codex/skills/runtime-policy-update/SKILL.md` together with `eng/runtime-policy.json`, `scripts/Update-GeneratedMarkdown.ps1`, and `scripts/Test-VersionPolicy.ps1`.

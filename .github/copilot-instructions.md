@@ -80,6 +80,8 @@ If multiple templates apply or conflict, choose in this order: state-changing fu
 
 Repo-local Codex skills are stored under `.codex/skills/`. When asked to synchronize downstream AI guidance, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
 
+When asked to update the template runtime, Ubuntu image, GitHub Actions runner, or pinned PowerShell tooling, use `.codex/skills/runtime-policy-update/SKILL.md`. Treat `eng/runtime-policy.json` as the source of truth, use `scripts/Update-GeneratedMarkdown.ps1` for generated Markdown blocks, and validate with `scripts/Test-VersionPolicy.ps1`.
+
 ## PowerShell Compatibility
 
 Target PowerShell 7.4.x unless `README.md`, `/docs`, or the task-specific template declares another version under `PowerShell Version`, `Requirements`, or `Compatibility`. For version conflicts, use this precedence: `README.md`, then `/docs`, then task-specific template. If version requirements are missing, invalid, outdated, or unsupported, provide a PowerShell 7.4.x-compatible fallback and document the assumption.

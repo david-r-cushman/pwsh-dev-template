@@ -1,0 +1,3 @@
+display_name: "Runtime Policy Update"
+short_description: "Update template runtime and tooling pins"
+default_prompt: "Use $runtime-policy-update to update the template runtime or tooling policy."
