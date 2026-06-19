@@ -20,6 +20,7 @@ This template provides a standardized starting point for PowerShell development 
 - reusable script, function, module, and test scaffolds
 - AI governance and GitHub Copilot guidance
 - downstream AI guidance sync for repositories created from this template
+- repo-local agent skills for guidance sync, runtime policy updates, and template release management
 - Conventional Commit standards
 - repository hygiene for issues, pull requests, security, and dependency updates
 
