@@ -108,6 +108,8 @@ Apply the deprecation guidance in `PowerShell Compatibility` to external service
 
 Use 4 spaces for PowerShell indentation, same-line opening braces, single quotes unless interpolation is required, comments above the code they describe, no trailing whitespace, and LF line endings.
 
+When editing text files, preserve the file's existing line-ending behavior and avoid CRLF/LF-sensitive string replacements, especially in Markdown and documentation files. Prefer line-based or parser-aware edits when practical. Before committing text-file changes, run `git diff --check` and fix extra blank lines at EOF, missing expected blank lines, and trailing whitespace.
+
 In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, unverified claims, and speculative refactors outside the requested scope.
 
 Unless explicitly requested and justified, do not generate `Invoke-Expression`, empty catch blocks, plaintext secret handling, hardcoded credentials, live external service calls in tests, silent breaking changes, or unrelated formatting-only refactors.
