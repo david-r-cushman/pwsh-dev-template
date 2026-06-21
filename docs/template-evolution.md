@@ -40,6 +40,12 @@ Updates to this template should generally follow these principles:
 - separate durable guidance from temporary working notes
 - keep security boundaries explicit
 
+## Decision Records
+
+Use Architecture Decision Records under `docs/decisions/` for durable template decisions that future maintainers should understand without reconstructing pull request discussion.
+
+ADRs are for significant capabilities, workflow policies, ownership boundaries, or non-obvious tradeoffs. They are not required for routine plans, patch fixes, or release metadata updates. Pull requests remain the place for implementation plans and review discussion, and `CHANGELOG.md` remains outcome-focused.
+
 ## Template Versioning
 
 This repository versions the template itself with Semantic Versioning. The version describes the reusable baseline maintained by this repository, not the version of any downstream project created from it.
