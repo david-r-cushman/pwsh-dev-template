@@ -9,6 +9,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 ### Added
 
 - Added an Architecture Decision Record convention and the first ADR for downstream guidance sync boundaries.
+- Added an ADR for repo-local agent workflows as an orchestration layer over deterministic scripts, Pester validation, and human review.
 
 ### Changed
 
