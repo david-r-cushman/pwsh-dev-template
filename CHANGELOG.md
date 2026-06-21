@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Added
+
+- Added an Architecture Decision Record convention and the first ADR for downstream guidance sync boundaries.
+
 ### Changed
 
 - Clarified README wording that distinguishes template validation tests from downstream project test implementations.
