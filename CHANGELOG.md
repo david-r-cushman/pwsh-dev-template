@@ -13,6 +13,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ### Changed
 
+- Added a README pointer to the Architecture Decision Records for durable template decisions.
 - Added text-editing guidance for preserving line endings and running whitespace checks before commits.
 - Clarified README wording that distinguishes template validation tests from downstream project test implementations.
 - Moved the README engineering philosophy section higher for earlier reader context.

@@ -62,6 +62,8 @@ AI is treated as a drafting accelerator, not as a substitute for engineering own
 
 For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md).
 
+For durable engineering decisions behind the template's workflow and ownership boundaries, see [`docs/decisions/`](docs/decisions/).
+
 ## Use This Template
 
 1. Create a new repository from this template.
