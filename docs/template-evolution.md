@@ -127,9 +127,10 @@ The downstream guidance sync process is intentionally narrow. It may update:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 - AI governance and operating-model documents under `docs`
+- `docs/decisions/README.md` as the ADR scaffold
 - the README template-version badge
 
-It does not update source code, tests, Pester configuration, PSScriptAnalyzer settings, GitHub Actions workflows, Dev Container files, runtime policy, module manifests, or scaffolds. Those files become downstream-owned after repository creation.
+It does not update source code, tests, Pester configuration, PSScriptAnalyzer settings, GitHub Actions workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs. Those files become downstream-owned after repository creation.
 
 Any broader synchronization should be explicit, repo-specific, and reviewed as normal project work.
 
