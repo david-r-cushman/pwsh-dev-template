@@ -240,4 +240,4 @@ Version changes apply to the template baseline, not to downstream repositories c
 - Minor versions indicate new template capabilities, tooling, templates, or conventions.
 - Patch versions indicate fixes, documentation clarifications, and low-risk maintenance updates.
 
-A repo-local Codex skill is provided at `.codex/skills/template-version-release/SKILL.md` for version preparation and post-merge release tagging. Release tags use the `vX.Y.Z` format and are applied to `main` after the release PR is merged.
+A repo-local Codex skill is provided at `.codex/skills/template-version-release/SKILL.md` for version preparation, post-merge release tagging, and GitHub Release publishing. Release tags use the `vX.Y.Z` format and are applied to `main` after the release PR is merged. GitHub Releases use the matching changelog section as their public release notes.

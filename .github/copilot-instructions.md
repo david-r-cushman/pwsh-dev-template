@@ -82,7 +82,7 @@ Repo-local Codex skills are stored under `.codex/skills/`. When asked to synchro
 
 When asked to update the template runtime, Ubuntu image, GitHub Actions runner, or pinned PowerShell tooling, use `.codex/skills/runtime-policy-update/SKILL.md`. Treat `eng/runtime-policy.json` as the source of truth, use `scripts/Update-GeneratedMarkdown.ps1` for generated Markdown blocks, and validate with `scripts/Test-VersionPolicy.ps1`.
 
-When asked to prepare, validate, tag, or clean up a template release version, use `.codex/skills/template-version-release/SKILL.md`. Keep `VERSION`, the README template-version badge, and `CHANGELOG.md` aligned, validate with `scripts/Test-TemplateVersion.ps1`, and create annotated `vX.Y.Z` tags only after the release PR is merged to `main`.
+When asked to prepare, validate, tag, publish, or clean up a template release version, use `.codex/skills/template-version-release/SKILL.md`. Keep `VERSION`, the README template-version badge, and `CHANGELOG.md` aligned, validate with `scripts/Test-TemplateVersion.ps1`, and create annotated `vX.Y.Z` tags plus GitHub Releases only after the release PR is merged to `main`.
 
 When adding or updating repo-local skills, add or update Pester coverage in `tests/unit/SkillScaffold.Tests.ps1` for the skill file, metadata, required references, and agent discoverability. The Codex `quick_validate.py` helper may be used as an optional authoring check, but Pester is the repository validation standard.
 
