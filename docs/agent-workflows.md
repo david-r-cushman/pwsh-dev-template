@@ -12,7 +12,7 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 | --- | --- | --- | --- | --- |
 | Downstream guidance sync | A repository created from this template needs current AI guidance, guardrail docs, and ADR scaffold guidance. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
 | Runtime policy update | The template needs coordinated PowerShell, Ubuntu, GitHub Actions runner, or pinned tooling updates. | `.codex/skills/runtime-policy-update/SKILL.md` | `eng/runtime-policy.json` | `scripts/Update-GeneratedMarkdown.ps1 -Check`, `scripts/Test-VersionPolicy.ps1`, `scripts/Invoke-RepoChecks.ps1 -IncludeTemplates` |
-| Template version release | The template version, changelog, README badge, and release tag need to be prepared or finalized. | `.codex/skills/template-version-release/SKILL.md` | `VERSION`, `CHANGELOG.md`, README template badge, and annotated `vX.Y.Z` tags | `scripts/Test-TemplateVersion.ps1` and release PR review |
+| Template version release | The template version, changelog, README badge, release tag, and GitHub Release need to be prepared or finalized. | `.codex/skills/template-version-release/SKILL.md` | `VERSION`, `CHANGELOG.md`, README template badge, annotated `vX.Y.Z` tags, and GitHub Releases | `scripts/Test-TemplateVersion.ps1` and release PR review |
 
 ## Operating Model
 

@@ -33,4 +33,4 @@ For downstream AI guidance synchronization, agents should use `.codex/skills/dow
 
 For template runtime and tooling policy updates, agents should use `.codex/skills/runtime-policy-update/SKILL.md` together with `eng/runtime-policy.json`, `scripts/Update-GeneratedMarkdown.ps1`, and `scripts/Test-VersionPolicy.ps1`.
 
-For template version release preparation, validation, tagging, and cleanup, agents should use `.codex/skills/template-version-release/SKILL.md` together with `scripts/Test-TemplateVersion.ps1`.
+For template version release preparation, validation, tagging, GitHub Release publishing, and cleanup, agents should use `.codex/skills/template-version-release/SKILL.md` together with `scripts/Test-TemplateVersion.ps1`.

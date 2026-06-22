@@ -8,6 +8,8 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ### Added
 
+- Added manual GitHub Release publishing to the template release process and documented the decision in an ADR.
+
 ### Changed
 
 ## 0.11.0 - 2026-06-21

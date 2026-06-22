@@ -143,6 +143,7 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'docs/template-evolution\.md'
         $content | Should -Match 'README\.md'
         $content | Should -Match 'vX\.Y\.Z'
+        $content | Should -Match 'GitHub Release'
     }
 
     It 'uses valid template version skill UI metadata with an explicit skill prompt' {
@@ -163,6 +164,10 @@ Describe 'Repo-local skills' {
         $evolutionContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
         $agentsContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
         $copilotContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
+        $readmeContent | Should -Match 'GitHub Release'
+        $evolutionContent | Should -Match 'GitHub Release'
+        $agentsContent | Should -Match 'GitHub Release'
+        $copilotContent | Should -Match 'GitHub Release'
     }
 
     It 'documents repo-local agent workflows for human discovery' {
@@ -177,6 +182,7 @@ Describe 'Repo-local skills' {
         $workflowContent | Should -Match 'eng/runtime-policy\.json'
         $workflowContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
         $workflowContent | Should -Match 'scripts/Test-TemplateVersion\.ps1'
+        $workflowContent | Should -Match 'GitHub Releases'
         $workflowContent | Should -Match 'tests/unit/SkillScaffold\.Tests\.ps1'
         $readmeContent | Should -Match 'docs/agent-workflows\.md'
     }
@@ -204,6 +210,7 @@ Describe 'Repo-local skills' {
         $versionContent | Should -Match 'CHANGELOG\.md'
         $versionContent | Should -Match 'vX\.Y\.Z'
         $versionContent | Should -Match 'Test-TemplateVersion\.ps1 -CheckTag'
+        $versionContent | Should -Match 'GitHub Release exists'
     }
 
     It 'documents rationale for workflow boundaries' {

@@ -1,6 +1,6 @@
 ---
 name: template-version-release
-description: Use when asked to prepare, validate, finalize, tag, or clean up a pwsh-dev-template release version, including SemVer bump decisions, VERSION, CHANGELOG.md, README template badge, Test-TemplateVersion.ps1, vX.Y.Z tags, post-merge release tagging, or merged branch cleanup.
+description: Use when asked to prepare, validate, finalize, tag, publish, or clean up a pwsh-dev-template release version, including SemVer bump decisions, VERSION, CHANGELOG.md, README template badge, Test-TemplateVersion.ps1, vX.Y.Z tags, GitHub Releases, post-merge release tagging, or merged branch cleanup.
 ---
 
 # Template Version Release
@@ -15,7 +15,7 @@ Use `scripts/Test-TemplateVersion.ps1` as the deterministic validator for versio
 
 Use these repository docs for release policy context:
 
-- `docs/template-evolution.md` for SemVer policy, release metadata expectations, and post-merge tag guidance
+- `docs/template-evolution.md` for SemVer policy, release metadata expectations, post-merge tag guidance, and GitHub Release guidance
 - `README.md` for the public Template Versioning summary and badge expectations
 
 ## Required Context
@@ -25,7 +25,7 @@ Before acting, identify:
 - the current version from `VERSION`
 - the intended next version and whether it is major, minor, or patch
 - the release date for the `CHANGELOG.md` heading
-- whether the user wants pre-merge release prep or post-merge release finalization
+- whether the user wants pre-merge release prep, post-merge release finalization, or GitHub Release publishing
 
 If the next version or bump level is unclear, inspect the change impact and ask before editing release metadata.
 
@@ -82,7 +82,15 @@ After the release PR is merged:
    pwsh -NoProfile -File ./scripts/Test-TemplateVersion.ps1 -CheckTag
    ```
 
-8. Delete the merged local branch only after the remote branch is deleted or the merge is confirmed.
+8. Publish a GitHub Release from the tag:
+
+   - tag: `vX.Y.Z`
+   - title: `vX.Y.Z`
+   - body: the matching `CHANGELOG.md` section
+   - draft: no
+   - prerelease: no, unless explicitly requested
+
+9. Delete the merged local branch only after the remote branch is deleted or the merge is confirmed.
 
 ## Success Criteria
 
@@ -92,6 +100,7 @@ The workflow is complete when:
 - `scripts/Test-TemplateVersion.ps1` passes before the release PR is opened or updated
 - after merge, `main` is fast-forwarded and the annotated `vX.Y.Z` tag is pushed
 - `scripts/Test-TemplateVersion.ps1 -CheckTag` passes after tagging
+- a GitHub Release exists for `vX.Y.Z` with notes derived from the matching `CHANGELOG.md` section
 - the merged local branch has been cleaned up after the remote branch deletion or merge is confirmed
 
 ## Stop Conditions
@@ -102,9 +111,10 @@ Stop and report instead of improvising when:
 - the requested version is not a SemVer `X.Y.Z` value
 - the changelog entry for the release is missing
 - `vX.Y.Z` already exists on a different commit
+- a GitHub Release already exists for `vX.Y.Z` with conflicting notes
 - `main` is not fast-forwardable after merge
 - the working tree is dirty before tagging or branch cleanup
 
 ## Agent Role
 
-Treat the validator and Git state as the source of truth. The agent role is to coordinate release metadata updates, inspect diffs, run validation, prepare PR text, tag the merged release, and clean up local branches.
+Treat the validator, Git state, and published GitHub Release state as the source of truth. The agent role is to coordinate release metadata updates, inspect diffs, run validation, prepare PR text, tag the merged release, publish the GitHub Release, and clean up local branches.
