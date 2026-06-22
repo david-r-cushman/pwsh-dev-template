@@ -9,6 +9,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
             'docs/ai-interaction-loop.md'
             'docs/copilot-instructions-reference.md'
             'docs/powershell-ai-operating-model.md'
+            'docs/decisions/README.md'
         )
 
         $script:InvokeSyncScript = {
@@ -96,6 +97,22 @@ Describe 'Invoke-TemplateGuidanceSync' {
         Get-Content -Raw -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'local-only.txt') | Should -Match 'keep me'
         Get-Content -Raw -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'README.md') |
             Should -Match '!\[Template Version\]\(https://img\.shields\.io/badge/template-0\.6\.2-blue\)'
+    }
+
+    It 'does not sync numbered ADR files' {
+        $templateDecisionPath = Join-Path -Path $script:TemplateRepo -ChildPath 'docs/decisions/0001-template-decision.md'
+        $targetDecisionPath = Join-Path -Path $script:TargetRepo -ChildPath 'docs/decisions/0001-downstream-decision.md'
+        New-Item -ItemType Directory -Path (Split-Path -Path $templateDecisionPath -Parent), (Split-Path -Path $targetDecisionPath -Parent) -Force | Out-Null
+        Set-Content -LiteralPath $templateDecisionPath -Value 'template-owned decision' -Encoding utf8
+        Set-Content -LiteralPath $targetDecisionPath -Value 'downstream-owned decision' -Encoding utf8
+        & git -C $script:TargetRepo add docs/decisions/0001-downstream-decision.md | Out-Null
+        & git -C $script:TargetRepo commit -m 'add downstream decision' | Out-Null
+
+        & $script:InvokeSyncScript -ExtraArguments @('-Apply') | Out-Null
+
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'docs/decisions/README.md') | Should -BeTrue
+        Get-Content -Raw -LiteralPath $targetDecisionPath | Should -Match 'downstream-owned decision'
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'docs/decisions/0001-template-decision.md') | Should -BeFalse
     }
 
     It 'updates an existing README template badge without changing unrelated content' {

@@ -47,7 +47,8 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'AGENTS\.md'
         $content | Should -Match '\.github/copilot-instructions\.md'
         $content | Should -Match 'README template-version badge'
-        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, or scaffolds'
+        $content | Should -Match 'docs/decisions/README\.md'
+        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs'
     }
 
     It 'uses valid skill UI metadata with an explicit skill prompt' {

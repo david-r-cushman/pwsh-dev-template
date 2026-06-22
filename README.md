@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.10.1-blue)
+![Template Version](https://img.shields.io/badge/template-0.11.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -192,7 +192,7 @@ This template includes repo-local agent skills for repeatable maintenance workfl
 
 ## Downstream Guidance Sync
 
-This template includes a local sync tool for repositories created from it. The sync updates only AI guidance and guardrail documentation, plus the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, or scaffolds.
+This template includes a local sync tool for repositories created from it. The sync updates only AI guidance, guardrail documentation, the ADR scaffold README, and the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, scaffolds, or project-specific ADRs.
 
 A repo-local Codex skill is also provided at `.codex/skills/downstream-guidance-sync/SKILL.md` so agents can operate the sync script through the intended audit, branch, validation, commit, and pull request workflow.
 

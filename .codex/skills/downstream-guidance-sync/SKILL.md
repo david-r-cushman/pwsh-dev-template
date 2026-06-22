@@ -7,7 +7,7 @@ description: Use when asked to sync, audit, update, or align AI guidance from pw
 
 ## Overview
 
-Use this skill to synchronize template-owned AI guidance from `pwsh-dev-template` into a downstream repository. The deterministic tool is `scripts/Invoke-TemplateGuidanceSync.ps1`; this skill defines how an agent should operate that tool safely.
+Use this skill to synchronize template-owned AI guidance and ADR scaffolding from `pwsh-dev-template` into a downstream repository. The deterministic tool is `scripts/Invoke-TemplateGuidanceSync.ps1`; this skill defines how an agent should operate that tool safely.
 
 The sync scope is intentionally narrow. Do not manually copy, edit, or invent files outside the script allowlist.
 
@@ -15,7 +15,7 @@ The sync scope is intentionally narrow. Do not manually copy, edit, or invent fi
 
 Repositories created from this template become independent projects after creation. Their source, tests, CI, analyzer settings, runtime policy, and scaffolds are project-owned and should not be clobbered by template updates.
 
-AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. Keeping that guidance aligned helps downstream repositories inherit the current operating model without overwriting implementation choices.
+AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. The ADR scaffold README is also safe to sync because it provides a documentation convention without overwriting project-specific decisions. Keeping these files aligned helps downstream repositories inherit the current operating model without overwriting implementation choices.
 
 ## Required Context
 
@@ -60,7 +60,7 @@ When the user requests sync changes, use this sequence:
    pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
    ```
 
-4. Inspect the downstream diff and verify changes are limited to AI guidance files and the README template badge.
+4. Inspect the downstream diff and verify changes are limited to AI guidance files, `docs/decisions/README.md`, and the README template badge.
 5. Run downstream validation if the repo provides a clear validation entrypoint, such as `scripts/Invoke-RepoChecks.ps1`.
 6. Commit with a conventional docs message, for example:
 
@@ -76,7 +76,7 @@ The workflow is complete when:
 
 - audit output has been reviewed and explained in plain language
 - apply mode, when used, ran only from a non-main downstream branch
-- the downstream diff is limited to the sync allowlist
+- the downstream diff is limited to the sync allowlist, including only the ADR scaffold README under `docs/decisions/`
 - downstream validation was run, or a clear reason was reported when validation was unavailable or skipped
 - the commit or PR summary states the synced template guidance version and validation result
 
@@ -100,9 +100,10 @@ The script may update only:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 - selected AI governance and operating-model docs under `docs`
+- `docs/decisions/README.md`
 - the README template-version badge
 
-It must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, or scaffolds.
+It must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs.
 
 ## Agent Role
 

@@ -10,7 +10,7 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 
 | Workflow | Use When | Skill | Control | Validation |
 | --- | --- | --- | --- | --- |
-| Downstream guidance sync | A repository created from this template needs current AI guidance and guardrail docs. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
+| Downstream guidance sync | A repository created from this template needs current AI guidance, guardrail docs, and ADR scaffold guidance. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
 | Runtime policy update | The template needs coordinated PowerShell, Ubuntu, GitHub Actions runner, or pinned tooling updates. | `.codex/skills/runtime-policy-update/SKILL.md` | `eng/runtime-policy.json` | `scripts/Update-GeneratedMarkdown.ps1 -Check`, `scripts/Test-VersionPolicy.ps1`, `scripts/Invoke-RepoChecks.ps1 -IncludeTemplates` |
 | Template version release | The template version, changelog, README badge, and release tag need to be prepared or finalized. | `.codex/skills/template-version-release/SKILL.md` | `VERSION`, `CHANGELOG.md`, README template badge, and annotated `vX.Y.Z` tags | `scripts/Test-TemplateVersion.ps1` and release PR review |
 
@@ -28,6 +28,6 @@ Pester is the repository validation standard for repo-local skill behavior and d
 
 Repo-local skills do not make autonomous changes acceptable without review. They should help agents apply known workflows consistently, not broaden the task scope.
 
-The downstream guidance sync workflow is intentionally narrow. It may update AI guidance and guardrail documentation plus the README template-version badge in downstream repositories. It must not be used to overwrite downstream source code, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, or scaffolds unless that broader work is requested as a separate repo-specific change.
+The downstream guidance sync workflow is intentionally narrow. It may update AI guidance, guardrail documentation, `docs/decisions/README.md`, and the README template-version badge in downstream repositories. It must not be used to overwrite downstream source code, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs unless that broader work is requested as a separate repo-specific change.
 
 Runtime policy updates and template version releases are template-repository workflows. Downstream repositories should adopt those changes only through explicit, reviewed project work.

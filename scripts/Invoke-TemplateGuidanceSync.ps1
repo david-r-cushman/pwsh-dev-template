@@ -5,7 +5,7 @@
 .DESCRIPTION
     Compares a downstream repository with this template repository for the
     files that are safe to keep aligned after a project has been created from
-    the template: AI guidance, guardrail documentation, and the README template
+    the template: AI guidance, guardrail documentation, the ADR scaffold README, and the README template
     version badge.
 
     The README badge represents template guidance alignment. It does not mean
@@ -67,6 +67,7 @@ $guidanceFiles = @(
     'docs/ai-interaction-loop.md'
     'docs/copilot-instructions-reference.md'
     'docs/powershell-ai-operating-model.md'
+    'docs/decisions/README.md'
 )
 
 function Resolve-DirectoryPath {
