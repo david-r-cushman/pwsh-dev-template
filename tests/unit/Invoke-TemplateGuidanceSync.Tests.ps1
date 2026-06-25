@@ -5,11 +5,15 @@ Describe 'Invoke-TemplateGuidanceSync' {
         $script:GuidanceFiles = @(
             'AGENTS.md'
             '.github/copilot-instructions.md'
+            '.codex/skills/downstream-repo-cleanup/SKILL.md'
+            '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
+            'docs/agent-workflows.md'
             'docs/ai-behavioral-contract.md'
             'docs/ai-interaction-loop.md'
             'docs/copilot-instructions-reference.md'
             'docs/powershell-ai-operating-model.md'
             'docs/decisions/README.md'
+            'scripts/Initialize-DownstreamRepo.ps1'
         )
 
         $script:InvokeSyncScript = {
@@ -72,7 +76,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
         }
     }
 
-    It 'detects missing guidance files and a missing README badge' {
+    It 'detects missing sync files, cleanup assets, and a missing README badge' {
         $output = & $script:InvokeSyncScript
 
         $output | Should -Contain 'Drift: True'
@@ -81,7 +85,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
         $output -join "`n" | Should -Match 'README\.md\s+Missing'
     }
 
-    It 'applies only approved guidance files and the README badge' {
+    It 'applies approved sync files, cleanup assets, and the README badge' {
         Set-Content -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'local-only.txt') -Value 'keep me' -Encoding utf8
         & git -C $script:TargetRepo add local-only.txt | Out-Null
         & git -C $script:TargetRepo commit -m 'add local file' | Out-Null
@@ -99,6 +103,14 @@ Describe 'Invoke-TemplateGuidanceSync' {
             Should -Match '!\[Template Version\]\(https://img\.shields\.io/badge/template-0\.6\.2-blue\)'
     }
 
+    It 'syncs cleanup workflow assets into downstream repos that predate cleanup support' {
+        & $script:InvokeSyncScript -ExtraArguments @('-Apply') | Out-Null
+
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Initialize-DownstreamRepo.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'docs/agent-workflows.md') | Should -BeTrue
+    }
     It 'does not sync numbered ADR files' {
         $templateDecisionPath = Join-Path -Path $script:TemplateRepo -ChildPath 'docs/decisions/0001-template-decision.md'
         $targetDecisionPath = Join-Path -Path $script:TargetRepo -ChildPath 'docs/decisions/0001-downstream-decision.md'
@@ -187,7 +199,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
         { & $script:InvokeSyncScript -ExtraArguments @('-FailOnDrift') } | Should -Throw -ExpectedMessage '*drift detected*'
     }
 
-    It 'reports current state after apply' {
+    It 'reports current state after applying guidance and cleanup assets' {
         & $script:InvokeSyncScript -ExtraArguments @('-Apply') | Out-Null
         & git -C $script:TargetRepo add . | Out-Null
         & git -C $script:TargetRepo commit -m 'sync guidance' | Out-Null
@@ -196,6 +208,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
 
         $output | Should -Contain 'Drift: False'
         $output -join "`n" | Should -Match 'AGENTS\.md\s+Current'
+        $output -join "`n" | Should -Match 'Initialize-DownstreamRepo\.ps1\s+Current'
         $output -join "`n" | Should -Match 'README\.md\s+Current'
     }
 

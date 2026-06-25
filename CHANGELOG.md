@@ -6,11 +6,17 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.12.0 - 2026-06-25
+
 ### Added
 
+- Added a first-run downstream cleanup workflow for repositories created from this template, including `scripts/Initialize-DownstreamRepo.ps1`, a repo-local cleanup skill, and validation coverage.
 - Added manual GitHub Release publishing to the template release process and documented the decision in an ADR.
+- Added an ADR that records the expansion of downstream guidance sync to deliver cleanup workflow assets into older downstream repositories.
 
 ### Changed
+
+- Expanded downstream guidance sync so existing downstream repositories can receive the downstream cleanup workflow assets and updated workflow guidance before running cleanup locally.
 
 ## 0.11.0 - 2026-06-21
 

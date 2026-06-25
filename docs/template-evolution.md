@@ -120,7 +120,7 @@ This template may continue to evolve after a downstream repository is created, b
 
 ### Downstream Guidance Sync
 
-AI guidance and guardrail documentation are the default downstream sync targets because they describe how AI-assisted changes should be generated, reviewed, and validated. Keeping those files aligned helps downstream repositories inherit the current operating model without replacing project-specific implementation choices.
+AI guidance and guardrail documentation are the default downstream sync targets because they describe how AI-assisted changes should be generated, reviewed, and validated. Keeping those files aligned helps downstream repositories inherit the current operating model without replacing project-specific implementation choices. For repositories that predate the cleanup workflow, sync may also deliver the cleanup script and cleanup skill so cleanup can then be run locally in the downstream repo.
 
 The downstream guidance sync process is intentionally narrow. It may update:
 
@@ -130,9 +130,9 @@ The downstream guidance sync process is intentionally narrow. It may update:
 - `docs/decisions/README.md` as the ADR scaffold
 - the README template-version badge
 
-It does not update source code, tests, Pester configuration, PSScriptAnalyzer settings, GitHub Actions workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs. Those files become downstream-owned after repository creation.
+It does not update source code, tests, Pester configuration, PSScriptAnalyzer settings, GitHub Actions workflows, Dev Container files, runtime policy, module manifests, scaffolds other than the cleanup workflow assets, or numbered project-specific ADRs. Those files become downstream-owned after repository creation or, for cleanup-owned guidance surfaces, after the immediate cleanup step.
 
-Any broader synchronization should be explicit, repo-specific, and reviewed as normal project work.
+Cleanup itself remains a downstream-repository action performed through `scripts/Initialize-DownstreamRepo.ps1`. Any broader synchronization should be explicit, repo-specific, and reviewed as normal project work.
 
 ## Maintenance Mindset
 

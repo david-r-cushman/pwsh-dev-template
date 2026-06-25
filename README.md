@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.11.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.12.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -200,7 +200,11 @@ New downstream repositories should begin with the README template version badge 
 
 ## Downstream Guidance Sync
 
-This template includes a local sync tool for repositories created from it. The sync updates only AI guidance, guardrail documentation, the ADR scaffold README, and the README template-version badge. It does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, scaffolds, or project-specific ADRs.
+This template includes a local sync tool for repositories created from it. The sync can refresh AI guidance, guardrail documentation, the ADR scaffold README, the README template-version badge, and the downstream cleanup workflow assets needed by older repositories that were created before cleanup support existed.
+
+Cleanup itself still runs from the downstream repo. For newly created repositories, the intended sequence is to create the repo from the template, run `scripts/Initialize-DownstreamRepo.ps1` locally in the downstream repo, and later use guidance sync from the template repo when guidance drift or missing cleanup assets need to be addressed.
+
+The sync does not update project-owned source, tests, PSScriptAnalyzer settings, Pester configuration, CI workflows, Dev Container files, runtime policy, or project-specific ADRs.
 
 A repo-local Codex skill is also provided at `.codex/skills/downstream-guidance-sync/SKILL.md` so agents can operate the sync script through the intended audit, branch, validation, commit, and pull request workflow.
 
@@ -213,11 +217,13 @@ pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstr
 Audit mode is the default and reports drift without changing files. To apply the safe sync set, create or switch the downstream repo to a non-main branch first, then run:
 
 ```powershell
-git -C ../downstream-repo switch -c chore/sync-template-guidance-0.7.0
+git -C ../downstream-repo switch -c chore/sync-template-guidance
 pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
 ```
 
-The README template badge means the downstream repo's AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
+If the sync delivered `scripts/Initialize-DownstreamRepo.ps1` and `.codex/skills/downstream-repo-cleanup/` into an older downstream repo, switch into that downstream repo and run cleanup there before doing additional project-specific work.
+
+The README template badge means the downstream repo''s AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
 
 ## Prerequisites And Setup
 

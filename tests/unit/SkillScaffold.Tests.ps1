@@ -72,10 +72,12 @@ Describe 'Repo-local skills' {
         $content | Should -Match '\r?\ndescription: .+downstream.+sync.+\r?\n---'
     }
 
-    It 'references the authoritative sync script' {
+    It 'references the authoritative sync script and cleanup asset delivery path' {
         $content = Get-Content -Raw -LiteralPath $script:SkillPath
 
         $content | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
+        $content | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $content | Should -Match 'does not perform cleanup itself'
         Test-Path -LiteralPath $script:SyncScriptPath -PathType Leaf | Should -BeTrue
     }
 
@@ -96,15 +98,19 @@ Describe 'Repo-local skills' {
         $content | Should -Match '\.github/copilot-instructions\.md'
         $content | Should -Match 'README template-version badge'
         $content | Should -Match 'docs/decisions/README\.md'
-        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs'
+        $content | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
+        $content | Should -Match '\.codex/skills/downstream-repo-cleanup/'
+        $content | Should -Match 'does not perform cleanup itself'
+        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds other than the cleanup workflow assets, or numbered project-specific ADRs'
     }
 
     It 'uses valid skill UI metadata with an explicit skill prompt' {
         $content = Get-Content -Raw -LiteralPath $script:SkillMetadataPath
 
         $content | Should -Match 'display_name: "Downstream Guidance Sync"'
-        $content | Should -Match 'short_description: "Sync template AI guidance into downstream repos"'
+        $content | Should -Match 'short_description: "Sync template guidance and cleanup assets into downstream repos"'
         $content | Should -Match 'default_prompt: "Use \$downstream-guidance-sync'
+        $content | Should -Match 'cleanup workflow assets'
     }
 
     It 'is discoverable from repository agent instructions' {
@@ -115,8 +121,10 @@ Describe 'Repo-local skills' {
 
         $agentsContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
         $agentsContent | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
+        $agentsContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
         $copilotContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
         $copilotContent | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
+        $copilotContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
     }
 
     It 'includes the runtime policy update skill' {
@@ -252,7 +260,8 @@ Describe 'Repo-local skills' {
         $syncContent | Should -Match 'audit output'
         $syncContent | Should -Match 'non-main downstream branch'
         $syncContent | Should -Match 'sync allowlist'
-        $syncContent | Should -Match 'synced template guidance version'
+        $syncContent | Should -Match 'cleanup-asset delivery'
+        $syncContent | Should -Match 'validation result'
 
         $runtimeContent | Should -Match '## Success Criteria'
         $runtimeContent | Should -Match 'eng/runtime-policy\.json'
@@ -283,6 +292,7 @@ Describe 'Repo-local skills' {
         $syncContent | Should -Match '## Why This Exists'
         $syncContent | Should -Match 'independent projects'
         $syncContent | Should -Match 'AI guidance'
+        $syncContent | Should -Match 'cleanup script and cleanup skill'
         $syncContent | Should -Match 'project-owned'
         $syncContent | Should -Match 'should not be clobbered'
 
