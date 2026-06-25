@@ -20,7 +20,7 @@ This template provides a standardized starting point for PowerShell development 
 - reusable script, function, module, and test scaffolds
 - AI governance and GitHub Copilot guidance
 - downstream AI guidance sync for repositories created from this template
-- repo-local agent skills for guidance sync, runtime policy updates, and template release management
+- repo-local agent skills for downstream cleanup, guidance sync, runtime policy updates, and template release management
 - Conventional Commit standards
 - repository hygiene for issues, pull requests, security, and dependency updates
 
@@ -68,12 +68,18 @@ For durable engineering decisions behind the template's workflow and ownership b
 
 1. Create a new repository from this template.
 2. Open the repository locally in VS Code or in a Dev Container.
-3. Replace placeholder module metadata if the project is module-oriented.
-4. Add scripts, functions, modules, or automation under `src`.
-5. Add project-specific Pester tests under `tests`.
-6. Copy and adapt scaffolds from `templates` for new functions, scripts, modules, and tests when they fit the work.
-7. Review the AI-assisted development guidance in `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.
-8. Run local validation:
+3. Run the downstream cleanup workflow immediately, before adding project-specific docs, tests, ADRs, or CI changes:
+
+   ```powershell
+   pwsh -NoProfile -File ./scripts/Initialize-DownstreamRepo.ps1 -Apply -RepositoryName <your-repo-name>
+   ```
+
+4. Replace placeholder module metadata if the project is module-oriented.
+5. Add scripts, functions, modules, or automation under `src`.
+6. Add project-specific Pester tests under `tests`.
+7. Copy and adapt scaffolds from `templates` for new functions, scripts, modules, and tests when they fit the work.
+8. Review the AI-assisted development guidance in `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.
+9. Run local validation:
 
    ```powershell
    pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
@@ -189,6 +195,8 @@ Use `-AsJson` for agent-readable output or `-FailOnIssue` when a non-healthy ite
 ## Repo-Local Agent Workflows
 
 This template includes repo-local agent skills for repeatable maintenance workflows. See [`docs/agent-workflows.md`](docs/agent-workflows.md) for the human-readable workflow index and validation expectations.
+
+New downstream repositories should begin with the README template version badge intact. The cleanup workflow preserves or inserts that badge so inherited guidance/template baseline alignment remains visible even after downstream normalization.
 
 ## Downstream Guidance Sync
 

@@ -1,15 +1,63 @@
 Describe 'Repo-local skills' {
     BeforeAll {
         $script:RepoRoot = (Resolve-Path -LiteralPath (Join-Path -Path $PSScriptRoot -ChildPath '..\..')).Path
+        $script:CleanupSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md'
+        $script:CleanupSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
         $script:SkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md'
         $script:SkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/agents/openai.yaml'
         $script:RuntimeSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/SKILL.md'
         $script:RuntimeSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/agents/openai.yaml'
         $script:VersionSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/SKILL.md'
         $script:VersionSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/agents/openai.yaml'
+        $script:CleanupScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Initialize-DownstreamRepo.ps1'
         $script:SyncScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1'
         $script:RuntimePolicyPath = Join-Path -Path $script:RepoRoot -ChildPath 'eng/runtime-policy.json'
         $script:AgentWorkflowsPath = Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md'
+    }
+
+    It 'includes the downstream repo cleanup skill' {
+        Test-Path -LiteralPath $script:CleanupSkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:CleanupSkillMetadataPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid required cleanup skill frontmatter' {
+        $content = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
+
+        $content | Should -Match '^---\s*\r?\nname: downstream-repo-cleanup\r?\n'
+        $content | Should -Match '\r?\ndescription: .+downstream.+cleanup.+\r?\n---'
+    }
+
+    It 'references the authoritative cleanup script and README badge contract' {
+        $content = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
+
+        $content | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $content | Should -Match 'README template version badge'
+        $content | Should -Match 'immediate post-create'
+        Test-Path -LiteralPath $script:CleanupScriptPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid cleanup skill UI metadata with an explicit skill prompt' {
+        $content = Get-Content -Raw -LiteralPath $script:CleanupSkillMetadataPath
+
+        $content | Should -Match 'display_name: "Downstream Repo Cleanup"'
+        $content | Should -Match 'short_description: "Normalize a new downstream repo"'
+        $content | Should -Match 'default_prompt: "Use \$downstream-repo-cleanup'
+    }
+
+    It 'makes the cleanup skill discoverable from repository agent instructions' {
+        $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
+        $agentsContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
+        $copilotContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
+        $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
+
+        $readmeContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $readmeContent | Should -Match 'template version badge'
+        $agentsContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
+        $agentsContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $copilotContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
+        $copilotContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $workflowContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
     }
 
     It 'includes the downstream guidance sync skill' {
@@ -176,6 +224,8 @@ Describe 'Repo-local skills' {
         $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
         $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
 
+        $workflowContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
         $workflowContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
         $workflowContent | Should -Match 'scripts/Invoke-TemplateGuidanceSync\.ps1'
         $workflowContent | Should -Match '\.codex/skills/runtime-policy-update/SKILL\.md'
@@ -188,9 +238,15 @@ Describe 'Repo-local skills' {
     }
 
     It 'documents success criteria for each repo-local workflow' {
+        $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $cleanupContent | Should -Match '## Success Criteria'
+        $cleanupContent | Should -Match 'README template version badge'
+        $cleanupContent | Should -Match 'project-specific work'
+        $cleanupContent | Should -Match 'downstream validation'
 
         $syncContent | Should -Match '## Success Criteria'
         $syncContent | Should -Match 'audit output'
@@ -214,9 +270,15 @@ Describe 'Repo-local skills' {
     }
 
     It 'documents rationale for workflow boundaries' {
+        $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $cleanupContent | Should -Match '## Why This Exists'
+        $cleanupContent | Should -Match 'template-maintainer artifacts'
+        $cleanupContent | Should -Match 'README template version badge'
+        $cleanupContent | Should -Match 'first-run cleanup'
 
         $syncContent | Should -Match '## Why This Exists'
         $syncContent | Should -Match 'independent projects'

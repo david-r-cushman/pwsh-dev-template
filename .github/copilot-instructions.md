@@ -78,7 +78,9 @@ If multiple templates apply or conflict, choose in this order: state-changing fu
 
 ## Repo-Local Skills
 
-Repo-local Codex skills are stored under `.codex/skills/`. When asked to synchronize downstream AI guidance, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
+Repo-local Codex skills are stored under `.codex/skills/`. When asked to normalize a newly created downstream repository from `pwsh-dev-template`, use `.codex/skills/downstream-repo-cleanup/SKILL.md` and operate `scripts/Initialize-DownstreamRepo.ps1` through the documented audit, apply, validation, and diff-review workflow. Use this only as an immediate post-create cleanup step before project-specific work begins.
+
+When asked to synchronize downstream AI guidance, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
 
 When asked to update the template runtime, Ubuntu image, GitHub Actions runner, or pinned PowerShell tooling, use `.codex/skills/runtime-policy-update/SKILL.md`. Treat `eng/runtime-policy.json` as the source of truth, use `scripts/Update-GeneratedMarkdown.ps1` for generated Markdown blocks, and validate with `scripts/Test-VersionPolicy.ps1`.
 
