@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Audits or syncs template-owned AI guidance into downstream repositories.
+    Audits or syncs template-owned downstream guidance and cleanup assets into downstream repositories.
 
 .DESCRIPTION
     Compares a downstream repository with this template repository for the
     files that are safe to keep aligned after a project has been created from
-    the template: AI guidance, guardrail documentation, the ADR scaffold README, and the README template
+    the template: AI guidance, downstream workflow documentation, cleanup workflow assets for older downstream repositories, the ADR scaffold README, and the README template
     version badge.
 
     The README badge represents template guidance alignment. It does not mean
@@ -63,11 +63,15 @@ $ErrorActionPreference = 'Stop'
 $guidanceFiles = @(
     'AGENTS.md'
     '.github/copilot-instructions.md'
+    '.codex/skills/downstream-repo-cleanup/SKILL.md'
+    '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
+    'docs/agent-workflows.md'
     'docs/ai-behavioral-contract.md'
     'docs/ai-interaction-loop.md'
     'docs/copilot-instructions-reference.md'
     'docs/powershell-ai-operating-model.md'
     'docs/decisions/README.md'
+    'scripts/Initialize-DownstreamRepo.ps1'
 )
 
 function Resolve-DirectoryPath {
@@ -398,7 +402,7 @@ function Write-TextReport {
         Write-Output ('Template version: {0}' -f $result.TemplateVersion)
         Write-Output ('Drift: {0}' -f $result.HasDrift)
         Write-Output ''
-        Write-Output 'Guidance files:'
+        Write-Output 'Synced files:'
         $result.Files | Format-Table -Property Path, Status, Applied -AutoSize | Out-String | Write-Output
         Write-Output 'README badge:'
         $result.ReadmeBadge | Format-Table -Property Path, Status, CurrentVersion, ExpectedVersion, Applied -AutoSize | Out-String | Write-Output
@@ -427,7 +431,7 @@ foreach ($targetPathInput in $Path) {
     }
 
     if ($Apply -and $branch -in @('main', 'master')) {
-        $branchName = 'chore/sync-template-guidance-{0}' -f $templateVersion
+        $branchName = 'chore/sync-template-guidance'
         throw ('Refusing to apply changes on protected branch "{0}". Create or switch to a working branch first: git -C "{1}" switch -c {2}' -f $branch, $targetPath, $branchName)
     }
 
