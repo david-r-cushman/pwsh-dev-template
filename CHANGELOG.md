@@ -6,6 +6,11 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Fixed
+
+- Hardened the GitHub Actions CI module-install step to recover when `PSGallery` is missing from the runner before installing pinned PowerShell modules.
+
+
 ## 0.12.0 - 2026-06-25
 
 ### Added
