@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.12.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.13.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -20,7 +20,7 @@ This template provides a standardized starting point for PowerShell development 
 - reusable script, function, module, and test scaffolds
 - AI governance and GitHub Copilot guidance
 - downstream AI guidance sync for repositories created from this template
-- repo-local agent skills for downstream cleanup, guidance sync, runtime policy updates, and template release management
+- repo-local agent skills for ordinary change delivery, downstream cleanup, guidance sync, runtime policy updates, and template release management
 - Conventional Commit standards
 - repository hygiene for issues, pull requests, security, and dependency updates
 
@@ -195,6 +195,8 @@ Use `-AsJson` for agent-readable output or `-FailOnIssue` when a non-healthy ite
 ## Repo-Local Agent Workflows
 
 This template includes repo-local agent skills for repeatable maintenance workflows. See [`docs/agent-workflows.md`](docs/agent-workflows.md) for the human-readable workflow index and validation expectations.
+
+For ordinary repository work that does not belong to a more specialized workflow, a repo-local Codex skill is provided at `.codex/skills/change-delivery-workflow/SKILL.md` so agents keep branch, changelog, validation, PR, and post-merge cleanup behavior consistent.
 
 New downstream repositories should begin with the README template version badge intact. The cleanup workflow preserves or inserts that badge so inherited guidance/template baseline alignment remains visible even after downstream normalization.
 

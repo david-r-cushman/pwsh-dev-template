@@ -63,6 +63,8 @@ $ErrorActionPreference = 'Stop'
 $guidanceFiles = @(
     'AGENTS.md'
     '.github/copilot-instructions.md'
+    '.codex/skills/change-delivery-workflow/SKILL.md'
+    '.codex/skills/change-delivery-workflow/agents/openai.yaml'
     '.codex/skills/downstream-repo-cleanup/SKILL.md'
     '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
     'docs/agent-workflows.md'

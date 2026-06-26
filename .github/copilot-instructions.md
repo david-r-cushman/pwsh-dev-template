@@ -78,6 +78,8 @@ If multiple templates apply or conflict, choose in this order: state-changing fu
 
 ## Repo-Local Skills
 
+Repo-local Codex skills are stored under `.codex/skills/`. When asked to perform ordinary repository changes that do not belong to a more specialized workflow, use `.codex/skills/change-delivery-workflow/SKILL.md` to coordinate sandbox escalation, non-`main` branches, changelog updates, release decisions, conventional commits, ready pull requests, and post-merge cleanup.
+
 Repo-local Codex skills are stored under `.codex/skills/`. When asked to normalize a newly created downstream repository from `pwsh-dev-template`, use `.codex/skills/downstream-repo-cleanup/SKILL.md` and operate `scripts/Initialize-DownstreamRepo.ps1` through the documented audit, apply, validation, and diff-review workflow. Use this only as an immediate post-create cleanup step before project-specific work begins.
 
 When asked to synchronize downstream AI guidance or deliver newly added cleanup workflow assets into an existing downstream repository, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Treat cleanup itself as a downstream-repository action performed through `scripts/Initialize-DownstreamRepo.ps1`, and do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
@@ -89,7 +91,6 @@ When asked to prepare, validate, tag, publish, or clean up a template release ve
 When adding or updating repo-local skills, add or update Pester coverage in `tests/unit/SkillScaffold.Tests.ps1` for the skill file, metadata, required references, and agent discoverability. The Codex `quick_validate.py` helper may be used as an optional authoring check, but Pester is the repository validation standard.
 
 ## PowerShell Compatibility
-
 Target PowerShell 7.4.x unless `README.md`, `/docs`, or the task-specific template declares another version under `PowerShell Version`, `Requirements`, or `Compatibility`. For version conflicts, use this precedence: `README.md`, then `/docs`, then task-specific template. If version requirements are missing, invalid, outdated, or unsupported, provide a PowerShell 7.4.x-compatible fallback and document the assumption.
 
 Avoid syntax, APIs, cmdlets, or modules that conflict with the supported PowerShell version or platform support. Prefer cross-platform approaches; when platform-specific behavior is required, isolate it with `$IsWindows`, `$IsLinux`, or `$IsMacOS`, and test or explicitly mock/skip each supported path.
