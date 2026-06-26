@@ -1,6 +1,8 @@
 Describe 'Repo-local skills' {
     BeforeAll {
         $script:RepoRoot = (Resolve-Path -LiteralPath (Join-Path -Path $PSScriptRoot -ChildPath '..\..')).Path
+        $script:ChangeDeliverySkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/change-delivery-workflow/SKILL.md'
+        $script:ChangeDeliverySkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/change-delivery-workflow/agents/openai.yaml'
         $script:CleanupSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md'
         $script:CleanupSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
         $script:SkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md'
@@ -15,6 +17,50 @@ Describe 'Repo-local skills' {
         $script:AgentWorkflowsPath = Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md'
     }
 
+    It 'includes the change delivery workflow skill' {
+        Test-Path -LiteralPath $script:ChangeDeliverySkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:ChangeDeliverySkillMetadataPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid required change delivery skill frontmatter' {
+        $content = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
+
+        $content | Should -Match '^---\s*\r?\nname: change-delivery-workflow\r?\n'
+        $content | Should -Match '\r?\ndescription: .+change.+workflow.+\r?\n---'
+    }
+
+    It 'documents sandbox recovery, branch discipline, and changelog expectations' {
+        $content = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
+
+        $content | Should -Match 'helper_sid_resolve_failed'
+        $content | Should -Match 'CodexSandboxOffline'
+        $content | Should -Match 'sandbox_permissions: require_escalated'
+        $content | Should -Match 'CHANGELOG\.md'
+        $content | Should -Match '## Unreleased'
+        $content | Should -Match 'non-main branch'
+        $content | Should -Match 'ready PR'
+        $content | Should -Match 'Conventional Commit'
+    }
+
+    It 'uses valid change delivery skill UI metadata with an explicit skill prompt' {
+        $content = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillMetadataPath
+
+        $content | Should -Match 'display_name: "Change Delivery Workflow"'
+        $content | Should -Match 'short_description: "Deliver ordinary repo changes with branch, changelog, PR, and release discipline"'
+        $content | Should -Match 'default_prompt: "Use \$change-delivery-workflow'
+    }
+
+    It 'makes the change delivery workflow discoverable from repository agent instructions' {
+        $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
+        $agentsContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
+        $copilotContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
+        $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
+
+        $readmeContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
+        $agentsContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
+        $copilotContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
+        $workflowContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
+    }
     It 'includes the downstream repo cleanup skill' {
         Test-Path -LiteralPath $script:CleanupSkillPath -PathType Leaf | Should -BeTrue
         Test-Path -LiteralPath $script:CleanupSkillMetadataPath -PathType Leaf | Should -BeTrue
@@ -56,6 +102,7 @@ Describe 'Repo-local skills' {
         $agentsContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
         $copilotContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
         $copilotContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
+        $workflowContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
         $workflowContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
         $workflowContent | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
     }
@@ -232,6 +279,7 @@ Describe 'Repo-local skills' {
         $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
         $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
 
+        $workflowContent | Should -Match '\.codex/skills/change-delivery-workflow/SKILL\.md'
         $workflowContent | Should -Match '\.codex/skills/downstream-repo-cleanup/SKILL\.md'
         $workflowContent | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
         $workflowContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
@@ -246,10 +294,17 @@ Describe 'Repo-local skills' {
     }
 
     It 'documents success criteria for each repo-local workflow' {
+        $changeDeliveryContent = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
         $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $changeDeliveryContent | Should -Match '## Success Criteria'
+        $changeDeliveryContent | Should -Match 'CHANGELOG\.md'
+        $changeDeliveryContent | Should -Match 'non-main branch'
+        $changeDeliveryContent | Should -Match 'ready PR'
+        $changeDeliveryContent | Should -Match 'post-merge cleanup'
 
         $cleanupContent | Should -Match '## Success Criteria'
         $cleanupContent | Should -Match 'README template version badge'
@@ -279,10 +334,17 @@ Describe 'Repo-local skills' {
     }
 
     It 'documents rationale for workflow boundaries' {
+        $changeDeliveryContent = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
         $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
+
+        $changeDeliveryContent | Should -Match '## Why This Exists'
+        $changeDeliveryContent | Should -Match 'helper_sid_resolve_failed'
+        $changeDeliveryContent | Should -Match 'Windows sandbox'
+        $changeDeliveryContent | Should -Match 'release/version contract'
+        $changeDeliveryContent | Should -Match 'ordinary repository work'
 
         $cleanupContent | Should -Match '## Why This Exists'
         $cleanupContent | Should -Match 'template-maintainer artifacts'

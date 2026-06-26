@@ -208,6 +208,7 @@ Invoke-TemplateHealthScript -Area 'Template Version' -Name 'Template version met
 
 $agentArea = 'Agent Workflows'
 $agentFiles = @(
+    @{ Name = 'Change delivery workflow skill'; Path = '.codex/skills/change-delivery-workflow/SKILL.md' },
     @{ Name = 'Downstream repo cleanup skill'; Path = '.codex/skills/downstream-repo-cleanup/SKILL.md' },
     @{ Name = 'Downstream guidance sync skill'; Path = '.codex/skills/downstream-guidance-sync/SKILL.md' },
     @{ Name = 'Runtime policy update skill'; Path = '.codex/skills/runtime-policy-update/SKILL.md' },
@@ -222,6 +223,7 @@ foreach ($agentFile in $agentFiles) {
 $agentReferences = @(
     @{ Name = 'README workflow pointer'; Path = 'README.md'; Text = 'docs/agent-workflows.md' },
     @{ Name = 'Workflow health pointer'; Path = 'docs/agent-workflows.md'; Text = 'scripts/Get-TemplateHealth.ps1' },
+    @{ Name = 'Change delivery skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/change-delivery-workflow/SKILL.md' },
     @{ Name = 'Cleanup skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/downstream-repo-cleanup/SKILL.md' },
     @{ Name = 'Cleanup script reference'; Path = 'docs/agent-workflows.md'; Text = 'scripts/Initialize-DownstreamRepo.ps1' },
     @{ Name = 'Downstream skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/downstream-guidance-sync/SKILL.md' },

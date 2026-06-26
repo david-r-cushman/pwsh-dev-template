@@ -6,10 +6,19 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.13.0 - 2026-06-26
+
+### Added
+
+- Added a repo-local change delivery workflow skill for ordinary repository work, including sandbox escalation guidance, non-`main` branch discipline, changelog expectations, release-decision guidance, and PR-first delivery workflow.
+
+### Changed
+
+- Expanded workflow documentation, template guidance sync, downstream cleanup guidance, template health checks, and skill validation so downstream repositories can adopt and discover the change delivery workflow consistently.
+
 ### Fixed
 
 - Hardened the GitHub Actions CI module-install step to recover when `PSGallery` is missing from the runner before installing pinned PowerShell modules.
-
 
 ## 0.12.0 - 2026-06-25
 

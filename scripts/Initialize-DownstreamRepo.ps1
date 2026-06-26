@@ -398,12 +398,15 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 
 | Workflow | Use When | Skill | Control | Validation |
 | --- | --- | --- | --- | --- |
+| Change delivery workflow | Ordinary repository work needs consistent branch, changelog, validation, PR, and post-merge cleanup discipline. | .codex/skills/change-delivery-workflow/SKILL.md | Repository guidance, Git state, repo-specific validators, diff review, and human review | Repo-specific validation, staged diff review, and PR review |
 | Downstream repo cleanup | A repository was just created from `pwsh-dev-template` and needs immediate first-run normalization before project-specific work begins. | `.codex/skills/downstream-repo-cleanup/SKILL.md` | `scripts/Initialize-DownstreamRepo.ps1` | Audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` |
 | Downstream guidance sync | A downstream repository needs current AI guidance, guardrail docs, and ADR scaffold guidance from `pwsh-dev-template`. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
 
 ## Operating Model
 
 Use the repo-local skill when the task matches one of the workflow areas above. The skill should guide the agent through the expected audit, apply, validation, diff review, commit, and pull request process.
+
+The change delivery workflow is intentionally process-oriented. It standardizes branch, changelog, release-decision, pull request, and cleanup behavior for everyday downstream work while still relying on repo guidance, repo validators, diff review, and human review as the controls.
 
 The agent should not invent a separate process when a deterministic script already exists. If a script reports an error, the correct response is to inspect the failure, fix the cause, and rerun the documented validation. Recovery should still be explicit, reviewable, and consistent with the repository guidance.
 
@@ -481,6 +484,8 @@ Repo-local Codex skills are stored under `.codex/skills/`. When asked to normali
 When asked to synchronize downstream AI guidance from `pwsh-dev-template`, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
 
 Runtime policy, generated Markdown, CI, tests, scaffolds, and release metadata become downstream-owned after cleanup. Treat changes to those surfaces as normal repository work, not as template-maintainer workflows.
+
+For ordinary downstream repository changes after cleanup, use .codex/skills/change-delivery-workflow/SKILL.md to coordinate sandbox escalation, non-main branches, changelog updates, release decisions, commits, pull requests, and post-merge cleanup.
 
 When adding or updating repo-local skills, add or update Pester coverage in `tests/unit/SkillScaffold.Tests.ps1` for the skill file, metadata, required references, and agent discoverability. The Codex `quick_validate.py` helper may be used as an optional authoring check, but Pester is the repository validation standard.
 
@@ -707,6 +712,7 @@ $keepPaths = @(
     'templates'
     'PesterConfiguration.psd1'
     'PSScriptAnalyzerSettings.psd1'
+    '.codex/skills/change-delivery-workflow'
     '.codex/skills/downstream-guidance-sync'
     '.codex/skills/downstream-repo-cleanup'
 )
