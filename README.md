@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.14.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.13.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -256,4 +256,4 @@ Version changes apply to the template baseline, not to downstream repositories c
 - Minor versions indicate new template capabilities, tooling, templates, or conventions.
 - Patch versions indicate fixes, documentation clarifications, and low-risk maintenance updates.
 
-A repo-local Codex skill is provided at `.codex/skills/template-version-release/SKILL.md` for version preparation, post-merge release tagging, and GitHub Release publishing. Release tags use the signed `vX.Y.Z` format and are applied to `main` after the release PR is merged. GitHub Releases use the matching changelog section as their public release notes, and GitHub verified status depends on the signing key being trusted there.
+A repo-local Codex skill is provided at `.codex/skills/template-version-release/SKILL.md` for version preparation, post-merge release tagging, and GitHub Release publishing. Release tags use the lightweight `vX.Y.Z` format and are applied to the merged `main` commit after the release PR is merged. GitHub Releases use the matching changelog section as their public release notes, and GitHub verification should be confirmed in the GitHub UI after the tag is pushed.
