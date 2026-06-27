@@ -22,12 +22,6 @@ Describe 'Test-TemplateVersion' {
             & git -C $script:TempRepo add VERSION README.md CHANGELOG.md | Out-Null
             & git -C $script:TempRepo commit -q -m 'add version fixture' | Out-Null
         }
-        $script:EnableSshSigning = {
-            $keyPath = Join-Path -Path $script:TempRepo -ChildPath 'id_ed25519'
-            & ssh-keygen -t ed25519 -N '' -C 'test@example.invalid' -f $keyPath | Out-Null
-            & git -C $script:TempRepo config gpg.format ssh | Out-Null
-            & git -C $script:TempRepo config user.signingkey $keyPath | Out-Null
-        }
     }
 
     BeforeEach {
@@ -67,15 +61,7 @@ Describe 'Test-TemplateVersion' {
         { & $script:ScriptPath -RepoRoot $script:TempRepo -CheckTag } | Should -Throw -ExpectedMessage '*Template version validation failed*'
     }
 
-    It 'fails when the release tag is lightweight' {
-        & $script:NewVersionFixture
-        & $script:CommitVersionFixture
-        & git -C $script:TempRepo tag v1.2.3 | Out-Null
-
-        { & $script:ScriptPath -RepoRoot $script:TempRepo -CheckTag } | Should -Throw -ExpectedMessage '*Template version validation failed*'
-    }
-
-    It 'fails when the release tag is unsigned annotated' {
+    It 'fails when the release tag is annotated' {
         & $script:NewVersionFixture
         & $script:CommitVersionFixture
         & git -C $script:TempRepo tag -a v1.2.3 -m 'Release v1.2.3' | Out-Null
@@ -83,11 +69,10 @@ Describe 'Test-TemplateVersion' {
         { & $script:ScriptPath -RepoRoot $script:TempRepo -CheckTag } | Should -Throw -ExpectedMessage '*Template version validation failed*'
     }
 
-    It 'passes when the release tag is signed and annotated' {
+    It 'passes when the release tag is lightweight and points at HEAD' {
         & $script:NewVersionFixture
         & $script:CommitVersionFixture
-        & $script:EnableSshSigning
-        & git -C $script:TempRepo tag -s v1.2.3 -m 'Release v1.2.3' | Out-Null
+        & git -C $script:TempRepo tag v1.2.3 | Out-Null
 
         { & $script:ScriptPath -RepoRoot $script:TempRepo -CheckTag } | Should -Not -Throw
     }

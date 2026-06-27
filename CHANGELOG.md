@@ -6,15 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
-## 0.14.0 - 2026-06-26
-
-### Added
-
-- Added signed release-tag validation and SSH signing guidance so future template releases can produce GitHub-verified tags.
-
 ### Changed
 
-- Updated the template release workflow, maintainer documentation, and validator expectations to require signed annotated `vX.Y.Z` tags instead of unsigned annotated tags.
+- Corrected the template release guidance to use lightweight `vX.Y.Z` tags on merged main commits so release tags can continue matching the previously verified GitHub behavior without adding signing-key requirements.
+
 
 ## 0.13.0 - 2026-06-26
 
