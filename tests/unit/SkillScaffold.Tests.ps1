@@ -246,6 +246,8 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'docs/template-evolution\.md'
         $content | Should -Match 'README\.md'
         $content | Should -Match 'vX\.Y\.Z'
+        $content | Should -Match 'git tag -s'
+        $content | Should -Match 'verified'
         $content | Should -Match 'GitHub Release'
     }
 
@@ -329,7 +331,9 @@ Describe 'Repo-local skills' {
         $versionContent | Should -Match 'README template badge'
         $versionContent | Should -Match 'CHANGELOG\.md'
         $versionContent | Should -Match 'vX\.Y\.Z'
+        $versionContent | Should -Match 'signed annotated'
         $versionContent | Should -Match 'Test-TemplateVersion\.ps1 -CheckTag'
+        $versionContent | Should -Match 'verified'
         $versionContent | Should -Match 'GitHub Release exists'
     }
 

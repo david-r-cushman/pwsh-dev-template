@@ -5,7 +5,7 @@
 .DESCRIPTION
     Checks that VERSION, the README template-version badge, and CHANGELOG.md
     agree on the current template version. Optionally verifies that the matching
-    Git tag points at HEAD.
+    Git tag points at HEAD, is an annotated tag, and includes a signature.
 #>
 [CmdletBinding()]
 param(
@@ -82,6 +82,22 @@ function Get-TemplateFileContent {
     return Get-Content -Raw -LiteralPath $path
 }
 
+function Invoke-GitCommand {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$Arguments
+    )
+
+    $output = & git -C $resolvedRepoRoot @Arguments 2>&1
+
+    return [pscustomobject]@{
+        ExitCode = $LASTEXITCODE
+        Output = ($output | Out-String).Trim()
+    }
+}
+
 $versionContent = Get-TemplateFileContent -RelativePath 'VERSION' -Description 'Template version file' -Expected 'SemVer X.Y.Z value'
 if ($null -ne $versionContent) {
     $version = $versionContent.Trim()
@@ -114,17 +130,35 @@ if ($failures.Count -eq 0) {
 
     if ($CheckTag) {
         $tagName = 'v{0}' -f $version
-        $headResult = & git -C $resolvedRepoRoot rev-parse HEAD 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Add-VersionFailure -Path '.git' -Description 'Current HEAD' -Expected 'Git repository with HEAD' -Actual ($headResult | Out-String).Trim() -Reason 'Unable to resolve HEAD'
+        $headResult = Invoke-GitCommand -Arguments @('rev-parse', 'HEAD')
+        if ($headResult.ExitCode -ne 0) {
+            Add-VersionFailure -Path '.git' -Description 'Current HEAD' -Expected 'Git repository with HEAD' -Actual $headResult.Output -Reason 'Unable to resolve HEAD'
         }
         else {
-            $tagResult = & git -C $resolvedRepoRoot rev-list -n 1 $tagName 2>&1
-            if ($LASTEXITCODE -ne 0) {
-                Add-VersionFailure -Path '.git' -Description 'Release tag' -Expected $tagName -Actual ($tagResult | Out-String).Trim() -Reason 'Tag not found'
+            $tagResult = Invoke-GitCommand -Arguments @('rev-list', '-n', '1', $tagName)
+            if ($tagResult.ExitCode -ne 0 -or [string]::IsNullOrWhiteSpace($tagResult.Output)) {
+                Add-VersionFailure -Path '.git' -Description 'Release tag' -Expected $tagName -Actual $tagResult.Output -Reason 'Tag not found'
             }
-            elseif ($tagResult.Trim() -ne $headResult.Trim()) {
-                Add-VersionFailure -Path '.git' -Description 'Release tag' -Expected $headResult.Trim() -Actual $tagResult.Trim() -Reason ('{0} does not point at HEAD' -f $tagName)
+            else {
+                if ($tagResult.Output.Trim() -ne $headResult.Output.Trim()) {
+                    Add-VersionFailure -Path '.git' -Description 'Release tag' -Expected $headResult.Output.Trim() -Actual $tagResult.Output.Trim() -Reason ('{0} does not point at HEAD' -f $tagName)
+                }
+
+                $tagTypeResult = Invoke-GitCommand -Arguments @('for-each-ref', ('refs/tags/{0}' -f $tagName), '--format=%(objecttype)')
+                if ($tagTypeResult.ExitCode -ne 0) {
+                    Add-VersionFailure -Path '.git' -Description 'Release tag type' -Expected 'annotated tag object' -Actual $tagTypeResult.Output -Reason 'Unable to inspect tag object type'
+                }
+                elseif ($tagTypeResult.Output.Trim() -ne 'tag') {
+                    Add-VersionFailure -Path '.git' -Description 'Release tag type' -Expected 'annotated tag object' -Actual $tagTypeResult.Output.Trim() -Reason 'Tag is not annotated'
+                }
+
+                $signatureResult = Invoke-GitCommand -Arguments @('for-each-ref', ('refs/tags/{0}' -f $tagName), '--format=%(contents:signature)')
+                if ($signatureResult.ExitCode -ne 0) {
+                    Add-VersionFailure -Path '.git' -Description 'Release tag signature' -Expected 'signed tag object' -Actual $signatureResult.Output -Reason 'Unable to inspect tag signature'
+                }
+                elseif ([string]::IsNullOrWhiteSpace($signatureResult.Output)) {
+                    Add-VersionFailure -Path '.git' -Description 'Release tag signature' -Expected 'signed tag object' -Reason 'Tag is not signed'
+                }
             }
         }
     }

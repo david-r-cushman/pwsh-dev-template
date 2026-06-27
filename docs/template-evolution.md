@@ -56,7 +56,20 @@ Use version changes to communicate the impact of template evolution:
 - Minor versions: new template capabilities, scaffolds, workflows, tooling support, or conventions that add value without intentionally breaking existing template consumers.
 - Patch versions: corrections, documentation clarifications, policy wording updates, validation fixes, and low-risk maintenance that preserve the current template contract.
 
-Update `VERSION`, the README template-version badge, and `CHANGELOG.md` together when preparing a release. Keep unreleased maintenance notes under the `Unreleased` heading until a release version is chosen. Use `scripts/Test-TemplateVersion.ps1` to verify release metadata before opening a PR. After the release PR is merged, create an annotated `vX.Y.Z` tag on `main`, push the tag, validate tag placement, and publish a GitHub Release from that tag using the matching changelog section as the release body. Agents should use `.codex/skills/template-version-release/SKILL.md` when coordinating this workflow.
+Update `VERSION`, the README template-version badge, and `CHANGELOG.md` together when preparing a release. Keep unreleased maintenance notes under the `Unreleased` heading until a release version is chosen. Use `scripts/Test-TemplateVersion.ps1` to verify release metadata before opening a PR. After the release PR is merged, create a signed annotated `vX.Y.Z` tag on `main`, push the tag, validate tag placement plus local signature presence, and publish a GitHub Release from that tag using the matching changelog section as the release body. Agents should use `.codex/skills/template-version-release/SKILL.md` when coordinating this workflow.
+
+### Signed Release Tags
+
+Template releases now require signed annotated tags so GitHub can show the release tag as verified when the signing identity is trusted there.
+
+Use SSH signing as the default maintainer path:
+
+```powershell
+git config --global gpg.format ssh
+git config --global user.signingkey C:/Users/<you>/.ssh/id_ed25519
+```
+
+The corresponding public key must also be registered with GitHub as an SSH signing key. `scripts/Test-TemplateVersion.ps1 -CheckTag` validates the local tag shape and signature presence, but the final release check is still to confirm GitHub shows the pushed tag as verified.
 
 ## Runtime Update Workflow
 
