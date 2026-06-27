@@ -12,7 +12,7 @@ The repository already keeps release notes in `CHANGELOG.md` and validates relea
 
 ## Decision
 
-Publish GitHub Releases manually after release PRs are merged and annotated `vX.Y.Z` tags are pushed.
+Publish GitHub Releases manually after release PRs are merged and signed annotated `vX.Y.Z` tags are pushed.
 
 Each GitHub Release should use:
 
