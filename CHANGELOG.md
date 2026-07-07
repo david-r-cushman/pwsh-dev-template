@@ -9,7 +9,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 ### Changed
 
 - Corrected the template release guidance to use lightweight `vX.Y.Z` tags on merged main commits so release tags can continue matching the previously verified GitHub behavior without adding signing-key requirements.
-
+- Clarified repository guidance to prefer self-explanatory code over explanatory inline comments while still requiring comment-based help for public functions and scripts and allowing targeted rationale comments for non-obvious constraints or quirks.
 
 ## 0.13.0 - 2026-06-26
 
