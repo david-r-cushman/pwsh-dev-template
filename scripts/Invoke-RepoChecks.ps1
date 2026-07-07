@@ -88,6 +88,7 @@ function Resolve-RepoPath {
 
 $analyzerSettingsPath = Resolve-RepoPath -RelativePath 'PSScriptAnalyzerSettings.psd1'
 $pesterConfigPath = Resolve-RepoPath -RelativePath 'PesterConfiguration.psd1'
+$pesterRunPath = Resolve-RepoPath -RelativePath 'tests'
 $versionPolicyScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-VersionPolicy.ps1'
 $generatedMarkdownScriptPath = Resolve-RepoPath -RelativePath 'scripts/Update-GeneratedMarkdown.ps1'
 $templateVersionScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-TemplateVersion.ps1'
@@ -145,6 +146,9 @@ if (-not $SkipTests) {
         throw ('Pester configuration file not found: {0}' -f $pesterConfigPath)
     }
 
+    $config = Import-PowerShellDataFile -LiteralPath $pesterConfigPath
+    $config.Run.Path = @($pesterRunPath)
+
     if ($OutputPath) {
         $resolvedOutputPath = (Resolve-Path -LiteralPath $OutputPath -ErrorAction SilentlyContinue)?.Path
         if (-not $resolvedOutputPath) {
@@ -152,12 +156,11 @@ if (-not $SkipTests) {
             $resolvedOutputPath = (Resolve-Path -LiteralPath $OutputPath).Path
         }
 
-        $config = Import-PowerShellDataFile -LiteralPath $pesterConfigPath
         $config.TestResult.OutputPath = (Join-Path -Path $resolvedOutputPath -ChildPath 'TestResults.xml')
         $pesterConfiguration = [PesterConfiguration]::new($config)
     }
     else {
-        $pesterConfiguration = [PesterConfiguration]::new((Import-PowerShellDataFile -LiteralPath $pesterConfigPath))
+        $pesterConfiguration = [PesterConfiguration]::new($config)
     }
 
     Write-Verbose 'Running Pester...'
