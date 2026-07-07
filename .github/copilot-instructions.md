@@ -42,6 +42,7 @@ When generating code:
 - Prefer native PowerShell features and standard language capabilities over additional abstractions, wrappers, frameworks, or dependencies.
 - Do not introduce helper functions, classes, configuration layers, design patterns, or reusable abstractions unless they provide clear value for the stated requirement.
 - Optimize for readability and maintainability over cleverness or theoretical extensibility.
+- Prefer code that is clear enough not to need explanatory inline comments. If a section needs heavy explanation, simplify the code first.
 - Keep the happy path easy to follow.
 - Apply error handling and validation where risk exists, but avoid unnecessary defensive code that obscures intent.
 - When modifying existing code, solve the requested problem with the smallest reasonable change and avoid unrelated refactoring.
@@ -56,7 +57,8 @@ For new or changed PowerShell code, prefer this checklist over adding one-off pa
 - Function shape: use production-quality advanced functions with `CmdletBinding()`, a `param()` block, approved verbs, PascalCase parameters, clear names, and small composable public functions.
 - State and output: add `SupportsShouldProcess` for mutations, wrap only the mutation, and return structured objects rather than display-formatted text.
 - Errors and security: use terminating errors with useful context, avoid undocumented `Write-Host`, validate external input, and never hardcode or log secrets, credentials, tenant IDs, or tokens.
-- Tests and help: include comment-based help for public functions and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
+- Tests and help: include comment-based help for public functions and scripts, and focused Pester tests that mock file I/O, network calls, service calls, time, and environment access.
+- Comments: do not add comments that merely restate obvious code behavior. Add targeted comments only when they preserve context the code cannot express directly, such as rationale, compatibility constraints, environmental quirks, safety assumptions, or other non-obvious behavior.
 - Verifiable output: prefer behavior and output contracts that can be tested, reviewed, or validated.
 
 ## Repository Structure And Templates
