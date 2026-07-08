@@ -42,7 +42,7 @@ This repo provides:
 
 Downstream portfolio repositories provide the project-specific implementation and show these standards applied to real PowerShell projects.
 
-## Engineering Philosophy
+## Engineering Principles in Practice
 
 > *"Zero Margin for Error"*
 
