@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.13.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.14.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -112,7 +112,7 @@ By using Docker-based development environments, third-party module execution, cl
 The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 
 <!-- BEGIN generated:readme-tooling-list -->
-- **Pester 5.7.1:** For unit and integration testing
+- **Pester 6.0.0:** For unit and integration testing
 - **PSScriptAnalyzer 1.25.0:** To enforce PowerShell best practices and security rules
 - **Azure CLI:** Pre-installed for cloud resource management
 - **PSReadLine 2.4.5:** Configured for a more efficient terminal experience

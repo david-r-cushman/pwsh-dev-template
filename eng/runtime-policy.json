@@ -9,7 +9,7 @@
     "runnerImage": "ubuntu-22.04"
   },
   "tooling": {
-    "pesterVersion": "5.7.1",
+    "pesterVersion": "6.0.0",
     "psScriptAnalyzerVersion": "1.25.0",
     "psReadLineVersion": "2.4.5"
   }

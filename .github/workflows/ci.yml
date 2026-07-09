@@ -36,7 +36,7 @@ jobs:
           }
 
           Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-          Install-Module Pester -Scope CurrentUser -Force -RequiredVersion 5.7.1
+          Install-Module Pester -Scope CurrentUser -Force -RequiredVersion 6.0.0
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -RequiredVersion 1.25.0
 
       - name: Run repo checks
