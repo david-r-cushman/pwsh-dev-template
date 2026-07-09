@@ -30,7 +30,7 @@ This repository also serves as the baseline template for my PowerShell-focused p
 
 ## Portfolio Context
 
-The intent is to make the development standard visible in one place, then demonstrate that standard in downstream repositories built from this template.
+Unlike a traditional project template, this repository is the engineering platform behind my PowerShell Core portfolio. It establishes the engineering standards, validation workflows, AI guardrails, and governance model used throughout the portfolio, while allowing downstream repositories to adopt template improvements through deliberate, project-specific validation rather than automatic synchronization.
 
 This repo provides:
 
