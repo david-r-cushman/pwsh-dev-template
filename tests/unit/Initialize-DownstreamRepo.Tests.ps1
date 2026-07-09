@@ -38,7 +38,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'scripts/Invoke-TemplateGuidanceSync.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1')
                 '.github/workflows/ci.yml' = 'name: CI'
                 '.devcontainer/devcontainer.json' = '{}'
-                'eng/runtime-policy.json' = '{"runtime":{"powershellVersion":"7.4","powershellVersionLabel":"7.4.x","ubuntuVersion":"22.04","dockerImage":"mcr.microsoft.com/powershell:lts-ubuntu-22.04"},"tooling":{"pesterVersion":"5.7.1","psScriptAnalyzerVersion":"1.25.0","psReadLineVersion":"2.4.5"},"githubActions":{"runnerImage":"ubuntu-22.04"}}'
+                'eng/runtime-policy.json' = '{"runtime":{"powershellVersion":"7.4","powershellVersionLabel":"7.4.x","ubuntuVersion":"22.04","dockerImage":"mcr.microsoft.com/powershell:lts-ubuntu-22.04"},"tooling":{"pesterVersion":"6.0.0","psScriptAnalyzerVersion":"1.25.0","psReadLineVersion":"2.4.5"},"githubActions":{"runnerImage":"ubuntu-22.04"}}'
                 'PesterConfiguration.psd1' = '@{}'
                 'PSScriptAnalyzerSettings.psd1' = '@{}'
                 'src/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'src/README.md')

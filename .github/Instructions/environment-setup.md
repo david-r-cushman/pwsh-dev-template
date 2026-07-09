@@ -20,7 +20,7 @@ The goal of the environment is to improve consistency, reduce unnecessary host-t
 - **Local Container Runtime:** Docker Desktop via WSL 2 backend
 - **Editor Support:** VS Code settings, launch configuration, and extension recommendations
 <!-- BEGIN generated:environment-tooling-stack -->
-- **Tooling:** Azure CLI, Pester 5.7.1, PSScriptAnalyzer 1.25.0, and PSReadLine 2.4.5
+- **Tooling:** Azure CLI, Pester 6.0.0, PSScriptAnalyzer 1.25.0, and PSReadLine 2.4.5
 <!-- END generated:environment-tooling-stack -->
 - **Governance:** `.editorconfig`, Markdown linting, and repository Copilot instructions
 

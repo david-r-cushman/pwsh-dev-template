@@ -4,13 +4,14 @@ All notable changes to this template are documented in this file.
 
 This project uses Semantic Versioning for the *template itself* (structure, tooling, workflows, devcontainer, and templates).
 
-## Unreleased
+## 0.14.0 - 2026-07-09
 
 ### Changed
 
 - Corrected the template release guidance to use lightweight `vX.Y.Z` tags on merged main commits so release tags can continue matching the previously verified GitHub behavior without adding signing-key requirements.
 - Clarified repository guidance to prefer self-explanatory code over explanatory inline comments while still requiring comment-based help for public functions and scripts and allowing targeted rationale comments for non-obvious constraints or quirks.
 - Hardened `scripts/Invoke-RepoChecks.ps1` so Pester test discovery is anchored to the repository root even when the script is launched from another working directory.
+- Adopted Pester 6.0.0 as the pinned template test framework version across the runtime policy, devcontainer, CI workflow, generated documentation, and downstream cleanup baseline after verifying the repository checks pass under Pester 6 without harness changes.
 
 ## 0.13.0 - 2026-06-26
 

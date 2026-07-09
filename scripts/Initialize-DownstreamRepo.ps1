@@ -309,7 +309,7 @@ function Get-DownstreamReadmeContent {
     $lines.Add('## Tooling Baseline')
     $lines.Add('')
     $lines.Add('<!-- BEGIN generated:readme-tooling-list -->')
-    $lines.Add('- **Pester 5.7.1:** For unit and integration testing')
+    $lines.Add('- **Pester 6.0.0:** For unit and integration testing')
     $lines.Add('- **PSScriptAnalyzer 1.25.0:** To enforce PowerShell best practices and security rules')
     $lines.Add('- **Azure CLI:** Pre-installed for cloud resource management')
     $lines.Add('- **PSReadLine 2.4.5:** Configured for a more efficient terminal experience')
