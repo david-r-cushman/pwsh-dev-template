@@ -86,6 +86,8 @@ Repo-local Codex skills are stored under `.codex/skills/`. When asked to normali
 
 When asked to synchronize downstream AI guidance or deliver newly added cleanup workflow assets into an existing downstream repository, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Treat cleanup itself as a downstream-repository action performed through `scripts/Initialize-DownstreamRepo.ps1`, and do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
 
+When asked to audit or align a downstream README against the shared portfolio skeleton, use `.codex/skills/readme-alignment/SKILL.md` and operate `scripts/Invoke-ReadmeAlignment.ps1` through the documented audit, apply, validation, and diff-review workflow.
+
 When asked to update the template runtime, Ubuntu image, GitHub Actions runner, or pinned PowerShell tooling, use `.codex/skills/runtime-policy-update/SKILL.md`. Treat `eng/runtime-policy.json` as the source of truth, use `scripts/Update-GeneratedMarkdown.ps1` for generated Markdown blocks, and validate with `scripts/Test-VersionPolicy.ps1`.
 
 When asked to prepare, validate, tag, publish, or clean up a template release version, use `.codex/skills/template-version-release/SKILL.md`. Keep `VERSION`, the README template-version badge, and `CHANGELOG.md` aligned, validate with `scripts/Test-TemplateVersion.ps1`, and create lightweight `vX.Y.Z` tags plus GitHub Releases only after the release PR is merged to `main`.

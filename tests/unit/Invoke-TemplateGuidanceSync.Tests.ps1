@@ -9,6 +9,8 @@ Describe 'Invoke-TemplateGuidanceSync' {
             '.codex/skills/change-delivery-workflow/agents/openai.yaml'
             '.codex/skills/downstream-repo-cleanup/SKILL.md'
             '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
+            '.codex/skills/readme-alignment/SKILL.md'
+            '.codex/skills/readme-alignment/agents/openai.yaml'
             'docs/agent-workflows.md'
             'docs/ai-behavioral-contract.md'
             'docs/ai-interaction-loop.md'
@@ -16,6 +18,10 @@ Describe 'Invoke-TemplateGuidanceSync' {
             'docs/powershell-ai-operating-model.md'
             'docs/decisions/README.md'
             'scripts/Initialize-DownstreamRepo.ps1'
+            'scripts/Invoke-ReadmeAlignment.ps1'
+            'scripts/Update-GeneratedMarkdown.ps1'
+            'eng/runtime-policy.json'
+            'templates/downstream/README.md'
         )
 
         $script:InvokeSyncScript = {
@@ -113,6 +119,12 @@ Describe 'Invoke-TemplateGuidanceSync' {
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Initialize-DownstreamRepo.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/readme-alignment/SKILL.md') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/readme-alignment/agents/openai.yaml') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Update-GeneratedMarkdown.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'eng/runtime-policy.json') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'templates/downstream/README.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'docs/agent-workflows.md') | Should -BeTrue
     }
     It 'does not sync numbered ADR files' {

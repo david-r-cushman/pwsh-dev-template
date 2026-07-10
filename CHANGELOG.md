@@ -4,6 +4,19 @@ All notable changes to this template are documented in this file.
 
 This project uses Semantic Versioning for the *template itself* (structure, tooling, workflows, devcontainer, and templates).
 
+## 0.15.0 - 2026-07-10
+
+### Added
+
+- Added a shared downstream README skeleton, a repo-local README alignment skill, and `scripts/Invoke-ReadmeAlignment.ps1` so template-derived repositories can be audited or realigned to a portfolio-oriented README structure after cleanup.
+- Added an ADR that records the downstream README skeleton, deterministic cleanup replacement, and later README alignment workflow as durable template capabilities.
+
+### Changed
+
+- Updated downstream cleanup to replace the inherited root README with the shared downstream skeleton instead of composing the downstream README inline.
+- Expanded downstream guidance sync to deliver the shared README workflow assets and the runtime-policy README-generation dependencies required by older downstream repositories.
+- Extended generated Markdown, runtime-policy validation, template health checks, and workflow discoverability coverage to include the downstream README skeleton and README alignment workflow.
+
 ## 0.14.0 - 2026-07-09
 
 ### Changed

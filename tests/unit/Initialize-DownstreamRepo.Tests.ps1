@@ -22,6 +22,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'AGENTS.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
                 'README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
                 '.github/copilot-instructions.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
+                '.github/Instructions/environment-setup.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/Instructions/environment-setup.md')
                 'docs/agent-workflows.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md')
                 'docs/decisions/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'docs/decisions/README.md')
                 'docs/template-evolution.md' = 'template evolution'
@@ -29,6 +30,9 @@ Describe 'Initialize-DownstreamRepo' {
                 'docs/decisions/0002-repo-local-agent-workflows.md' = 'seed ADR'
                 'docs/decisions/0003-manual-github-releases.md' = 'seed ADR'
                 'docs/decisions/0004-downstream-repo-cleanup.md' = 'seed ADR'
+                'docs/decisions/0005-downstream-guidance-sync-delivers-cleanup-assets.md' = 'seed ADR'
+                'docs/decisions/0006-change-delivery-workflow.md' = 'seed ADR'
+                'docs/decisions/0007-readme-alignment-workflow.md' = 'seed ADR'
                 'scripts/Get-TemplateHealth.ps1' = 'Write-Output "health"'
                 'scripts/Test-TemplateVersion.ps1' = 'Write-Output "version"'
                 'scripts/Initialize-DownstreamRepo.ps1' = Get-Content -Raw -LiteralPath $script:ScriptPath
@@ -36,6 +40,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'scripts/Test-VersionPolicy.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Test-VersionPolicy.ps1')
                 'scripts/Update-GeneratedMarkdown.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Update-GeneratedMarkdown.ps1')
                 'scripts/Invoke-TemplateGuidanceSync.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1')
+                'scripts/Invoke-ReadmeAlignment.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1')
                 '.github/workflows/ci.yml' = 'name: CI'
                 '.devcontainer/devcontainer.json' = '{}'
                 'eng/runtime-policy.json' = '{"runtime":{"powershellVersion":"7.4","powershellVersionLabel":"7.4.x","ubuntuVersion":"22.04","dockerImage":"mcr.microsoft.com/powershell:lts-ubuntu-22.04"},"tooling":{"pesterVersion":"6.0.0","psScriptAnalyzerVersion":"1.25.0","psReadLineVersion":"2.4.5"},"githubActions":{"runnerImage":"ubuntu-22.04"}}'
@@ -49,6 +54,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'src/Private/.gitkeep' = ''
                 'src/Classes/.gitkeep' = ''
                 'templates/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'templates/README.md')
+                'templates/downstream/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'templates/downstream/README.md')
                 '.codex/skills/downstream-guidance-sync/SKILL.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md')
                 '.codex/skills/downstream-guidance-sync/agents/openai.yaml' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/agents/openai.yaml')
                 '.codex/skills/downstream-repo-cleanup/SKILL.md' = "placeholder"
@@ -57,6 +63,8 @@ display_name: "Downstream Repo Cleanup"
 short_description: "Normalize a new downstream repo"
 default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream repository."
 '@
+                '.codex/skills/readme-alignment/SKILL.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/SKILL.md')
+                '.codex/skills/readme-alignment/agents/openai.yaml' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/agents/openai.yaml')
                 '.codex/skills/runtime-policy-update/SKILL.md' = 'runtime skill'
                 '.codex/skills/runtime-policy-update/agents/openai.yaml' = 'display_name: "Runtime Policy Update"'
                 '.codex/skills/template-version-release/SKILL.md' = 'release skill'
@@ -67,6 +75,7 @@ default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream r
                 'tests/unit/TemplateVersion.Tests.ps1' = 'Describe "x" {}'
                 'tests/unit/SkillScaffold.Tests.ps1' = 'Describe "x" {}'
                 'tests/unit/Initialize-DownstreamRepo.Tests.ps1' = 'Describe "x" {}'
+                'tests/unit/Invoke-ReadmeAlignment.Tests.ps1' = 'Describe "x" {}'
                 'tests/.gitkeep' = ''
                 'tests/unit/.gitkeep' = ''
                 'tests/testhelpers/.gitkeep' = ''
@@ -159,7 +168,9 @@ default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream r
         $readme = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'README.md')
         $readme | Should -Match '# winget-pwsh-automation'
         $readme | Should -Match 'template-0\.11\.0-blue'
-        $readme | Should -Match 'does not mean this repository remains fully identical'
+        $readme | Should -Match '## Portfolio Context'
+        $readme | Should -Match '## Template Versioning'
+        $readme | Should -Match 'Quick navigation:'
 
         $agents = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'AGENTS.md')
         $agents | Should -Match 'downstream-repo-cleanup'
@@ -193,8 +204,11 @@ default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream r
 
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.codex/skills/readme-alignment/SKILL.md') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'eng/runtime-policy.json') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Update-GeneratedMarkdown.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'templates/downstream/README.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Invoke-RepoChecks.ps1') | Should -BeTrue
     }
 
@@ -204,12 +218,14 @@ default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream r
         $copilot = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.github/copilot-instructions.md')
         $copilot | Should -Match 'created from the pwsh-dev-template GitHub template'
         $copilot | Should -Match 'downstream-repo-cleanup'
+        $copilot | Should -Match 'readme-alignment'
         $copilot | Should -Not -Match 'runtime-policy-update'
         $copilot | Should -Not -Match 'template-version-release'
 
         $workflows = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'docs/agent-workflows.md')
         $workflows | Should -Match 'Downstream repo cleanup'
         $workflows | Should -Match 'Downstream guidance sync'
+        $workflows | Should -Match 'README alignment'
         $workflows | Should -Not -Match 'Runtime policy update'
 
         $decisionsReadme = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'docs/decisions/README.md')
@@ -239,7 +255,17 @@ default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream r
 
         $readme = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'README.md')
         $readme | Should -Match '# winget-pwsh-automation'
-        $readme | Should -Match 'Replace this placeholder README summary'
+        $readme | Should -Match 'Add a concise repository summary that explains what this project does and why it exists.'
+    }
+
+    It 'produces a downstream README that is compatible with generated Markdown validation' {
+        & Invoke-CleanupScript -RepoPath $script:DownstreamRepo -ExtraArguments @('-Apply') | Out-Null
+
+        $scriptPath = Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Update-GeneratedMarkdown.ps1'
+        $output = & pwsh -NoProfile -File $scriptPath -Check 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw ($output -join [Environment]::NewLine)
+        }
     }
 
     It 'stops when the repo has moved beyond the immediate cleanup window' {

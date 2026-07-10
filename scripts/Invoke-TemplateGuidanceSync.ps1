@@ -67,6 +67,8 @@ $guidanceFiles = @(
     '.codex/skills/change-delivery-workflow/agents/openai.yaml'
     '.codex/skills/downstream-repo-cleanup/SKILL.md'
     '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
+    '.codex/skills/readme-alignment/SKILL.md'
+    '.codex/skills/readme-alignment/agents/openai.yaml'
     'docs/agent-workflows.md'
     'docs/ai-behavioral-contract.md'
     'docs/ai-interaction-loop.md'
@@ -74,6 +76,10 @@ $guidanceFiles = @(
     'docs/powershell-ai-operating-model.md'
     'docs/decisions/README.md'
     'scripts/Initialize-DownstreamRepo.ps1'
+    'scripts/Invoke-ReadmeAlignment.ps1'
+    'scripts/Update-GeneratedMarkdown.ps1'
+    'eng/runtime-policy.json'
+    'templates/downstream/README.md'
 )
 
 function Resolve-DirectoryPath {

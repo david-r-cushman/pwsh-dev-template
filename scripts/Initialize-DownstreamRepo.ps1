@@ -246,97 +246,28 @@ function Get-DownstreamReadmeContent {
     param(
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [string]$RepoRoot,
+
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string]$RepoName,
 
         [Parameter()]
         [string]$TemplateVersion
     )
 
-    $badgeLine = Get-TemplateVersionBadgeLine -TemplateVersion $TemplateVersion
-    $lines = [System.Collections.Generic.List[string]]::new()
-
-    $lines.Add('# {0}' -f $RepoName)
-    $lines.Add('')
-    $lines.Add('<!-- BEGIN generated:readme-powershell-badge -->')
-    $lines.Add('![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)')
-    $lines.Add('<!-- END generated:readme-powershell-badge -->')
-    if ($badgeLine) {
-        $lines.Add($badgeLine)
+    $skeletonPath = Get-RepoPath -BasePath $RepoRoot -RelativePath 'templates/downstream/README.md'
+    $skeletonContent = Get-FileContent -Path $skeletonPath
+    if ($null -eq $skeletonContent) {
+        throw ('Downstream README skeleton not found: {0}' -f $skeletonPath)
     }
-    $lines.Add('')
-    $lines.Add('PowerShell automation repository created from `pwsh-dev-template` and normalized for downstream development.')
-    $lines.Add('')
-    $lines.Add('The template version badge tracks inherited guidance and baseline workflow alignment. It does not mean this repository remains fully identical to the source template.')
-    $lines.Add('')
-    $lines.Add('## Repository Focus')
-    $lines.Add('')
-    $lines.Add('This repository starts with a validated PowerShell engineering baseline and is expected to add project-specific implementation, tests, and documentation over time.')
-    $lines.Add('')
-    $lines.Add('<!-- BEGIN generated:readme-runtime-focus -->')
-    $lines.Add('- PowerShell 7.4 development')
-    $lines.Add('<!-- END generated:readme-runtime-focus -->')
-    $lines.Add('- Pester testing')
-    $lines.Add('- PSScriptAnalyzer validation')
-    $lines.Add('- GitHub Actions CI')
-    $lines.Add('- Dev Containers and GitHub Codespaces')
-    $lines.Add('- reusable script, function, module, and test scaffolds')
-    $lines.Add('- AI governance and GitHub Copilot guidance')
-    $lines.Add('- downstream AI guidance sync from `pwsh-dev-template`')
-    $lines.Add('')
-    $lines.Add('## Initial Repository Setup')
-    $lines.Add('')
-    $lines.Add('1. Run the downstream cleanup workflow immediately after creating the repository from the template.')
-    $lines.Add('2. Replace the placeholder repository description in this README.')
-    $lines.Add('3. Add project-specific scripts, modules, or automation under `src`.')
-    $lines.Add('4. Add project-specific Pester tests under `tests`.')
-    $lines.Add('5. Copy and adapt scaffolds from `templates` when they fit the work.')
-    $lines.Add('6. Review `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.')
-    $lines.Add('7. Run local validation:')
-    $lines.Add('')
-    $lines.Add('   ```powershell')
-    $lines.Add('   pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates')
-    $lines.Add('   ```')
-    $lines.Add('')
-    $lines.Add('## Architecture And Stack')
-    $lines.Add('')
-    $lines.Add('<!-- BEGIN generated:readme-runtime-stack -->')
-    $lines.Add('- **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04')
-    $lines.Add('<!-- END generated:readme-runtime-stack -->')
-    $lines.Add('- **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces')
-    $lines.Add('- **Isolation Strategy:** Use the container to reduce host tooling and credential exposure during development work')
-    $lines.Add('- **Governance:** Integrated `PSScriptAnalyzer`, `EditorConfig`, and Markdown linting support')
-    $lines.Add('')
-    $lines.Add('## Tooling Baseline')
-    $lines.Add('')
-    $lines.Add('<!-- BEGIN generated:readme-tooling-list -->')
-    $lines.Add('- **Pester 6.0.0:** For unit and integration testing')
-    $lines.Add('- **PSScriptAnalyzer 1.25.0:** To enforce PowerShell best practices and security rules')
-    $lines.Add('- **Azure CLI:** Pre-installed for cloud resource management')
-    $lines.Add('- **PSReadLine 2.4.5:** Configured for a more efficient terminal experience')
-    $lines.Add('<!-- END generated:readme-tooling-list -->')
-    $lines.Add('')
-    $lines.Add('## Engineering Guidance')
-    $lines.Add('')
-    $lines.Add('<!-- BEGIN generated:readme-runtime-philosophy -->')
-    $lines.Add('- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift')
-    $lines.Add('<!-- END generated:readme-runtime-philosophy -->')
-    $lines.Add('- **Process Integrity:** Validation, review, and explicit ownership remain part of normal development work')
-    $lines.Add('- **Respect For State:** State-changing functions should support `-WhatIf` and `-Confirm` where appropriate')
-    $lines.Add('- **AI Governance:** AI assistance is a drafting accelerator, not a substitute for engineering accountability')
-    $lines.Add('')
-    $lines.Add('For the deeper operating model behind that approach, see [docs/powershell-ai-operating-model.md](docs/powershell-ai-operating-model.md).')
-    $lines.Add('')
-    $lines.Add('## Ongoing Template Alignment')
-    $lines.Add('')
-    $lines.Add('Use `.codex/skills/downstream-guidance-sync/SKILL.md` with `scripts/Invoke-TemplateGuidanceSync.ps1` when you want to adopt newer AI guidance from `pwsh-dev-template` without overwriting downstream-owned source, tests, CI, or runtime decisions.')
-    $lines.Add('')
-    $lines.Add('## Next Steps')
-    $lines.Add('')
-    $lines.Add('- Replace this placeholder README summary with a repository-specific description.')
-    $lines.Add('- Add repository-specific ADRs under `docs/decisions/` when durable engineering decisions need to be captured.')
-    $lines.Add('- Update issue templates, docs, and module metadata only when the project requirements are clear.')
 
-    return (($lines -join "`n").TrimEnd() + "`n")
+    $badgeLine = Get-TemplateVersionBadgeLine -TemplateVersion $TemplateVersion
+    $rendered = $skeletonContent.Replace('{{REPOSITORY_NAME}}', $RepoName)
+    $rendered = $rendered.Replace('{{TEMPLATE_VERSION_BADGE}}', $badgeLine)
+    $rendered = $rendered.Replace('{{REPOSITORY_SUMMARY}}', 'Add a concise repository summary that explains what this project does and why it exists.')
+
+    return ($rendered.TrimEnd("`r", "`n") + "`n")
 }
 
 function Get-DownstreamAgentsContent {
@@ -378,6 +309,8 @@ Repo-local Codex skills are stored under `.codex/skills/`.
 For immediate post-create normalization of this downstream repository, agents should use `.codex/skills/downstream-repo-cleanup/SKILL.md` together with `scripts/Initialize-DownstreamRepo.ps1`.
 
 For downstream AI guidance synchronization from `pwsh-dev-template`, agents should use `.codex/skills/downstream-guidance-sync/SKILL.md` together with `scripts/Invoke-TemplateGuidanceSync.ps1` instead of manually copying guidance files.
+
+For shared README alignment after cleanup, agents should use `.codex/skills/readme-alignment/SKILL.md` together with `scripts/Invoke-ReadmeAlignment.ps1`.
 '@
 }
 
@@ -400,7 +333,8 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 | --- | --- | --- | --- | --- |
 | Change delivery workflow | Ordinary repository work needs consistent branch, changelog, validation, PR, and post-merge cleanup discipline. | .codex/skills/change-delivery-workflow/SKILL.md | Repository guidance, Git state, repo-specific validators, diff review, and human review | Repo-specific validation, staged diff review, and PR review |
 | Downstream repo cleanup | A repository was just created from `pwsh-dev-template` and needs immediate first-run normalization before project-specific work begins. | `.codex/skills/downstream-repo-cleanup/SKILL.md` | `scripts/Initialize-DownstreamRepo.ps1` | Audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` |
-| Downstream guidance sync | A downstream repository needs current AI guidance, guardrail docs, and ADR scaffold guidance from `pwsh-dev-template`. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
+| Downstream guidance sync | A downstream repository needs current AI guidance, guardrail docs, README workflow assets, and ADR scaffold guidance from `pwsh-dev-template`. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
+| README alignment | A downstream repository README needs to be audited or realigned to the shared portfolio skeleton after cleanup. | `.codex/skills/readme-alignment/SKILL.md` | `scripts/Invoke-ReadmeAlignment.ps1` | README audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` |
 
 ## Operating Model
 
@@ -416,7 +350,7 @@ Repo-local skills do not make autonomous changes acceptable without review. They
 
 The downstream cleanup workflow is intentionally a first-run normalization step. It may remove template-maintainer artifacts and rewrite inherited guidance into downstream form, but it must not invent business logic, project-specific tests, repo-specific documentation, or unrelated CI changes.
 
-The downstream guidance sync workflow is intentionally narrow. It may update AI guidance, guardrail documentation, `docs/decisions/README.md`, and the README template-version badge in downstream repositories. It must not be used to overwrite downstream source code, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds, or numbered project-specific ADRs unless that broader work is requested as a separate repo-specific change.
+The downstream guidance sync workflow is intentionally narrow. It may update AI guidance, guardrail documentation, `docs/decisions/README.md`, the README template-version badge, the shared downstream README skeleton, the README alignment workflow assets, and the runtime-policy README-generation assets required by that workflow. It must not be used to overwrite downstream source code, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, module manifests, scaffolds outside the README workflow assets, or numbered project-specific ADRs unless that broader work is requested as a separate repo-specific change.
 '@
 }
 
@@ -483,7 +417,9 @@ Repo-local Codex skills are stored under `.codex/skills/`. When asked to normali
 
 When asked to synchronize downstream AI guidance from `pwsh-dev-template`, use `.codex/skills/downstream-guidance-sync/SKILL.md` and operate `scripts/Invoke-TemplateGuidanceSync.ps1` through the documented audit, branch, validation, commit, and pull request workflow. Do not manually edit downstream guidance files outside the sync script allowlist unless the user explicitly asks for manual repair after a script failure.
 
-Runtime policy, generated Markdown, CI, tests, scaffolds, and release metadata become downstream-owned after cleanup. Treat changes to those surfaces as normal repository work, not as template-maintainer workflows.
+When asked to audit or align a downstream README to the shared portfolio skeleton, use `.codex/skills/readme-alignment/SKILL.md` and operate `scripts/Invoke-ReadmeAlignment.ps1` through the documented audit, branch, validation, diff-review, and commit workflow.
+
+Runtime policy, generated Markdown, CI, tests, scaffolds, and release metadata become downstream-owned after cleanup. Treat changes to those surfaces as normal repository work, except when downstream guidance sync is intentionally delivering the README workflow assets that depend on `eng/runtime-policy.json` and `scripts/Update-GeneratedMarkdown.ps1`.
 
 For ordinary downstream repository changes after cleanup, use .codex/skills/change-delivery-workflow/SKILL.md to coordinate sandbox escalation, non-main branches, changelog updates, release decisions, commits, pull requests, and post-merge cleanup.
 
@@ -586,6 +522,7 @@ $knownTemplateTests = @(
     'tests/unit/TemplateVersion.Tests.ps1'
     'tests/unit/SkillScaffold.Tests.ps1'
     'tests/unit/Initialize-DownstreamRepo.Tests.ps1'
+    'tests/unit/Invoke-ReadmeAlignment.Tests.ps1'
 )
 
 $expectedSourceFiles = @(
@@ -609,7 +546,7 @@ if ($customTestFiles) {
 }
 
 $customAdrFiles = Get-ChildItem -LiteralPath (Get-RepoPath -BasePath $resolvedRepoRoot -RelativePath 'docs/decisions') -Filter '*.md' -File -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -match '^\d{4}-' -and $_.Name -notmatch '^000[1-4]-' } |
+    Where-Object { $_.Name -match '^\d{4}-' -and $_.Name -notmatch '^000[1-7]-' } |
     Select-Object -ExpandProperty Name
 
 if ($customAdrFiles) {
@@ -679,10 +616,14 @@ $removePaths = @(
     'docs/decisions/0002-repo-local-agent-workflows.md'
     'docs/decisions/0003-manual-github-releases.md'
     'docs/decisions/0004-downstream-repo-cleanup.md'
+    'docs/decisions/0005-downstream-guidance-sync-delivers-cleanup-assets.md'
+    'docs/decisions/0006-change-delivery-workflow.md'
+    'docs/decisions/0007-readme-alignment-workflow.md'
     'tests/unit/TemplateHealth.Tests.ps1'
     'tests/unit/TemplateVersion.Tests.ps1'
     'tests/unit/SkillScaffold.Tests.ps1'
     'tests/unit/Initialize-DownstreamRepo.Tests.ps1'
+    'tests/unit/Invoke-ReadmeAlignment.Tests.ps1'
 )
 
 if ($ProjectType -eq 'script') {
@@ -708,13 +649,16 @@ $keepPaths = @(
     'scripts/Test-VersionPolicy.ps1'
     'scripts/Update-GeneratedMarkdown.ps1'
     'scripts/Invoke-TemplateGuidanceSync.ps1'
+    'scripts/Invoke-ReadmeAlignment.ps1'
     'eng/runtime-policy.json'
     'templates'
+    'templates/downstream/README.md'
     'PesterConfiguration.psd1'
     'PSScriptAnalyzerSettings.psd1'
     '.codex/skills/change-delivery-workflow'
     '.codex/skills/downstream-guidance-sync'
     '.codex/skills/downstream-repo-cleanup'
+    '.codex/skills/readme-alignment'
 )
 
 foreach ($path in $removePaths) {
@@ -750,7 +694,7 @@ if ($Apply) {
         Remove-RepoItem -Path (Get-RepoPath -BasePath $resolvedRepoRoot -RelativePath $path)
     }
 
-    $newReadme = Get-DownstreamReadmeContent -RepoName $RepositoryName -TemplateVersion $templateVersion
+    $newReadme = Get-DownstreamReadmeContent -RepoRoot $resolvedRepoRoot -RepoName $RepositoryName -TemplateVersion $templateVersion
     if ($PSCmdlet.ShouldProcess($readmePath, 'Rewrite downstream README')) {
         Write-Utf8File -Path $readmePath -Content $newReadme
     }
