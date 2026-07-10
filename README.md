@@ -13,24 +13,27 @@ This template provides a standardized starting point for PowerShell development 
 <!-- BEGIN generated:readme-runtime-focus -->
 - PowerShell 7.4 development
 <!-- END generated:readme-runtime-focus -->
-- Pester testing
-- PSScriptAnalyzer validation
+- Pester testing and PSScriptAnalyzer validation
 - GitHub Actions CI
 - Dev Containers and GitHub Codespaces
 - reusable script, function, module, and test scaffolds
 - AI governance and GitHub Copilot guidance
 - downstream AI guidance sync for repositories created from this template
-- repo-local agent skills for ordinary change delivery, downstream cleanup, guidance sync, runtime policy updates, and template release management
-- Conventional Commit standards
-- repository hygiene for issues, pull requests, security, and dependency updates
+- repo-local agent workflows for change delivery, downstream cleanup, guidance sync, runtime policy updates, and template release management
+- Conventional Commit and repository hygiene standards
 
-Designed for engineers who want a consistent, AI-assisted PowerShell development workflow with validation and review guardrails.
+Designed for engineers who want a consistent, AI-assisted PowerShell development workflow with validation and review guardrails. This repository also serves as the baseline template for my PowerShell-focused portfolio projects, where downstream repositories demonstrate these standards applied to real automation work.
 
-This repository also serves as the baseline template for my PowerShell-focused portfolio projects, where downstream repositories demonstrate these standards applied to real automation work.
+Quick navigation:
+
+- [Portfolio Context](#portfolio-context)
+- [Engineering Principles in Practice](#engineering-principles-in-practice)
+- [Validation And Maintenance](#validation-and-maintenance)
+- [Repository Structure](#repository-structure)
 
 ## Portfolio Context
 
-Unlike a traditional project template, this repository is the engineering platform behind my PowerShell Core portfolio. It establishes the engineering standards, validation workflows, AI guardrails, and governance model used throughout the portfolio, while allowing downstream repositories to adopt template improvements through deliberate, project-specific validation rather than automatic synchronization.
+Unlike a traditional project template, this repository is the engineering platform behind my PowerShell portfolio. It establishes the engineering standards, validation workflows, AI guardrails, and governance model used throughout the portfolio, while allowing downstream repositories to adopt template improvements through deliberate, project-specific validation rather than automatic synchronization.
 
 This repo provides:
 
@@ -55,14 +58,9 @@ This template carries over a high-consequence operational mindset into Infrastru
 - **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
 - **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
 - **Clean Development Boundary:** Development tools should not unnecessarily expose host credentials or host-resident auth state to code running in the container
+- **Human Accountability:** AI assistance accelerates drafting, but review and ownership remain human responsibilities
 
-That same philosophy also shapes how AI assistance is used in this template and in repositories created from it.
-
-AI is treated as a drafting accelerator, not as a substitute for engineering ownership. Constraints, review standards, safety checks, and final accountability remain human responsibilities.
-
-For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md).
-
-For durable engineering decisions behind the template's workflow and ownership boundaries, see [`docs/decisions/`](docs/decisions/).
+That same philosophy also shapes how AI assistance is used in this template and in repositories created from it. For the deeper operating model behind that approach, see [`docs/powershell-ai-operating-model.md`](docs/powershell-ai-operating-model.md). For durable engineering decisions behind the template's workflow and ownership boundaries, see [`docs/decisions/`](docs/decisions/).
 
 ## Use This Template
 
@@ -85,15 +83,13 @@ For durable engineering decisions behind the template's workflow and ownership b
    pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
    ```
 
-## Mission
+This template provides the environment, conventions, structure, and reusable scaffolds. Downstream repositories are expected to replace placeholder metadata, add real implementation code, and supply project-specific tests and documentation.
 
-This template gives new PowerShell repositories a ready-to-use development baseline that can be used locally, in a Dev Container, or in GitHub Codespaces.
+## Runtime And Environment
 
-The goal is to reduce credential exposure, improve environmental consistency, and make it easier to work from almost anywhere without rebuilding the same setup each time.
+This template gives new PowerShell repositories a ready-to-use development baseline that can be used locally, in a Dev Container, or in GitHub Codespaces. The goal is to reduce credential exposure, improve environmental consistency, and make it easier to work from almost anywhere without rebuilding the same setup each time.
 
 By using Docker-based development environments, third-party module execution, cloud CLI operations, and script testing can be performed inside a Linux-based workspace instead of directly on the host operating system.
-
-## Architecture And Stack
 
 <!-- BEGIN generated:readme-runtime-stack -->
 - **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
@@ -103,13 +99,11 @@ By using Docker-based development environments, third-party module execution, cl
 - **Isolation Strategy:** The container is intended to minimize exposure of host credentials and host-resident developer tooling inside the development environment
 - **Credential Separation:** GitHub Copilot and similar authenticated extensions are intentionally excluded from the container environment
 - **Ephemeral Cloud Identity:** Cloud authentication is expected to occur inside the container session when needed by using commands such as `az login`
-- **Governance:** Integrated `PSScriptAnalyzer`, `EditorConfig`, and Markdown linting support
+- **Formatting:** UTF-8 text and LF line endings are retained for predictable Git diffs
 
-## Key Features
+This template distinguishes between the host editor experience and the in-container development environment. VS Code on the host may use convenience extensions such as GitHub Copilot or pull request tooling, while the development container intentionally excludes those extensions and their authentication state so that code executed inside the container does not gain access to sensitive host credentials or cached tokens.
 
-### Automated Tooling Injection
-
-The `Dockerfile` provisions a professional PowerShell engineering toolkit:
+## Tooling
 
 <!-- BEGIN generated:readme-tooling-list -->
 - **Pester 6.0.0:** For unit and integration testing
@@ -118,48 +112,31 @@ The `Dockerfile` provisions a professional PowerShell engineering toolkit:
 - **PSReadLine 2.4.5:** Configured for a more efficient terminal experience
 <!-- END generated:readme-tooling-list -->
 
-Core PowerShell tooling is version-pinned in the Dev Container so validation behavior is more predictable across rebuilds.
+The `Dockerfile` provisions a professional PowerShell engineering toolkit, and core PowerShell tooling is version-pinned in the Dev Container so validation behavior is more predictable across rebuilds.
 
-### Tailored Developer Experience
+When you work inside the intended Dev Container or Codespaces environment, these tools are already provisioned. If you choose to run validation outside that containerized workflow, install the required modules and CLI tooling separately on the host first.
 
-The environment injects a specialized PowerShell profile that enables:
+The environment also injects a specialized PowerShell profile that enables:
 
 - **Predictive IntelliSense:** Leveraging local command history
 - **ListView Completion:** High-visibility completion menus
 - **Visual Feedback:** A clear startup message confirming the container environment has loaded
 
-## Editor Vs Container Trust Boundary
+## Repository Structure
 
-This template distinguishes between the host editor experience and the in-container development environment.
+This repository includes the environment, conventions, and approved templates used to start new PowerShell projects, but it does not ship with downstream project business logic, public functions, private helpers, or project-owned test implementations.
 
-VS Code on the host may use convenience extensions such as GitHub Copilot or pull request tooling. The development container intentionally excludes those extensions and their authentication state so that code executed inside the container does not gain access to sensitive host credentials or cached tokens.
+Core repository structure:
 
-That same repository structure also supports GitHub Codespaces, providing a browser-accessible development environment when local workstation access is not the preferred option.
+- `src/`: project source and optional module scaffold
+- `tests/`: Pester tests for the template itself and downstream project tests after repository creation
+- `templates/`: approved function, script, module, pattern, and test scaffolds
+- `docs/`: operating model, durable decisions, and maintainer guidance
+- `scripts/Invoke-RepoChecks.ps1`: local and CI validation entrypoint
+- `eng/runtime-policy.json`: runtime, runner, and tooling source of truth
+- `.github/copilot-instructions.md`: authoritative AI coding guidance
 
-## What This Template Does Not Include
-
-This template does not ship with project-specific business logic, public functions, private helpers, or downstream project test implementations.
-
-This repository does include Pester tests for validating the template itself, including scaffolds, repo health behavior, version policy, and sync tooling. Repositories created from this template are expected to add their own project-specific Pester tests for their scripts, modules, and automation logic.
-
-It does include optional scaffolding for both script-first and module-first projects, but downstream repositories are expected to replace placeholder module metadata and add real implementation code.
-
-## Expected Contents Of Repositories Created From This Template
-
-Repositories created from this template are expected to add:
-
-- PowerShell source files under `src`
-- Pester tests under `tests`
-- project-specific documentation under `docs`
-- optional module manifest and build or validation automation as needed
-
-This template provides the environment, conventions, and structure. Downstream repositories provide the implementation.
-
-## Repository Templates
-
-This repository includes approved templates under `templates/` for common PowerShell development patterns.
-
-Use these as starting points for new authored code, tests, scripts, and modules:
+Template starting points include:
 
 - `templates/functions/read-only-function-template.ps1`
 - `templates/functions/state-changing-function-template.ps1`
@@ -167,24 +144,17 @@ Use these as starting points for new authored code, tests, scripts, and modules:
 - `templates/tests/read-only-function-tests-template.ps1`
 - `templates/tests/state-changing-function-tests-template.ps1`
 
-See `templates/README.md` for the full template index (including module and script scaffolds).
+See `templates/README.md` for the full template index, including module and script scaffolds.
 
-For AI-assisted development, these templates are referenced by `/.github/copilot-instructions.md`.
+## Validation And Maintenance
 
-## Validation And CI
+Run the complete validation suite:
 
-- Local checks entrypoint: `scripts/Invoke-RepoChecks.ps1`
-- Analyzer settings: `PSScriptAnalyzerSettings.psd1`
-- Pester settings: `PesterConfiguration.psd1`
-- GitHub Actions workflow: `.github/workflows/ci.yml`
+```powershell
+pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
+```
 
-The CI workflow runs the same repo check entrypoint with template validation enabled. This verifies both the reusable scaffold and any downstream project tests.
-
-Runtime and tooling pins are managed through `eng/runtime-policy.json`. For the coordinated update workflow, see [`docs/template-evolution.md`](docs/template-evolution.md).
-
-## Template Health
-
-Run the template health report for a quick maintainer view of generated Markdown, runtime policy, template version metadata, repo-local agent workflow discoverability, and Git release posture:
+Run the template health report for a maintainer view of generated Markdown, runtime policy, template version metadata, repo-local agent workflow discoverability, and Git release posture:
 
 ```powershell
 pwsh -NoProfile -File ./scripts/Get-TemplateHealth.ps1
@@ -192,13 +162,18 @@ pwsh -NoProfile -File ./scripts/Get-TemplateHealth.ps1
 
 Use `-AsJson` for agent-readable output or `-FailOnIssue` when a non-healthy item should fail automation.
 
-## Repo-Local Agent Workflows
+Validation and maintenance also rely on:
 
-This template includes repo-local agent skills for repeatable maintenance workflows. See [`docs/agent-workflows.md`](docs/agent-workflows.md) for the human-readable workflow index and validation expectations.
+- `PSScriptAnalyzerSettings.psd1`
+- `PesterConfiguration.psd1`
+- `.github/workflows/ci.yml`
+- `eng/runtime-policy.json`
+- [`docs/template-evolution.md`](docs/template-evolution.md)
+- [`docs/agent-workflows.md`](docs/agent-workflows.md)
 
-For ordinary repository work that does not belong to a more specialized workflow, a repo-local Codex skill is provided at `.codex/skills/change-delivery-workflow/SKILL.md` so agents keep branch, changelog, validation, PR, and post-merge cleanup behavior consistent.
+This template includes repo-local agent skills for repeatable maintenance workflows. For ordinary repository work that does not belong to a more specialized workflow, `.codex/skills/change-delivery-workflow/SKILL.md` keeps branch, changelog, validation, PR, and post-merge cleanup behavior consistent.
 
-New downstream repositories should begin with the README template version badge intact. The cleanup workflow preserves or inserts that badge so inherited guidance/template baseline alignment remains visible even after downstream normalization.
+New downstream repositories should begin with the README template version badge intact. The cleanup workflow preserves or inserts that badge so inherited guidance and template baseline alignment remain visible even after downstream normalization.
 
 ## Downstream Guidance Sync
 
@@ -225,7 +200,7 @@ pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstr
 
 If the sync delivered `scripts/Initialize-DownstreamRepo.ps1` and `.codex/skills/downstream-repo-cleanup/` into an older downstream repo, switch into that downstream repo and run cleanup there before doing additional project-specific work.
 
-The README template badge means the downstream repo''s AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
+The README template badge means the downstream repo's AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
 
 ## Prerequisites And Setup
 
@@ -234,12 +209,6 @@ The README template badge means the downstream repo''s AI guidance and guardrail
 3. **Launch:** Open the folder in VS Code and select **Reopen in Container** when prompted
 
 If you are using GitHub Codespaces instead, create a new Codespace from a repository generated from this template and open the project in the browser-based editor.
-
-## Troubleshooting
-
-- **Rebuilding:** Use `F1 > Dev Containers: Rebuild Container Without Cache` to force a clean layer refresh
-- **Line Ending Errors:** Verify your local `git config core.autocrlf` is set to `input` or `false`
-- **Identity Issues:** Run `az login` inside the container terminal to authenticate your cloud session for that environment
 
 ## Template Versioning
 
