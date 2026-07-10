@@ -101,6 +101,8 @@ The script may remove template-maintainer artifacts such as:
 - template release and runtime-policy workflow skills
 - template-maintainer tests and ADR seed files
 
+It should preserve downstream README workflow assets such as the shared README skeleton, `scripts/Invoke-ReadmeAlignment.ps1`, and `.codex/skills/readme-alignment/`.
+
 It may rewrite inherited downstream-owned guidance such as:
 
 - `README.md`

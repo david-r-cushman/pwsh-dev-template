@@ -106,6 +106,29 @@ Set-GeneratedMarkdownBlock -RelativePath 'README.md' -BlockName 'readme-runtime-
     $baseRuntimeLine
 )
 
+Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -BlockName 'readme-powershell-badge' -Lines @(
+    '![PowerShell {0}](https://img.shields.io/badge/PowerShell-{0}-blue)' -f $policy.runtime.powershellVersion
+)
+
+Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -BlockName 'readme-runtime-focus' -Lines @(
+    '- PowerShell {0} development' -f $policy.runtime.powershellVersion
+)
+
+Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -BlockName 'readme-runtime-stack' -Lines @(
+    $runtimeLine
+)
+
+Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -BlockName 'readme-tooling-list' -Lines @(
+    ('- **Pester {0}:** For unit and integration testing' -f $policy.tooling.pesterVersion),
+    ('- **PSScriptAnalyzer {0}:** To enforce PowerShell best practices and security rules' -f $policy.tooling.psScriptAnalyzerVersion),
+    '- **Azure CLI:** Pre-installed for cloud resource management',
+    ('- **PSReadLine {0}:** Configured for a more efficient terminal experience' -f $policy.tooling.psReadLineVersion)
+)
+
+Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -BlockName 'readme-runtime-philosophy' -Lines @(
+    $baseRuntimeLine
+)
+
 Set-GeneratedMarkdownBlock -RelativePath '.github/Instructions/environment-setup.md' -BlockName 'environment-runtime-stack' -Lines @(
     $runtimeLine
 )

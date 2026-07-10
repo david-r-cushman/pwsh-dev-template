@@ -156,6 +156,8 @@ Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*Ins
 
 Test-PolicyText -RelativePath 'README.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'README PowerShell version'
 Test-PolicyText -RelativePath 'README.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'README Ubuntu version'
+Test-PolicyText -RelativePath 'templates/downstream/README.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'Downstream README skeleton PowerShell version'
+Test-PolicyText -RelativePath 'templates/downstream/README.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'Downstream README skeleton Ubuntu version'
 Test-PolicyText -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersion) -Description 'Environment setup PowerShell version'
 Test-PolicyText -RelativePath '.github/Instructions/environment-setup.md' -ExpectedText ('Ubuntu {0}' -f $policy.runtime.ubuntuVersion) -Description 'Environment setup Ubuntu version'
 Test-PolicyText -RelativePath '.github/copilot-instructions.md' -ExpectedText ('PowerShell {0}' -f $policy.runtime.powershellVersionLabel) -Description 'Copilot instruction PowerShell compatibility target'

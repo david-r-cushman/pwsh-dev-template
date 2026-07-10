@@ -17,7 +17,7 @@ The sync scope is intentionally narrow and migration-oriented. Do not manually c
 
 Repositories created from this template become independent projects after creation. Their source, tests, CI, analyzer settings, runtime policy, and scaffolds are project-owned and should not be clobbered by template updates.
 
-AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. The ADR scaffold README is also safe to sync because it provides a documentation convention without overwriting project-specific decisions. For downstream repositories that predate the cleanup workflow, the sync process can also deliver the cleanup script and cleanup skill so cleanup can then be run locally inside the downstream repo.
+AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. The ADR scaffold README is also safe to sync because it provides a documentation convention without overwriting project-specific decisions. For downstream repositories that predate the cleanup workflow, the sync process can also deliver the cleanup script, cleanup skill, shared downstream README skeleton, README alignment workflow assets, and the runtime-policy README-generation assets that keep that README workflow functional.
 
 ## Required Context
 
@@ -65,8 +65,8 @@ When the user requests sync changes, use this sequence:
    pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
    ```
 
-4. Inspect the downstream diff and verify changes are limited to synced guidance files, the ADR scaffold README, the README template badge, and cleanup workflow assets shipped from the template.
-5. If the sync delivered `scripts/Initialize-DownstreamRepo.ps1` and the cleanup skill into an older downstream repo, switch into the downstream repo and run cleanup there before adding more project-specific changes.
+4. Inspect the downstream diff and verify changes are limited to synced guidance files, the ADR scaffold README, the README template badge, and the cleanup or README workflow assets shipped from the template.
+5. If the sync delivered `scripts/Initialize-DownstreamRepo.ps1`, the cleanup skill, or the shared README workflow assets into an older downstream repo, switch into the downstream repo and run cleanup or README alignment there before adding more project-specific changes.
 6. Run downstream validation if the repo provides a clear validation entrypoint, such as `scripts/Invoke-RepoChecks.ps1`.
 7. Commit with a conventional docs or chore message that reflects the actual change, for example:
 
@@ -84,7 +84,7 @@ The workflow is complete when:
 - apply mode, when used, ran only from a non-main downstream branch
 - the downstream diff is limited to the sync allowlist, including only the ADR scaffold README under `docs/decisions/`
 - downstream validation was run, or a clear reason was reported when validation was unavailable or skipped
-- the commit or PR summary states whether the change was a guidance refresh, a cleanup-asset delivery, or both, along with the validation result
+- the commit or PR summary states whether the change was a guidance refresh, a cleanup-asset delivery, a README-workflow delivery, or a combination of those, along with the validation result
 
 ## Stop Conditions
 
@@ -106,13 +106,18 @@ The script may update only:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 - `.codex/skills/downstream-repo-cleanup/`
+- `.codex/skills/readme-alignment/`
 - selected AI governance and operating-model docs under `docs`
 - `docs/agent-workflows.md`
 - `docs/decisions/README.md`
 - `scripts/Initialize-DownstreamRepo.ps1`
+- `scripts/Invoke-ReadmeAlignment.ps1`
+- `scripts/Update-GeneratedMarkdown.ps1`
+- `eng/runtime-policy.json`
+- `templates/downstream/README.md`
 - the README template-version badge
 
-It must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds other than the cleanup workflow assets, or numbered project-specific ADRs. It also does not perform cleanup itself; it only delivers the assets needed for cleanup to run locally in downstream repositories.
+It must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup and README workflow assets, or numbered project-specific ADRs. The one runtime-policy exception is the narrow set of README-generation assets required by the shared downstream README workflow. It also does not perform cleanup or README alignment itself; it only delivers the assets needed for those workflows to run locally in downstream repositories.
 
 ## Agent Role
 

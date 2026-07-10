@@ -7,12 +7,15 @@ Describe 'Repo-local skills' {
         $script:CleanupSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml'
         $script:SkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md'
         $script:SkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/agents/openai.yaml'
+        $script:ReadmeAlignmentSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/SKILL.md'
+        $script:ReadmeAlignmentSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/agents/openai.yaml'
         $script:RuntimeSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/SKILL.md'
         $script:RuntimeSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/runtime-policy-update/agents/openai.yaml'
         $script:VersionSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/SKILL.md'
         $script:VersionSkillMetadataPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/template-version-release/agents/openai.yaml'
         $script:CleanupScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Initialize-DownstreamRepo.ps1'
         $script:SyncScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1'
+        $script:ReadmeAlignmentScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1'
         $script:RuntimePolicyPath = Join-Path -Path $script:RepoRoot -ChildPath 'eng/runtime-policy.json'
         $script:AgentWorkflowsPath = Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md'
     }
@@ -147,8 +150,9 @@ Describe 'Repo-local skills' {
         $content | Should -Match 'docs/decisions/README\.md'
         $content | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
         $content | Should -Match '\.codex/skills/downstream-repo-cleanup/'
-        $content | Should -Match 'does not perform cleanup itself'
-        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, runtime policy, module manifests, scaffolds other than the cleanup workflow assets, or numbered project-specific ADRs'
+        $content | Should -Match '\.codex/skills/readme-alignment/'
+        $content | Should -Match 'does not perform cleanup or README alignment itself'
+        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup and README workflow assets, or numbered project-specific ADRs'
     }
 
     It 'uses valid skill UI metadata with an explicit skill prompt' {
@@ -172,6 +176,50 @@ Describe 'Repo-local skills' {
         $copilotContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
         $copilotContent | Should -Match 'Invoke-TemplateGuidanceSync\.ps1'
         $copilotContent | Should -Match 'Initialize-DownstreamRepo\.ps1'
+    }
+
+    It 'includes the README alignment skill' {
+        Test-Path -LiteralPath $script:ReadmeAlignmentSkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:ReadmeAlignmentSkillMetadataPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid required README alignment skill frontmatter' {
+        $content = Get-Content -Raw -LiteralPath $script:ReadmeAlignmentSkillPath
+
+        $content | Should -Match '^---\s*\r?\nname: readme-alignment\r?\n'
+        $content | Should -Match '\r?\ndescription: .+README.+align.+\r?\n---'
+    }
+
+    It 'references the authoritative README alignment script and shared skeleton boundary' {
+        $content = Get-Content -Raw -LiteralPath $script:ReadmeAlignmentSkillPath
+
+        $content | Should -Match 'Invoke-ReadmeAlignment\.ps1'
+        $content | Should -Match 'template-derived downstream repositories'
+        $content | Should -Match 'Portfolio Context'
+        $content | Should -Match 'Template Versioning'
+        Test-Path -LiteralPath $script:ReadmeAlignmentScriptPath -PathType Leaf | Should -BeTrue
+    }
+
+    It 'uses valid README alignment skill UI metadata with an explicit skill prompt' {
+        $content = Get-Content -Raw -LiteralPath $script:ReadmeAlignmentSkillMetadataPath
+
+        $content | Should -Match 'display_name: "README Alignment"'
+        $content | Should -Match 'short_description: "Align a downstream README to the shared portfolio skeleton"'
+        $content | Should -Match 'default_prompt: "Use \$readme-alignment'
+    }
+
+    It 'makes the README alignment skill discoverable from repository agent instructions' {
+        $readmeContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
+        $agentsContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
+        $copilotContent = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
+        $workflowContent = Get-Content -Raw -LiteralPath $script:AgentWorkflowsPath
+
+        $readmeContent | Should -Match '\.codex/skills/readme-alignment/SKILL\.md'
+        $agentsContent | Should -Match '\.codex/skills/readme-alignment/SKILL\.md'
+        $copilotContent | Should -Match '\.codex/skills/readme-alignment/SKILL\.md'
+        $workflowContent | Should -Match '\.codex/skills/readme-alignment/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Invoke-ReadmeAlignment\.ps1'
+        $workflowContent | Should -Match 'templates/downstream/README\.md'
     }
 
     It 'includes the runtime policy update skill' {
@@ -286,6 +334,9 @@ Describe 'Repo-local skills' {
         $workflowContent | Should -Match 'scripts/Initialize-DownstreamRepo\.ps1'
         $workflowContent | Should -Match '\.codex/skills/downstream-guidance-sync/SKILL\.md'
         $workflowContent | Should -Match 'scripts/Invoke-TemplateGuidanceSync\.ps1'
+        $workflowContent | Should -Match '\.codex/skills/readme-alignment/SKILL\.md'
+        $workflowContent | Should -Match 'scripts/Invoke-ReadmeAlignment\.ps1'
+        $workflowContent | Should -Match 'templates/downstream/README\.md'
         $workflowContent | Should -Match '\.codex/skills/runtime-policy-update/SKILL\.md'
         $workflowContent | Should -Match 'eng/runtime-policy\.json'
         $workflowContent | Should -Match '\.codex/skills/template-version-release/SKILL\.md'
@@ -299,6 +350,7 @@ Describe 'Repo-local skills' {
         $changeDeliveryContent = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
         $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
+        $readmeAlignmentContent = Get-Content -Raw -LiteralPath $script:ReadmeAlignmentSkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
 
@@ -319,6 +371,12 @@ Describe 'Repo-local skills' {
         $syncContent | Should -Match 'sync allowlist'
         $syncContent | Should -Match 'cleanup-asset delivery'
         $syncContent | Should -Match 'validation result'
+
+        $readmeAlignmentContent | Should -Match '## Success Criteria'
+        $readmeAlignmentContent | Should -Match 'shared skeleton order'
+        $readmeAlignmentContent | Should -Match 'Portfolio Context'
+        $readmeAlignmentContent | Should -Match 'Template Versioning'
+        $readmeAlignmentContent | Should -Match 'downstream validation'
 
         $runtimeContent | Should -Match '## Success Criteria'
         $runtimeContent | Should -Match 'eng/runtime-policy\.json'
@@ -341,6 +399,7 @@ Describe 'Repo-local skills' {
         $changeDeliveryContent = Get-Content -Raw -LiteralPath $script:ChangeDeliverySkillPath
         $cleanupContent = Get-Content -Raw -LiteralPath $script:CleanupSkillPath
         $syncContent = Get-Content -Raw -LiteralPath $script:SkillPath
+        $readmeAlignmentContent = Get-Content -Raw -LiteralPath $script:ReadmeAlignmentSkillPath
         $runtimeContent = Get-Content -Raw -LiteralPath $script:RuntimeSkillPath
         $versionContent = Get-Content -Raw -LiteralPath $script:VersionSkillPath
 
@@ -358,9 +417,15 @@ Describe 'Repo-local skills' {
         $syncContent | Should -Match '## Why This Exists'
         $syncContent | Should -Match 'independent projects'
         $syncContent | Should -Match 'AI guidance'
-        $syncContent | Should -Match 'cleanup script and cleanup skill'
+        $syncContent | Should -Match 'cleanup script'
+        $syncContent | Should -Match 'runtime-policy README-generation assets'
         $syncContent | Should -Match 'project-owned'
         $syncContent | Should -Match 'should not be clobbered'
+
+        $readmeAlignmentContent | Should -Match '## Why This Exists'
+        $readmeAlignmentContent | Should -Match 'shared skeleton'
+        $readmeAlignmentContent | Should -Match 'generator-driven'
+        $readmeAlignmentContent | Should -Match 'repo-specific sections'
 
         $runtimeContent | Should -Match '## Why This Exists'
         $runtimeContent | Should -Match 'Runtime and tooling pins'

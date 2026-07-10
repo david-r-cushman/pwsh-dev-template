@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.14.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.15.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -177,7 +177,7 @@ New downstream repositories should begin with the README template version badge 
 
 ## Downstream Guidance Sync
 
-This template includes a local sync tool for repositories created from it. The sync can refresh AI guidance, guardrail documentation, the ADR scaffold README, the README template-version badge, and the downstream cleanup workflow assets needed by older repositories that were created before cleanup support existed.
+This template includes a local sync tool for repositories created from it. The sync can refresh AI guidance, guardrail documentation, the ADR scaffold README, the README template-version badge, the shared downstream README skeleton, the README alignment workflow assets, and the runtime-policy README-generation assets needed by older repositories that were created before those README workflow capabilities existed.
 
 Cleanup itself still runs from the downstream repo. For newly created repositories, the intended sequence is to create the repo from the template, run `scripts/Initialize-DownstreamRepo.ps1` locally in the downstream repo, and later use guidance sync from the template repo when guidance drift or missing cleanup assets need to be addressed.
 
@@ -198,7 +198,9 @@ git -C ../downstream-repo switch -c chore/sync-template-guidance
 pwsh -NoProfile -File ./scripts/Invoke-TemplateGuidanceSync.ps1 -Path ../downstream-repo -Apply
 ```
 
-If the sync delivered `scripts/Initialize-DownstreamRepo.ps1` and `.codex/skills/downstream-repo-cleanup/` into an older downstream repo, switch into that downstream repo and run cleanup there before doing additional project-specific work.
+If the sync delivered `scripts/Initialize-DownstreamRepo.ps1`, `.codex/skills/downstream-repo-cleanup/`, or the shared README workflow assets into an older downstream repo, switch into that downstream repo and run cleanup or README alignment there before doing additional project-specific work.
+
+For later README realignment in downstream repositories, use `.codex/skills/readme-alignment/SKILL.md` with `scripts/Invoke-ReadmeAlignment.ps1` after the shared skeleton and runtime-policy README assets are present.
 
 The README template badge means the downstream repo's AI guidance and guardrails are aligned to that template version. It does not mean the downstream implementation or tooling fully matches this template.
 

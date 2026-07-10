@@ -211,6 +211,7 @@ $agentFiles = @(
     @{ Name = 'Change delivery workflow skill'; Path = '.codex/skills/change-delivery-workflow/SKILL.md' },
     @{ Name = 'Downstream repo cleanup skill'; Path = '.codex/skills/downstream-repo-cleanup/SKILL.md' },
     @{ Name = 'Downstream guidance sync skill'; Path = '.codex/skills/downstream-guidance-sync/SKILL.md' },
+    @{ Name = 'README alignment skill'; Path = '.codex/skills/readme-alignment/SKILL.md' },
     @{ Name = 'Runtime policy update skill'; Path = '.codex/skills/runtime-policy-update/SKILL.md' },
     @{ Name = 'Template version release skill'; Path = '.codex/skills/template-version-release/SKILL.md' },
     @{ Name = 'Agent workflow documentation'; Path = 'docs/agent-workflows.md' }
@@ -228,6 +229,9 @@ $agentReferences = @(
     @{ Name = 'Cleanup script reference'; Path = 'docs/agent-workflows.md'; Text = 'scripts/Initialize-DownstreamRepo.ps1' },
     @{ Name = 'Downstream skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/downstream-guidance-sync/SKILL.md' },
     @{ Name = 'Downstream sync script reference'; Path = 'docs/agent-workflows.md'; Text = 'scripts/Invoke-TemplateGuidanceSync.ps1' },
+    @{ Name = 'README alignment skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/readme-alignment/SKILL.md' },
+    @{ Name = 'README alignment script reference'; Path = 'docs/agent-workflows.md'; Text = 'scripts/Invoke-ReadmeAlignment.ps1' },
+    @{ Name = 'README skeleton reference'; Path = 'docs/agent-workflows.md'; Text = 'templates/downstream/README.md' },
     @{ Name = 'Runtime skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/runtime-policy-update/SKILL.md' },
     @{ Name = 'Runtime policy reference'; Path = 'docs/agent-workflows.md'; Text = 'eng/runtime-policy.json' },
     @{ Name = 'Release skill reference'; Path = 'docs/agent-workflows.md'; Text = '.codex/skills/template-version-release/SKILL.md' },
