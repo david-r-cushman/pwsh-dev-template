@@ -112,11 +112,12 @@ if (-not $SkipVersionPolicy) {
 }
 if (-not $SkipTemplateVersion) {
     if (-not (Test-Path -LiteralPath $templateVersionScriptPath)) {
-        throw ('Template version validation script not found: {0}' -f $templateVersionScriptPath)
+        Write-Verbose ('Skipping template version validation because the script is not present in this repository: {0}' -f $templateVersionScriptPath)
     }
-
-    Write-Verbose 'Validating template version metadata...'
-    & $templateVersionScriptPath
+    else {
+        Write-Verbose 'Validating template version metadata...'
+        & $templateVersionScriptPath
+    }
 }
 
 if (-not $SkipAnalyzer) {

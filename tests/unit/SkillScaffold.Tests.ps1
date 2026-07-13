@@ -152,7 +152,7 @@ Describe 'Repo-local skills' {
         $content | Should -Match '\.codex/skills/downstream-repo-cleanup/'
         $content | Should -Match '\.codex/skills/readme-alignment/'
         $content | Should -Match 'does not perform cleanup or README alignment itself'
-        $content | Should -Match 'must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup and README workflow assets, or numbered project-specific ADRs'
+        $content | Should -Match 'must not update downstream source, tests, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup, sync, and README workflow assets, or numbered project-specific ADRs'
     }
 
     It 'uses valid skill UI metadata with an explicit skill prompt' {

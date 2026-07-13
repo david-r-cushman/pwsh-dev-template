@@ -17,7 +17,7 @@ The sync scope is intentionally narrow and migration-oriented. Do not manually c
 
 Repositories created from this template become independent projects after creation. Their source, tests, CI, analyzer settings, runtime policy, and scaffolds are project-owned and should not be clobbered by template updates.
 
-AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. The ADR scaffold README is also safe to sync because it provides a documentation convention without overwriting project-specific decisions. For downstream repositories that predate the cleanup workflow, the sync process can also deliver the cleanup script, cleanup skill, shared downstream README skeleton, README alignment workflow assets, and the runtime-policy README-generation assets that keep that README workflow functional.
+AI guidance is the default sync target because it governs how AI-assisted work is produced, reviewed, and validated. The ADR scaffold README is also safe to sync because it provides a documentation convention without overwriting project-specific decisions. For downstream repositories that predate the cleanup workflow, the sync process can also deliver the cleanup script, cleanup skill, shared downstream README skeleton, README alignment workflow assets, the downstream sync workflow assets, and the README-validation baseline required for those workflows to function consistently.
 
 ## Required Context
 
@@ -105,19 +105,25 @@ The script may update only:
 
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
+- `.codex/skills/downstream-guidance-sync/`
 - `.codex/skills/downstream-repo-cleanup/`
 - `.codex/skills/readme-alignment/`
+- `PesterConfiguration.psd1`
+- `PSScriptAnalyzerSettings.psd1`
 - selected AI governance and operating-model docs under `docs`
 - `docs/agent-workflows.md`
 - `docs/decisions/README.md`
 - `scripts/Initialize-DownstreamRepo.ps1`
+- `scripts/Invoke-RepoChecks.ps1`
 - `scripts/Invoke-ReadmeAlignment.ps1`
+- `scripts/Invoke-TemplateGuidanceSync.ps1`
+- `scripts/Test-VersionPolicy.ps1`
 - `scripts/Update-GeneratedMarkdown.ps1`
 - `eng/runtime-policy.json`
 - `templates/downstream/README.md`
 - the README template-version badge
 
-It must not update downstream source, tests, Pester configuration, PSScriptAnalyzer settings, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup and README workflow assets, or numbered project-specific ADRs. The one runtime-policy exception is the narrow set of README-generation assets required by the shared downstream README workflow. It also does not perform cleanup or README alignment itself; it only delivers the assets needed for those workflows to run locally in downstream repositories.
+It must not update downstream source, tests, CI workflows, Dev Container files, module manifests, scaffolds other than the cleanup, sync, and README workflow assets, or numbered project-specific ADRs. The narrow validation exceptions are the repo-checks entrypoint, `PesterConfiguration.psd1`, `PSScriptAnalyzerSettings.psd1`, `scripts/Test-VersionPolicy.ps1`, and the runtime-policy README-generation assets required by the shared downstream README workflow. It also does not perform cleanup or README alignment itself; it only delivers the assets needed for those workflows to run locally in downstream repositories.
 
 ## Agent Role
 

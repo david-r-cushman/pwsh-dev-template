@@ -9,6 +9,7 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 ### Changed
 
 - Clarified the README opening positioning so the template reads as both a practical PowerShell foundation and a documented exploration of effective PowerShell engineering.
+- Expanded downstream guidance sync to deliver the downstream sync skill/script and the repo-check validation baseline needed for README alignment in older downstream repositories, and made `scripts/Invoke-RepoChecks.ps1` skip template-version validation automatically when that template-only script is absent.
 
 ## 0.15.0 - 2026-07-10
 
