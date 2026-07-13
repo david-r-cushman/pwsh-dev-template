@@ -57,12 +57,12 @@ Describe 'Initialize-DownstreamRepo' {
                 'templates/downstream/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'templates/downstream/README.md')
                 '.codex/skills/downstream-guidance-sync/SKILL.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md')
                 '.codex/skills/downstream-guidance-sync/agents/openai.yaml' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/downstream-guidance-sync/agents/openai.yaml')
-                '.codex/skills/downstream-repo-cleanup/SKILL.md' = "placeholder"
-                '.codex/skills/downstream-repo-cleanup/agents/openai.yaml' = @'
-display_name: "Downstream Repo Cleanup"
-short_description: "Normalize a new downstream repo"
-default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream repository."
-'@
+                '.codex/skills/downstream-repo-cleanup/SKILL.md' = 'placeholder'
+                '.codex/skills/downstream-repo-cleanup/agents/openai.yaml' = @(
+                    'display_name: "Downstream Repo Cleanup"'
+                    'short_description: "Normalize a new downstream repo"'
+                    'default_prompt: "Use $downstream-repo-cleanup to normalize this new downstream repository."'
+                ) -join "`n"
                 '.codex/skills/readme-alignment/SKILL.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/SKILL.md')
                 '.codex/skills/readme-alignment/agents/openai.yaml' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/readme-alignment/agents/openai.yaml')
                 '.codex/skills/runtime-policy-update/SKILL.md' = 'runtime skill'
