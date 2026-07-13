@@ -22,7 +22,7 @@ This template provides a standardized starting point for PowerShell development 
 - repo-local agent workflows for change delivery, downstream cleanup, guidance sync, runtime policy updates, and template release management
 - Conventional Commit and repository hygiene standards
 
-Designed for engineers who want a consistent, AI-assisted PowerShell development workflow with validation and review guardrails. This repository also serves as the baseline template for my PowerShell-focused portfolio projects, where downstream repositories demonstrate these standards applied to real automation work.
+This repository is a reusable PowerShell Core development template with validation, review guardrails, and AI-assisted workflow support. It serves as both a practical engineering foundation and a documented exploration of the engineering, governance, and lifecycle concerns that underpin effective PowerShell development, showing how those concerns can be turned into a cohesive engineering system.
 
 Quick navigation:
 
