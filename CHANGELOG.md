@@ -8,6 +8,9 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ### Changed
 
+- Added repository-owned Markdown validation for README workflows, wired it into scripts/Invoke-RepoChecks.ps1, and delivered the new validator through downstream cleanup and guidance sync assets.
+
+
 - Clarified the README opening positioning so the template reads as both a practical PowerShell foundation and a documented exploration of effective PowerShell engineering.
 - Expanded downstream guidance sync to deliver the downstream sync skill/script and the repo-check validation baseline needed for README alignment in older downstream repositories, and made `scripts/Invoke-RepoChecks.ps1` skip template-version validation automatically when that template-only script is absent.
 

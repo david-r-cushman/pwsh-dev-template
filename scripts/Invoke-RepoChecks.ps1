@@ -5,6 +5,7 @@
 .DESCRIPTION
     Intended to be the single entrypoint for local validation and CI.
 
+    - Runs repository README Markdown validation
     - Runs PSScriptAnalyzer using PSScriptAnalyzerSettings.psd1
     - Runs Pester using PesterConfiguration.psd1
 
@@ -19,6 +20,9 @@
 
 .PARAMETER SkipVersionPolicy
     Skips runtime and tooling version policy validation.
+
+.PARAMETER SkipMarkdownLint
+    Skips repository README Markdown validation.
 
 .PARAMETER SkipGeneratedMarkdown
     Skips generated Markdown validation.
@@ -42,6 +46,9 @@ param(
 
     [Parameter()]
     [switch]$SkipVersionPolicy,
+
+    [Parameter()]
+    [switch]$SkipMarkdownLint,
 
     [Parameter()]
     [switch]$SkipGeneratedMarkdown,
@@ -90,8 +97,18 @@ $analyzerSettingsPath = Resolve-RepoPath -RelativePath 'PSScriptAnalyzerSettings
 $pesterConfigPath = Resolve-RepoPath -RelativePath 'PesterConfiguration.psd1'
 $pesterRunPath = Resolve-RepoPath -RelativePath 'tests'
 $versionPolicyScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-VersionPolicy.ps1'
+$markdownValidationScriptPath = Resolve-RepoPath -RelativePath 'scripts/Invoke-MarkdownValidation.ps1'
 $generatedMarkdownScriptPath = Resolve-RepoPath -RelativePath 'scripts/Update-GeneratedMarkdown.ps1'
 $templateVersionScriptPath = Resolve-RepoPath -RelativePath 'scripts/Test-TemplateVersion.ps1'
+
+if (-not $SkipMarkdownLint) {
+    if (-not (Test-Path -LiteralPath $markdownValidationScriptPath)) {
+        throw ('Markdown validation script not found: {0}' -f $markdownValidationScriptPath)
+    }
+
+    Write-Verbose 'Validating Markdown...'
+    & $markdownValidationScriptPath -RepoRoot (Resolve-RepoPath -RelativePath '.')
+}
 
 if (-not $SkipGeneratedMarkdown) {
     if (-not (Test-Path -LiteralPath $generatedMarkdownScriptPath)) {

@@ -23,6 +23,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
             'docs/decisions/README.md'
             'scripts/Initialize-DownstreamRepo.ps1'
             'scripts/Invoke-RepoChecks.ps1'
+            'scripts/Invoke-MarkdownValidation.ps1'
             'scripts/Invoke-ReadmeAlignment.ps1'
             'scripts/Invoke-TemplateGuidanceSync.ps1'
             'scripts/Test-VersionPolicy.ps1'
@@ -127,6 +128,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'PSScriptAnalyzerSettings.psd1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Initialize-DownstreamRepo.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Invoke-RepoChecks.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'scripts/Invoke-MarkdownValidation.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-repo-cleanup/agents/openai.yaml') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath '.codex/skills/downstream-guidance-sync/SKILL.md') | Should -BeTrue
