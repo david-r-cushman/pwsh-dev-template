@@ -334,7 +334,7 @@ Repo-local skills live under `.codex/skills/`. They tell compatible agents how t
 | Change delivery workflow | Ordinary repository work needs consistent branch, changelog, validation, PR, and post-merge cleanup discipline. | .codex/skills/change-delivery-workflow/SKILL.md | Repository guidance, Git state, repo-specific validators, diff review, and human review | Repo-specific validation, staged diff review, and PR review |
 | Downstream repo cleanup | A repository was just created from `pwsh-dev-template` and needs immediate first-run normalization before project-specific work begins. | `.codex/skills/downstream-repo-cleanup/SKILL.md` | `scripts/Initialize-DownstreamRepo.ps1` | Audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` |
 | Downstream guidance sync | A downstream repository needs current AI guidance, guardrail docs, README workflow assets, and ADR scaffold guidance from `pwsh-dev-template`. | `.codex/skills/downstream-guidance-sync/SKILL.md` | `scripts/Invoke-TemplateGuidanceSync.ps1` | Audit output, downstream diff review, downstream validation |
-| README alignment | A downstream repository README needs to be audited or realigned to the shared portfolio skeleton after cleanup. | `.codex/skills/readme-alignment/SKILL.md` | `scripts/Invoke-ReadmeAlignment.ps1` | README audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` |
+| README alignment | A downstream repository README needs to be audited or realigned to the shared portfolio skeleton after cleanup. | `.codex/skills/readme-alignment/SKILL.md` | `scripts/Invoke-ReadmeAlignment.ps1` | README audit output, downstream diff review, `scripts/Invoke-RepoChecks.ps1` with Markdown validation |
 
 ## Operating Model
 
@@ -522,7 +522,9 @@ $knownTemplateTests = @(
     'tests/unit/TemplateVersion.Tests.ps1'
     'tests/unit/SkillScaffold.Tests.ps1'
     'tests/unit/Initialize-DownstreamRepo.Tests.ps1'
+    'tests/unit/Invoke-MarkdownValidation.Tests.ps1'
     'tests/unit/Invoke-ReadmeAlignment.Tests.ps1'
+    'tests/unit/Invoke-RepoChecks.Tests.ps1'
 )
 
 $expectedSourceFiles = @(
@@ -623,7 +625,9 @@ $removePaths = @(
     'tests/unit/TemplateVersion.Tests.ps1'
     'tests/unit/SkillScaffold.Tests.ps1'
     'tests/unit/Initialize-DownstreamRepo.Tests.ps1'
+    'tests/unit/Invoke-MarkdownValidation.Tests.ps1'
     'tests/unit/Invoke-ReadmeAlignment.Tests.ps1'
+    'tests/unit/Invoke-RepoChecks.Tests.ps1'
 )
 
 if ($ProjectType -eq 'script') {
@@ -646,6 +650,7 @@ $keepPaths = @(
     '.github/workflows/ci.yml'
     'scripts/Initialize-DownstreamRepo.ps1'
     'scripts/Invoke-RepoChecks.ps1'
+    'scripts/Invoke-MarkdownValidation.ps1'
     'scripts/Test-VersionPolicy.ps1'
     'scripts/Update-GeneratedMarkdown.ps1'
     'scripts/Invoke-TemplateGuidanceSync.ps1'

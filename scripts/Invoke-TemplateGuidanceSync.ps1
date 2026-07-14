@@ -81,6 +81,7 @@ $guidanceFiles = @(
     'docs/decisions/README.md'
     'scripts/Initialize-DownstreamRepo.ps1'
     'scripts/Invoke-RepoChecks.ps1'
+    'scripts/Invoke-MarkdownValidation.ps1'
     'scripts/Invoke-ReadmeAlignment.ps1'
     'scripts/Invoke-TemplateGuidanceSync.ps1'
     'scripts/Test-VersionPolicy.ps1'

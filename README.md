@@ -13,7 +13,8 @@ This template provides a standardized starting point for PowerShell development 
 <!-- BEGIN generated:readme-runtime-focus -->
 - PowerShell 7.4 development
 <!-- END generated:readme-runtime-focus -->
-- Pester testing and PSScriptAnalyzer validation
+
+- Pester testing, PSScriptAnalyzer validation, and README Markdown validation
 - GitHub Actions CI
 - Dev Containers and GitHub Codespaces
 - reusable script, function, module, and test scaffolds
@@ -54,6 +55,7 @@ This template carries over a high-consequence operational mindset into Infrastru
 <!-- BEGIN generated:readme-runtime-philosophy -->
 - **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
 <!-- END generated:readme-runtime-philosophy -->
+
 - **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
 - **Process Integrity:** Code is not just logic. It is a service. Linting, testing, and deliberate structure are used to keep behavior predictable
 - **Respect For State:** Any function that changes a system's state should support `-WhatIf` and `-Confirm` parameters
@@ -94,6 +96,7 @@ By using Docker-based development environments, third-party module execution, cl
 <!-- BEGIN generated:readme-runtime-stack -->
 - **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
 <!-- END generated:readme-runtime-stack -->
+
 - **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces
 - **Container Runtime:** Docker Desktop via WSL 2 backend for local container use
 - **Isolation Strategy:** The container is intended to minimize exposure of host credentials and host-resident developer tooling inside the development environment
@@ -148,7 +151,7 @@ See `templates/README.md` for the full template index, including module and scri
 
 ## Validation And Maintenance
 
-Run the complete validation suite:
+Run the complete validation suite, including README Markdown validation for README and documentation changes:
 
 ```powershell
 pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1 -IncludeTemplates
@@ -162,7 +165,7 @@ pwsh -NoProfile -File ./scripts/Get-TemplateHealth.ps1
 
 Use `-AsJson` for agent-readable output or `-FailOnIssue` when a non-healthy item should fail automation.
 
-Validation and maintenance also rely on:
+The repo checks entrypoint now runs README Markdown validation, generated Markdown validation, version-policy checks, analyzer validation, and Pester. Validation and maintenance also rely on:
 
 - `PSScriptAnalyzerSettings.psd1`
 - `PesterConfiguration.psd1`

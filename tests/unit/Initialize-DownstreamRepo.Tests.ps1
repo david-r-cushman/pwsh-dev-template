@@ -37,6 +37,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'scripts/Test-TemplateVersion.ps1' = 'Write-Output "version"'
                 'scripts/Initialize-DownstreamRepo.ps1' = Get-Content -Raw -LiteralPath $script:ScriptPath
                 'scripts/Invoke-RepoChecks.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-RepoChecks.ps1')
+                'scripts/Invoke-MarkdownValidation.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-MarkdownValidation.ps1')
                 'scripts/Test-VersionPolicy.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Test-VersionPolicy.ps1')
                 'scripts/Update-GeneratedMarkdown.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Update-GeneratedMarkdown.ps1')
                 'scripts/Invoke-TemplateGuidanceSync.ps1' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-TemplateGuidanceSync.ps1')
@@ -75,7 +76,9 @@ Describe 'Initialize-DownstreamRepo' {
                 'tests/unit/TemplateVersion.Tests.ps1' = 'Describe "x" {}'
                 'tests/unit/SkillScaffold.Tests.ps1' = 'Describe "x" {}'
                 'tests/unit/Initialize-DownstreamRepo.Tests.ps1' = 'Describe "x" {}'
+                'tests/unit/Invoke-MarkdownValidation.Tests.ps1' = 'Describe "x" {}'
                 'tests/unit/Invoke-ReadmeAlignment.Tests.ps1' = 'Describe "x" {}'
+                'tests/unit/Invoke-RepoChecks.Tests.ps1' = 'Describe "x" {}'
                 'tests/.gitkeep' = ''
                 'tests/unit/.gitkeep' = ''
                 'tests/testhelpers/.gitkeep' = ''
@@ -206,6 +209,7 @@ Describe 'Initialize-DownstreamRepo' {
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.codex/skills/downstream-repo-cleanup/SKILL.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath '.codex/skills/readme-alignment/SKILL.md') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1') | Should -BeTrue
+        Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Invoke-MarkdownValidation.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'eng/runtime-policy.json') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'scripts/Update-GeneratedMarkdown.ps1') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'templates/downstream/README.md') | Should -BeTrue

@@ -64,7 +64,7 @@ When the user requests alignment changes, use this sequence:
    - shared sections were normalized to the skeleton order
    - `Portfolio Context` and `Template Versioning` were preserved
    - repo-specific extra sections were not discarded
-5. Run downstream validation:
+5. Run downstream validation. The repo checks entrypoint includes Markdown validation for the aligned README:
 
    ```powershell
    pwsh -NoProfile -File ./scripts/Invoke-RepoChecks.ps1
@@ -81,7 +81,7 @@ The workflow is complete when:
 - the resulting README follows the shared skeleton order
 - repo-specific extra sections were preserved
 - `Portfolio Context` and `Template Versioning` remain present
-- downstream validation was run, or a clear reason was reported when validation was unavailable or skipped
+- downstream validation was run, including Markdown validation for the README, or a clear reason was reported when validation was unavailable or skipped
 
 ## Stop Conditions
 

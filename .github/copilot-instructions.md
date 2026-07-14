@@ -115,7 +115,11 @@ Apply the deprecation guidance in `PowerShell Compatibility` to external service
 
 Use 4 spaces for PowerShell indentation, same-line opening braces, single quotes unless interpolation is required, comments above the code they describe, no trailing whitespace, and LF line endings.
 
-When editing text files, preserve the file's existing line-ending behavior and avoid CRLF/LF-sensitive string replacements, especially in Markdown and documentation files. Prefer line-based or parser-aware edits when practical. Before committing text-file changes, run `git diff --check` and fix extra blank lines at EOF, missing expected blank lines, and trailing whitespace.
+When editing Markdown files, run `scripts/Invoke-MarkdownValidation.ps1 -Path <markdown-path>` before committing and resolve all reported violations. Do not rely on visual review or `git diff --check` as a substitute for Markdown validation.
+
+When editing other text files, preserve the file's existing line-ending behavior and avoid CRLF/LF-sensitive string replacements. Prefer line-based or parser-aware edits when practical.
+
+Before committing text-file changes, run `git diff --check` and fix trailing whitespace, whitespace errors, and unintended blank lines at end of file.
 
 In review, flag missing tests, missing comment-based help, analyzer violations, weak validation, missing `ShouldProcess`, unsafe secret handling, unmockable external calls, unstable output contracts, unverified claims, and speculative refactors outside the requested scope.
 

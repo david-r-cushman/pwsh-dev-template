@@ -27,6 +27,7 @@ This repository is part of a PowerShell portfolio built from `pwsh-dev-template`
 <!-- BEGIN generated:readme-runtime-philosophy -->
 - **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
 <!-- END generated:readme-runtime-philosophy -->
+
 - **Deterministic Workflows:** Prefer repeatable scripts, explicit validation, and reviewable changes over one-off manual steps
 - **Small Safe Changes:** Solve the requested problem with the smallest reasonable change before introducing more structure
 - **Validation First:** Use analyzer, tests, and diff review as normal delivery controls rather than optional cleanup
@@ -47,6 +48,7 @@ For the deeper operating model behind that approach, see [`docs/powershell-ai-op
 <!-- BEGIN generated:readme-runtime-stack -->
 - **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
 <!-- END generated:readme-runtime-stack -->
+
 - **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces
 - **Isolation Strategy:** Use the container to reduce host tooling and credential exposure during development work
 - **Environment Ownership:** Customize runtime details when the repository intentionally diverges from the template baseline
