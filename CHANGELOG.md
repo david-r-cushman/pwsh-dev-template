@@ -6,6 +6,10 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+### Changed
+
+- Reframed the README engineering-principles introduction around respect for consequences and recoverable engineering.
+
 ## 0.16.0 - 2026-08-29
 
 ### Added
