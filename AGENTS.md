@@ -1,42 +1,28 @@
 # AGENTS.md
 
-## Repository Instructions
+## Entry Point
 
-This repository's primary AI guidance is maintained in:
+Read this file before repository work. It supplies cross-agent rules; use the layered guidance below for task detail.
 
-```text
-.github/copilot-instructions.md
-```
+Precedence is: safety and security, explicit user direction, deterministic repository behavior and supported platforms, then local convention. Stop and ask when requirements are materially ambiguous. Keep changes scoped, protect secrets, and verify claims with the relevant validation.
 
-Before performing coding, review, documentation, test, automation, or repository-maintenance work, coding agents must read and follow `.github/copilot-instructions.md`.
+## Mandatory Freshness Gate
 
-That file is the authoritative instruction source for:
+Before any modification, confirm the working tree is clean, fetch and prune the tracking remote, and verify the branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if no usable tracking remote exists, the tree is dirty, the branch is behind or diverged, or it lacks the latest `origin/main`.
 
-- AI governance requirements
-- conflict resolution rules
-- code generation standards
-- complexity management guidance
-- PowerShell compatibility requirements
-- external service guidance
-- commit message conventions
-- review expectations
+## Guidance Layers
 
-If `.github/copilot-instructions.md` is missing or unavailable, stop and report that the repository guidance cannot be loaded rather than guessing.
+- `.github/copilot-instructions.md` contains Copilot-compatible always-on rules.
+- `.github/instructions/` contains path-specific Markdown and PowerShell rules.
+- `.codex/skills/` contains task-scoped detail; read the matching skill before conditional work.
 
-If guidance in this file conflicts with `.github/copilot-instructions.md`, `.github/copilot-instructions.md` is authoritative.
+## Skill Routing
 
-## Repo-Local Skills
+- `powershell-authoring`: production PowerShell functions, modules, and scripts.
+- `powershell-testing-review`: Pester, analyzer, help, review, and validation.
+- `powershell-external-services`: Graph, REST, credentials, deprecation, and integration boundaries.
+- Workflow skills: `.codex/skills/change-delivery-workflow/SKILL.md`, `.codex/skills/downstream-repo-cleanup/SKILL.md`, `.codex/skills/downstream-guidance-sync/SKILL.md`, `.codex/skills/readme-alignment/SKILL.md`, `.codex/skills/runtime-policy-update/SKILL.md`, and `.codex/skills/template-version-release/SKILL.md`.
+- Their deterministic entrypoints include `scripts/Initialize-DownstreamRepo.ps1`, `scripts/Invoke-TemplateGuidanceSync.ps1`, `scripts/Invoke-ReadmeAlignment.ps1`, and `eng/runtime-policy.json`.
+- Template releases use the matching workflow skill; create tags and GitHub Releases only after the release PR merges.
 
-Repo-local Codex skills are stored under `.codex/skills/`.
-
-For general repository change delivery, agents should use `.codex/skills/change-delivery-workflow/SKILL.md` to handle sandbox escalation, non-`main` branches, changelog updates, release decisions, commits, pull requests, and post-merge cleanup consistently.
-
-For immediate post-create normalization of repositories created from this template, agents should use `.codex/skills/downstream-repo-cleanup/SKILL.md` together with `scripts/Initialize-DownstreamRepo.ps1` before adding project-specific implementation, docs, tests, ADRs, or CI changes.
-
-For downstream AI guidance synchronization and delivery of newly added cleanup workflow assets into older downstream repositories, agents should use `.codex/skills/downstream-guidance-sync/SKILL.md` together with `scripts/Invoke-TemplateGuidanceSync.ps1` instead of manually copying guidance files. Cleanup itself still runs from the downstream repository through `scripts/Initialize-DownstreamRepo.ps1`.
-
-For downstream README audits or structural realignment against the shared portfolio skeleton, agents should use `.codex/skills/readme-alignment/SKILL.md` together with `scripts/Invoke-ReadmeAlignment.ps1`.
-
-For template runtime and tooling policy updates, agents should use `.codex/skills/runtime-policy-update/SKILL.md` together with `eng/runtime-policy.json`, `scripts/Update-GeneratedMarkdown.ps1`, and `scripts/Test-VersionPolicy.ps1`.
-
-For template version release preparation, validation, tagging, GitHub Release publishing, and cleanup, agents should use `.codex/skills/template-version-release/SKILL.md` together with `scripts/Test-TemplateVersion.ps1`.
+If `.github/copilot-instructions.md` is unavailable, stop and report that repository guidance cannot be loaded.

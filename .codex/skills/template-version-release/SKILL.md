@@ -27,6 +27,8 @@ Before acting, identify:
 - the release date for the `CHANGELOG.md` heading
 - whether the user wants pre-merge release prep, post-merge release finalization, or GitHub Release publishing
 
+Before changing release metadata, complete the mandatory freshness preflight: require a clean tree, fetch and prune the tracking remote, and verify the branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if the remote is unusable, the branch is behind or diverged, or the tree is dirty.
+
 If the next version or bump level is unclear, inspect the change impact and ask before editing release metadata.
 
 ## Pre-Merge Release Prep

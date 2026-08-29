@@ -34,12 +34,14 @@ If the repo does not provide a clear versioning contract, default to a `CHANGELO
 
 Use this sequence before editing:
 
-1. Read the repository guidance and inspect the working tree.
+1. Read the repository guidance and complete the freshness preflight: require a clean tree, fetch and prune remotes, require a usable tracking remote, and confirm the branch contains the latest `origin/main`.
 2. If the current branch is `main` or `master`, create and switch to a working branch before making changes.
 3. Review the relevant implementation, tests, docs, and existing validators before choosing the smallest safe change.
 4. Decide whether the repo already defines a release workflow that should be respected for this change.
 
 If the task clearly matches a more specialized repo-local skill, use that skill instead of this one.
+
+Stop without pulling, rebasing, merging, or editing when the repository is dirty, remote-less, behind, diverged, or missing the latest `origin/main`.
 
 ## Sandbox Recovery
 

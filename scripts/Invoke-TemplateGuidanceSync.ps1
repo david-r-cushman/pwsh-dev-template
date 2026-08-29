@@ -65,6 +65,14 @@ $guidanceFiles = @(
     'PSScriptAnalyzerSettings.psd1'
     'AGENTS.md'
     '.github/copilot-instructions.md'
+    '.github/instructions/markdown.instructions.md'
+    '.github/instructions/powershell.instructions.md'
+    '.codex/skills/powershell-authoring/SKILL.md'
+    '.codex/skills/powershell-authoring/agents/openai.yaml'
+    '.codex/skills/powershell-testing-review/SKILL.md'
+    '.codex/skills/powershell-testing-review/agents/openai.yaml'
+    '.codex/skills/powershell-external-services/SKILL.md'
+    '.codex/skills/powershell-external-services/agents/openai.yaml'
     '.codex/skills/change-delivery-workflow/SKILL.md'
     '.codex/skills/change-delivery-workflow/agents/openai.yaml'
     '.codex/skills/downstream-guidance-sync/SKILL.md'
@@ -127,6 +135,7 @@ function Invoke-Git {
 
 function Test-GitRepository {
     [CmdletBinding()]
+    [OutputType([bool])]
     param(
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -141,6 +150,49 @@ function Test-GitRepository {
     }
 
     return (($isWorkTree | Select-Object -First 1) -eq 'true')
+}
+
+function Assert-RemoteFreshness {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RepoPath
+    )
+
+    $status = @(Invoke-Git -RepoPath $RepoPath -Arguments @('status', '--porcelain'))
+    if ($status.Count -gt 0) {
+        throw ('Refusing to apply changes because the working tree is dirty: {0}' -f $RepoPath)
+    }
+
+    $remoteNames = @(Invoke-Git -RepoPath $RepoPath -Arguments @('remote'))
+    if ($remoteNames -notcontains 'origin') {
+        throw ('Refusing to apply changes because origin is not configured: {0}' -f $RepoPath)
+    }
+
+    Invoke-Git -RepoPath $RepoPath -Arguments @('fetch', '--prune', 'origin') | Out-Null
+    $upstream = & git -C $RepoPath rev-parse --abbrev-ref '@{upstream}' 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstream)) {
+        throw ('Refusing to apply changes because the current branch has no upstream: {0}' -f $RepoPath)
+    }
+
+    $counts = @((& git -C $RepoPath rev-list --left-right --count HEAD...$upstream) -split '\s+')
+    if ($LASTEXITCODE -ne 0 -or $counts.Count -ne 2) {
+        throw ('Refusing to apply changes because upstream freshness cannot be determined: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[0] -gt 0 -and [int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch has diverged from its upstream: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch is behind its upstream: {0}' -f $RepoPath)
+    }
+
+    & git -C $RepoPath merge-base --is-ancestor origin/main HEAD
+    if ($LASTEXITCODE -ne 0) {
+        throw ('Refusing to apply changes because the branch does not contain the latest origin/main: {0}' -f $RepoPath)
+    }
 }
 
 function Get-FileHashText {
@@ -181,6 +233,7 @@ function Get-TemplateVersion {
 
 function Get-NewLine {
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter(Mandatory)]
         [AllowEmptyString()]
@@ -360,6 +413,7 @@ function Copy-GuidanceFile {
 
 function Get-GuidanceFileState {
     [CmdletBinding()]
+    [OutputType([object[]])]
     param(
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -426,6 +480,7 @@ function Write-TextReport {
 }
 
 $resolvedTemplatePath = Resolve-DirectoryPath -LiteralPath $TemplatePath
+$templateFreshnessChecked = $false
 $templateVersion = Get-TemplateVersion -RepoPath $resolvedTemplatePath
 $results = [System.Collections.Generic.List[object]]::new()
 
@@ -444,6 +499,15 @@ foreach ($targetPathInput in $Path) {
     $gitStatus = @(Invoke-Git -RepoPath $targetPath -Arguments @('status', '--porcelain'))
     if ($Apply -and -not $AllowDirty -and $gitStatus.Count -gt 0) {
         throw ('Refusing to apply changes because target repository has uncommitted changes: {0}' -f $targetPath)
+    }
+
+    if ($Apply) {
+        if (-not $templateFreshnessChecked) {
+            Assert-RemoteFreshness -RepoPath $resolvedTemplatePath
+            $templateFreshnessChecked = $true
+        }
+
+        Assert-RemoteFreshness -RepoPath $targetPath
     }
 
     if ($Apply -and $branch -in @('main', 'master')) {

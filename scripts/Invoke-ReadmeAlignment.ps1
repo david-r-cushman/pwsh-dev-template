@@ -93,6 +93,7 @@ function Write-Utf8File {
 
 function Get-NewLine {
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter()]
         [AllowEmptyString()]
@@ -116,6 +117,53 @@ function Test-GitRepository {
 
     $output = & git -C $RepoPath rev-parse --is-inside-work-tree 2>&1
     return ($LASTEXITCODE -eq 0 -and ($output | Select-Object -First 1) -eq 'true')
+}
+
+function Assert-RemoteFreshness {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RepoPath
+    )
+
+    $status = @(& git -C $RepoPath status --porcelain)
+    if ($LASTEXITCODE -ne 0 -or $status.Count -gt 0) {
+        throw ('Refusing to apply changes because the working tree is dirty: {0}' -f $RepoPath)
+    }
+
+    $origin = & git -C $RepoPath remote get-url origin 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($origin)) {
+        throw ('Refusing to apply changes because origin is not configured: {0}' -f $RepoPath)
+    }
+
+    & git -C $RepoPath fetch --prune origin
+    if ($LASTEXITCODE -ne 0) {
+        throw ('Refusing to apply changes because origin cannot be fetched: {0}' -f $RepoPath)
+    }
+
+    $upstream = & git -C $RepoPath rev-parse --abbrev-ref '@{upstream}' 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstream)) {
+        throw ('Refusing to apply changes because the current branch has no upstream: {0}' -f $RepoPath)
+    }
+
+    $counts = @((& git -C $RepoPath rev-list --left-right --count HEAD...$upstream) -split '\s+')
+    if ($LASTEXITCODE -ne 0 -or $counts.Count -ne 2) {
+        throw ('Refusing to apply changes because upstream freshness cannot be determined: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[0] -gt 0 -and [int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch has diverged from its upstream: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch is behind its upstream: {0}' -f $RepoPath)
+    }
+
+    & git -C $RepoPath merge-base --is-ancestor origin/main HEAD
+    if ($LASTEXITCODE -ne 0) {
+        throw ('Refusing to apply changes because the branch does not contain the latest origin/main: {0}' -f $RepoPath)
+    }
 }
 
 function Get-ReadmeDocument {
@@ -204,6 +252,7 @@ function Get-TemplateBadgeLine {
 
 function Get-LeadSummaryBlock {
     [CmdletBinding()]
+    [OutputType([object[]])]
     param(
         [Parameter(Mandatory)]
         [AllowEmptyString()]
@@ -485,6 +534,8 @@ $result = [pscustomobject]@{
 }
 
 if ($Apply -and $hasChanges) {
+    Assert-RemoteFreshness -RepoPath $resolvedRepoRoot
+
     if ($PSCmdlet.ShouldProcess($readmePath, 'Align README to shared downstream skeleton')) {
         Write-Utf8File -Path $readmePath -Content $alignedContent
     }

@@ -6,6 +6,8 @@ The workflows are designed around a simple rule: agents may coordinate the work,
 
 Repo-local skills live under `.codex/skills/`. They tell compatible agents how to use the repository's existing scripts, validation commands, and review expectations. They are not a substitute for reading the repository guidance, inspecting diffs, or opening reviewed pull requests.
 
+For production PowerShell, Pester or review work, and external-service integrations, use the task-scoped `powershell-authoring`, `powershell-testing-review`, and `powershell-external-services` skills respectively. Complete the mandatory remote-freshness preflight before any mutable workflow.
+
 ## Workflow Index
 
 | Workflow | Use When | Skill | Control | Validation |

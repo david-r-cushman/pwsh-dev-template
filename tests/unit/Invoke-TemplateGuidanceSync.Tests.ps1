@@ -7,6 +7,14 @@ Describe 'Invoke-TemplateGuidanceSync' {
             'PSScriptAnalyzerSettings.psd1'
             'AGENTS.md'
             '.github/copilot-instructions.md'
+            '.github/instructions/markdown.instructions.md'
+            '.github/instructions/powershell.instructions.md'
+            '.codex/skills/powershell-authoring/SKILL.md'
+            '.codex/skills/powershell-authoring/agents/openai.yaml'
+            '.codex/skills/powershell-testing-review/SKILL.md'
+            '.codex/skills/powershell-testing-review/agents/openai.yaml'
+            '.codex/skills/powershell-external-services/SKILL.md'
+            '.codex/skills/powershell-external-services/agents/openai.yaml'
             '.codex/skills/change-delivery-workflow/SKILL.md'
             '.codex/skills/change-delivery-workflow/agents/openai.yaml'
             '.codex/skills/downstream-guidance-sync/SKILL.md'
@@ -73,6 +81,15 @@ Describe 'Invoke-TemplateGuidanceSync' {
             Set-Content -LiteralPath $templatePath -Value ('template content for {0}' -f $relativePath) -Encoding utf8
         }
 
+        & git -C $script:TemplateRepo init -q -b main | Out-Null
+        & git -C $script:TemplateRepo config user.email 'test@example.invalid' | Out-Null
+        & git -C $script:TemplateRepo config user.name 'Test User' | Out-Null
+        & git -C $script:TemplateRepo add . | Out-Null
+        & git -C $script:TemplateRepo commit -m 'initial template' | Out-Null
+        & git -C $script:TemplateRepo remote add origin $script:TemplateRepo | Out-Null
+        & git -C $script:TemplateRepo fetch origin 2>$null | Out-Null
+        & git -C $script:TemplateRepo branch --set-upstream-to=origin/main main | Out-Null
+
         Set-Content -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'README.md') -Value @(
             '# Downstream Repo'
             ''
@@ -84,6 +101,11 @@ Describe 'Invoke-TemplateGuidanceSync' {
         & git -C $script:TargetRepo config user.name 'Test User' | Out-Null
         & git -C $script:TargetRepo add . | Out-Null
         & git -C $script:TargetRepo commit -m 'initial target' | Out-Null
+        & git -C $script:TargetRepo branch main | Out-Null
+        & git -C $script:TargetRepo remote add origin $script:TargetRepo | Out-Null
+        & git -C $script:TargetRepo fetch origin 2>$null | Out-Null
+        & git -C $script:TargetRepo branch --set-upstream-to=origin/work/sync work/sync | Out-Null
+        & git -C $script:TargetRepo branch --set-upstream-to=origin/main main | Out-Null
     }
 
     AfterEach {
@@ -151,6 +173,8 @@ Describe 'Invoke-TemplateGuidanceSync' {
         Set-Content -LiteralPath $targetDecisionPath -Value 'downstream-owned decision' -Encoding utf8
         & git -C $script:TargetRepo add docs/decisions/0001-downstream-decision.md | Out-Null
         & git -C $script:TargetRepo commit -m 'add downstream decision' | Out-Null
+        & git -C $script:TemplateRepo add docs/decisions/0001-template-decision.md | Out-Null
+        & git -C $script:TemplateRepo commit -m 'add template decision' | Out-Null
 
         & $script:InvokeSyncScript -ExtraArguments @('-Apply') | Out-Null
 
@@ -199,7 +223,7 @@ Describe 'Invoke-TemplateGuidanceSync' {
     }
 
     It 'refuses to apply on main' {
-        & git -C $script:TargetRepo switch -q -c main | Out-Null
+        & git -C $script:TargetRepo switch -q main | Out-Null
 
         { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*protected branch "main"*'
     }
@@ -208,6 +232,31 @@ Describe 'Invoke-TemplateGuidanceSync' {
         Set-Content -LiteralPath (Join-Path -Path $script:TargetRepo -ChildPath 'dirty.txt') -Value 'dirty' -Encoding utf8
 
         { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*uncommitted*changes*'
+    }
+
+    It 'defines all remote-freshness stop conditions for template and target apply operations' {
+        $content = Get-Content -Raw -LiteralPath $script:SyncScript
+
+        $content | Should -Match 'function Assert-RemoteFreshness'
+        $content | Should -Match 'origin is not configured'
+        $content | Should -Match 'no upstream'
+        $content | Should -Match 'behind its upstream'
+        $content | Should -Match 'has diverged from its upstream'
+        $content | Should -Match 'latest origin/main'
+        $content | Should -Match 'Assert-RemoteFreshness -RepoPath \$resolvedTemplatePath'
+        $content | Should -Match 'Assert-RemoteFreshness -RepoPath \$targetPath'
+    }
+
+    It 'refuses to apply when the target has no origin remote' {
+        & git -C $script:TargetRepo remote remove origin | Out-Null
+
+        { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*origin is not configured*'
+    }
+
+    It 'refuses to apply when the target has no upstream branch' {
+        & git -C $script:TargetRepo branch --unset-upstream | Out-Null
+
+        { & $script:InvokeSyncScript -ExtraArguments @('-Apply') } | Should -Throw -ExpectedMessage '*no upstream*'
     }
 
     It 'supports WhatIf without changing files' {

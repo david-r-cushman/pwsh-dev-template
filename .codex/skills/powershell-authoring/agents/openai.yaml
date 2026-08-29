@@ -1,0 +1,3 @@
+display_name: "PowerShell Authoring"
+short_description: "Author maintainable PowerShell code"
+default_prompt: "Use $powershell-authoring to implement this PowerShell change."

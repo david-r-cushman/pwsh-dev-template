@@ -61,6 +61,10 @@ Repository-specific extra section.
             & git -C $Path config user.name 'Test User' | Out-Null
             & git -C $Path add . | Out-Null
             & git -C $Path commit -m 'initial repo' | Out-Null
+            & git -C $Path branch main | Out-Null
+            & git -C $Path remote add origin $Path | Out-Null
+            & git -C $Path fetch origin | Out-Null
+            & git -C $Path branch --set-upstream-to=origin/work/readme work/readme | Out-Null
         }
 
         function Invoke-AlignmentScript {
@@ -110,6 +114,18 @@ Repository-specific extra section.
         $text | Should -Match 'Missing'
         $text | Should -Match 'Extra sections:'
         $text | Should -Match 'Extra Context'
+    }
+
+    It 'defines the required remote-freshness stop conditions before alignment can apply changes' {
+        $content = Get-Content -Raw -LiteralPath $script:ScriptPath
+
+        $content | Should -Match 'function Assert-RemoteFreshness'
+        $content | Should -Match 'origin is not configured'
+        $content | Should -Match 'no upstream'
+        $content | Should -Match 'behind its upstream'
+        $content | Should -Match 'has diverged from its upstream'
+        $content | Should -Match 'latest origin/main'
+        $content | Should -Match 'if \(\$Apply -and \$hasChanges\) \{\s*Assert-RemoteFreshness'
     }
 
     It 'realigns the README while preserving portfolio and extra sections' {
