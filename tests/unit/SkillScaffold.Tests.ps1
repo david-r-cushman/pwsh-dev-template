@@ -18,6 +18,19 @@ Describe 'Repo-local skills' {
         $script:ReadmeAlignmentScriptPath = Join-Path -Path $script:RepoRoot -ChildPath 'scripts/Invoke-ReadmeAlignment.ps1'
         $script:RuntimePolicyPath = Join-Path -Path $script:RepoRoot -ChildPath 'eng/runtime-policy.json'
         $script:AgentWorkflowsPath = Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md'
+        $script:PowerShellAuthoringSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/powershell-authoring/SKILL.md'
+        $script:PowerShellTestingSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/powershell-testing-review/SKILL.md'
+        $script:PowerShellServicesSkillPath = Join-Path -Path $script:RepoRoot -ChildPath '.codex/skills/powershell-external-services/SKILL.md'
+    }
+
+    It 'includes focused task-scoped PowerShell skills' {
+        Test-Path -LiteralPath $script:PowerShellAuthoringSkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:PowerShellTestingSkillPath -PathType Leaf | Should -BeTrue
+        Test-Path -LiteralPath $script:PowerShellServicesSkillPath -PathType Leaf | Should -BeTrue
+
+        (Get-Content -Raw -LiteralPath $script:PowerShellAuthoringSkillPath) | Should -Match 'SupportsShouldProcess'
+        (Get-Content -Raw -LiteralPath $script:PowerShellTestingSkillPath) | Should -Match 'Mock'
+        (Get-Content -Raw -LiteralPath $script:PowerShellServicesSkillPath) | Should -Match 'Microsoft Graph'
     }
 
     It 'includes the change delivery workflow skill' {

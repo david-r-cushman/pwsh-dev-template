@@ -52,7 +52,7 @@ If the downstream repo is missing `scripts/Initialize-DownstreamRepo.ps1` or `.c
 
 When the user requests sync changes, use this sequence:
 
-1. Confirm the downstream repo has a clean working tree.
+1. Complete the mandatory freshness preflight for both the template source and downstream target: require clean trees, fetch and prune their remotes, require usable tracking remotes, and verify each branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if either repository is remote-less, behind, diverged, or dirty.
 2. Create or switch to a non-main branch in the downstream repo, for example:
 
    ```powershell

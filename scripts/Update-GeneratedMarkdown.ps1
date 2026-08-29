@@ -129,15 +129,15 @@ Set-GeneratedMarkdownBlock -RelativePath 'templates/downstream/README.md' -Block
     $baseRuntimeLine
 )
 
-Set-GeneratedMarkdownBlock -RelativePath '.github/Instructions/environment-setup.md' -BlockName 'environment-runtime-stack' -Lines @(
+Set-GeneratedMarkdownBlock -RelativePath '.github/instructions/environment-setup.md' -BlockName 'environment-runtime-stack' -Lines @(
     $runtimeLine
 )
 
-Set-GeneratedMarkdownBlock -RelativePath '.github/Instructions/environment-setup.md' -BlockName 'environment-tooling-stack' -Lines @(
+Set-GeneratedMarkdownBlock -RelativePath '.github/instructions/environment-setup.md' -BlockName 'environment-tooling-stack' -Lines @(
     $toolingLine
 )
 
-Set-GeneratedMarkdownBlock -RelativePath '.github/Instructions/environment-setup.md' -BlockName 'environment-runtime-principle' -Lines @(
+Set-GeneratedMarkdownBlock -RelativePath '.github/instructions/environment-setup.md' -BlockName 'environment-runtime-principle' -Lines @(
     $controlledRuntimeLine
 )
 

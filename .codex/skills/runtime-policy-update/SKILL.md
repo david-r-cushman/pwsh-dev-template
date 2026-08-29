@@ -27,6 +27,8 @@ Before acting, identify:
 
 If the requested target versions are unclear, inspect the current policy and ask for the missing version decisions before editing.
 
+Before any update, complete the mandatory freshness preflight: require a clean tree, fetch and prune the tracking remote, and confirm this branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if the remote is unusable, the branch is behind or diverged, or the tree is dirty.
+
 ## Update Workflow
 
 Use this order for runtime or tooling changes:

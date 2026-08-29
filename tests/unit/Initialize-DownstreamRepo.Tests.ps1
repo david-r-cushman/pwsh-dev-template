@@ -22,7 +22,7 @@ Describe 'Initialize-DownstreamRepo' {
                 'AGENTS.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'AGENTS.md')
                 'README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'README.md')
                 '.github/copilot-instructions.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/copilot-instructions.md')
-                '.github/Instructions/environment-setup.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/Instructions/environment-setup.md')
+                '.github/instructions/environment-setup.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath '.github/instructions/environment-setup.md')
                 'docs/agent-workflows.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'docs/agent-workflows.md')
                 'docs/decisions/README.md' = Get-Content -Raw -LiteralPath (Join-Path -Path $script:RepoRoot -ChildPath 'docs/decisions/README.md')
                 'docs/template-evolution.md' = 'template evolution'
@@ -106,6 +106,10 @@ Describe 'Initialize-DownstreamRepo' {
             & git -C $Path config user.name 'Test User' | Out-Null
             & git -C $Path add . | Out-Null
             & git -C $Path commit -m 'initial downstream template copy' | Out-Null
+            & git -C $Path remote add origin $Path | Out-Null
+            & git -C $Path fetch origin | Out-Null
+            & git -C $Path branch --set-upstream-to=origin/main main | Out-Null
+            & git -C $Path branch --set-upstream-to=origin/main main | Out-Null
         }
 
         function Invoke-CleanupScript {
@@ -156,6 +160,18 @@ Describe 'Initialize-DownstreamRepo' {
         $text | Should -Match 'Keep:'
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'VERSION') | Should -BeTrue
         Test-Path -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'CHANGELOG.md') | Should -BeTrue
+    }
+
+    It 'defines the required remote-freshness stop conditions before cleanup can apply changes' {
+        $content = Get-Content -Raw -LiteralPath $script:ScriptPath
+
+        $content | Should -Match 'function Assert-RemoteFreshness'
+        $content | Should -Match 'origin is not configured'
+        $content | Should -Match 'no upstream'
+        $content | Should -Match 'behind its upstream'
+        $content | Should -Match 'has diverged from its upstream'
+        $content | Should -Match 'latest origin/main'
+        $content | Should -Match 'if \(\$Apply\) \{\s*Assert-RemoteFreshness'
     }
 
     It 'removes template-only files and rewrites docs in script mode' {
@@ -226,10 +242,18 @@ Describe 'Initialize-DownstreamRepo' {
         $copilot | Should -Not -Match 'runtime-policy-update'
         $copilot | Should -Not -Match 'template-version-release'
 
+        $agents = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'AGENTS.md')
+        $agents | Should -Match '## Guidance Layers'
+        $agents | Should -Match 'powershell-authoring'
+        $agents | Should -Match 'Mandatory Freshness Gate'
+        $agents | Should -Not -Match 'primary AI guidance'
+
         $workflows = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'docs/agent-workflows.md')
         $workflows | Should -Match 'Downstream repo cleanup'
         $workflows | Should -Match 'Downstream guidance sync'
         $workflows | Should -Match 'README alignment'
+        $workflows | Should -Match 'powershell-testing-review'
+        $workflows | Should -Match 'mandatory remote-freshness preflight'
         $workflows | Should -Not -Match 'Runtime policy update'
 
         $decisionsReadme = Get-Content -Raw -LiteralPath (Join-Path -Path $script:DownstreamRepo -ChildPath 'docs/decisions/README.md')

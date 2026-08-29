@@ -132,6 +132,8 @@ The downstream guidance sync process is intentionally narrow. It may update:
 
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
+- `.github/instructions/` path-specific guidance
+- `.codex/skills/` task-scoped guidance and their agent metadata
 - AI governance and operating-model documents under `docs`
 - `docs/decisions/README.md` as the ADR scaffold
 - the README template-version badge

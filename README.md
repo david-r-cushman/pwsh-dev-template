@@ -4,7 +4,7 @@
 <!-- BEGIN generated:readme-powershell-badge -->
 ![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.15.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.16.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
@@ -78,7 +78,7 @@ That same philosophy also shapes how AI assistance is used in this template and 
 5. Add scripts, functions, modules, or automation under `src`.
 6. Add project-specific Pester tests under `tests`.
 7. Copy and adapt scaffolds from `templates` for new functions, scripts, modules, and tests when they fit the work.
-8. Review the AI-assisted development guidance in `AGENTS.md` and `.github/copilot-instructions.md` before using AI-generated changes.
+8. Review `AGENTS.md`, then use the always-on Copilot instructions, matching path-specific rules, and task-scoped skills before using AI-generated changes.
 9. Run local validation:
 
    ```powershell
@@ -137,7 +137,9 @@ Core repository structure:
 - `docs/`: operating model, durable decisions, and maintainer guidance
 - `scripts/Invoke-RepoChecks.ps1`: local and CI validation entrypoint
 - `eng/runtime-policy.json`: runtime, runner, and tooling source of truth
-- `.github/copilot-instructions.md`: authoritative AI coding guidance
+- `AGENTS.md`: cross-agent entrypoint and mandatory freshness gate
+- `.github/copilot-instructions.md`: Copilot-compatible always-on guidance
+- `.github/instructions/` and `.codex/skills/`: path-specific and task-scoped guidance
 
 Template starting points include:
 

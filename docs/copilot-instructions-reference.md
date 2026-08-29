@@ -2,13 +2,13 @@
 
 This document explains how to maintain the repository-wide Copilot instructions without duplicating the canonical instruction file.
 
-## Canonical Instruction File
+## Layered Instruction Model
 
-The active repository-wide instructions live at:
+Always-on Copilot-compatible instructions live at:
 
 - `/.github/copilot-instructions.md`
 
-That file is the source of truth for Copilot generation and review behavior in repositories created from this template.
+Path-specific rules live under `/.github/instructions/`; task-specific details live in repo-local Codex skills. `AGENTS.md` remains the cross-agent entrypoint and freshness gate.
 
 Do not copy the full instruction text into this reference document. Keeping one canonical file reduces drift and makes the applied rules easier to audit.
 
@@ -54,7 +54,7 @@ Before changing the Copilot instructions:
 
 ## Additional Instruction Files
 
-Use `/.github/Instructions/` only for narrower guidance that should not live in the repository-wide instruction file.
+Use `/.github/instructions/` for narrower guidance that should not live in the repository-wide instruction file.
 
 Good candidates:
 

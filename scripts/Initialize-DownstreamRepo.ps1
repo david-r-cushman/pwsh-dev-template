@@ -74,6 +74,53 @@ function Test-GitRepository {
     return ($LASTEXITCODE -eq 0)
 }
 
+function Assert-RemoteFreshness {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$RepoPath
+    )
+
+    $status = @(& git -C $RepoPath status --porcelain)
+    if ($LASTEXITCODE -ne 0 -or $status.Count -gt 0) {
+        throw ('Refusing to apply changes because the working tree is dirty: {0}' -f $RepoPath)
+    }
+
+    $origin = & git -C $RepoPath remote get-url origin 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($origin)) {
+        throw ('Refusing to apply changes because origin is not configured: {0}' -f $RepoPath)
+    }
+
+    & git -C $RepoPath fetch --prune origin
+    if ($LASTEXITCODE -ne 0) {
+        throw ('Refusing to apply changes because origin cannot be fetched: {0}' -f $RepoPath)
+    }
+
+    $upstream = & git -C $RepoPath rev-parse --abbrev-ref '@{upstream}' 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstream)) {
+        throw ('Refusing to apply changes because the current branch has no upstream: {0}' -f $RepoPath)
+    }
+
+    $counts = @((& git -C $RepoPath rev-list --left-right --count HEAD...$upstream) -split '\s+')
+    if ($LASTEXITCODE -ne 0 -or $counts.Count -ne 2) {
+        throw ('Refusing to apply changes because upstream freshness cannot be determined: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[0] -gt 0 -and [int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch has diverged from its upstream: {0}' -f $RepoPath)
+    }
+
+    if ([int]$counts[1] -gt 0) {
+        throw ('Refusing to apply changes because the branch is behind its upstream: {0}' -f $RepoPath)
+    }
+
+    & git -C $RepoPath merge-base --is-ancestor origin/main HEAD
+    if ($LASTEXITCODE -ne 0) {
+        throw ('Refusing to apply changes because the branch does not contain the latest origin/main: {0}' -f $RepoPath)
+    }
+}
+
 function Get-FileContent {
     [CmdletBinding()]
     param(
@@ -277,40 +324,31 @@ function Get-DownstreamAgentsContent {
     return @'
 # AGENTS.md
 
-## Repository Instructions
+## Entry Point
 
-This repository's primary AI guidance is maintained in:
+Read this file before repository work. It supplies cross-agent rules; use the layered guidance below for task detail.
 
-```text
-.github/copilot-instructions.md
-```
+Precedence is: safety and security, explicit user direction, deterministic repository behavior and supported platforms, then local convention. Stop and ask when requirements are materially ambiguous. Keep changes scoped, protect secrets, and verify claims with the relevant validation.
 
-Before performing coding, review, documentation, test, automation, or repository-maintenance work, coding agents must read and follow `.github/copilot-instructions.md`.
+## Mandatory Freshness Gate
 
-That file is the authoritative instruction source for:
+Before any modification, confirm the working tree is clean, fetch and prune the tracking remote, and verify the branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if no usable tracking remote exists, the tree is dirty, the branch is behind or diverged, or it lacks the latest `origin/main`.
 
-- AI governance requirements
-- conflict resolution rules
-- code generation standards
-- complexity management guidance
-- PowerShell compatibility requirements
-- external service guidance
-- commit message conventions
-- review expectations
+## Guidance Layers
 
-If `.github/copilot-instructions.md` is missing or unavailable, stop and report that the repository guidance cannot be loaded rather than guessing.
+- `.github/copilot-instructions.md` contains Copilot-compatible always-on rules.
+- `.github/instructions/` contains path-specific Markdown and PowerShell rules.
+- `.codex/skills/` contains task-scoped detail; read the matching skill before conditional work.
 
-If guidance in this file conflicts with `.github/copilot-instructions.md`, `.github/copilot-instructions.md` is authoritative.
+## Skill Routing
 
-## Repo-Local Skills
+- `powershell-authoring`: production PowerShell functions, modules, and scripts.
+- `powershell-testing-review`: Pester, analyzer, help, review, and validation.
+- `powershell-external-services`: Graph, REST, credentials, deprecation, and integration boundaries.
+- Downstream workflows: `.codex/skills/downstream-repo-cleanup/SKILL.md`, `.codex/skills/downstream-guidance-sync/SKILL.md`, and `.codex/skills/readme-alignment/SKILL.md`.
+- Their deterministic entrypoints include `scripts/Initialize-DownstreamRepo.ps1`, `scripts/Invoke-TemplateGuidanceSync.ps1`, and `scripts/Invoke-ReadmeAlignment.ps1`.
 
-Repo-local Codex skills are stored under `.codex/skills/`.
-
-For immediate post-create normalization of this downstream repository, agents should use `.codex/skills/downstream-repo-cleanup/SKILL.md` together with `scripts/Initialize-DownstreamRepo.ps1`.
-
-For downstream AI guidance synchronization from `pwsh-dev-template`, agents should use `.codex/skills/downstream-guidance-sync/SKILL.md` together with `scripts/Invoke-TemplateGuidanceSync.ps1` instead of manually copying guidance files.
-
-For shared README alignment after cleanup, agents should use `.codex/skills/readme-alignment/SKILL.md` together with `scripts/Invoke-ReadmeAlignment.ps1`.
+If `.github/copilot-instructions.md` is unavailable, stop and report that repository guidance cannot be loaded.
 '@
 }
 
@@ -326,6 +364,8 @@ This repository includes repo-local agent workflows for downstream setup and ong
 The workflows are designed around a simple rule: agents may coordinate the work, but deterministic scripts, Pester tests, and human review remain the controls that make the work reliable.
 
 Repo-local skills live under `.codex/skills/`. They tell compatible agents how to use the repository's existing scripts, validation commands, and review expectations. They are not a substitute for reading the repository guidance, inspecting diffs, or opening reviewed pull requests.
+
+For production PowerShell, Pester or review work, and external-service integrations, use the task-scoped `powershell-authoring`, `powershell-testing-review`, and `powershell-external-services` skills respectively. Complete the mandatory remote-freshness preflight before any mutable workflow.
 
 ## Workflow Index
 
@@ -356,6 +396,7 @@ The downstream guidance sync workflow is intentionally narrow. It may update AI 
 
 function Get-DownstreamDecisionsReadmeContent {
     [CmdletBinding()]
+    [OutputType([string])]
     param()
 
     return @'
@@ -408,6 +449,9 @@ function Get-DownstreamCopilotInstruction {
 
     $updatedContent = $ExistingContent
     $updatedContent = $updatedContent -replace 'This repository is a GitHub template for PowerShell projects\.', 'This repository was created from the pwsh-dev-template GitHub template and is now treated as its own PowerShell project.'
+    $updatedContent = $updatedContent -replace ', `\.codex/skills/runtime-policy-update/SKILL\.md`', ''
+    $updatedContent = $updatedContent -replace ', `\.codex/skills/template-version-release/SKILL\.md`', ''
+    $updatedContent = $updatedContent -replace ' and `\.codex/skills/template-version-release/SKILL\.md`', ''
 
     $pattern = '(?s)## Repo-Local Skills\r?\n.*?\r?\n## PowerShell Compatibility'
     $replacement = @'
@@ -429,7 +473,7 @@ When adding or updating repo-local skills, add or update Pester coverage in `tes
 '@
 
     if (-not [regex]::IsMatch($updatedContent, $pattern)) {
-        throw 'Unable to rewrite the repo-local skills section in .github/copilot-instructions.md.'
+        return ($updatedContent.TrimEnd("`r", "`n") + "`n`nThis repository was created from the pwsh-dev-template GitHub template and is now treated as its own PowerShell project. Use `.codex/skills/downstream-repo-cleanup/SKILL.md`, `.codex/skills/downstream-guidance-sync/SKILL.md`, and `.codex/skills/readme-alignment/SKILL.md` for their matching downstream workflows.`n")
     }
 
     $updatedContent = [regex]::Replace($updatedContent, $pattern, $replacement)
@@ -576,7 +620,7 @@ if ($null -eq $readmeContent -or $readmeContent -notmatch 'PowerShell Developmen
 
 $agentsPath = Get-RepoPath -BasePath $resolvedRepoRoot -RelativePath 'AGENTS.md'
 $agentsContent = Get-FileContent -Path $agentsPath
-if ($null -eq $agentsContent -or $agentsContent -notmatch 'template version release') {
+if ($null -eq $agentsContent -or $agentsContent -notmatch 'Mandatory Freshness Gate') {
     $stopReasons.Add('AGENTS.md no longer appears to be in the expected immediate post-create state.')
 }
 
@@ -664,6 +708,9 @@ $keepPaths = @(
     '.codex/skills/downstream-guidance-sync'
     '.codex/skills/downstream-repo-cleanup'
     '.codex/skills/readme-alignment'
+    '.codex/skills/powershell-authoring'
+    '.codex/skills/powershell-testing-review'
+    '.codex/skills/powershell-external-services'
 )
 
 foreach ($path in $removePaths) {
@@ -695,6 +742,8 @@ foreach ($item in $manualFollowUp) {
 }
 
 if ($Apply) {
+    Assert-RemoteFreshness -RepoPath $resolvedRepoRoot
+
     foreach ($path in $removePaths) {
         Remove-RepoItem -Path (Get-RepoPath -BasePath $resolvedRepoRoot -RelativePath $path)
     }

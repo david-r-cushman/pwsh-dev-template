@@ -52,7 +52,7 @@ pwsh -NoProfile -File ./scripts/Invoke-ReadmeAlignment.ps1 -OutputFormat Json
 
 When the user requests alignment changes, use this sequence:
 
-1. Confirm the repo is a supported downstream repository.
+1. Confirm the repo is a supported downstream repository and complete the mandatory freshness preflight: require a clean tree, fetch and prune remotes, and verify the branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if the remote is unusable, the branch is behind or diverged, or the tree is dirty.
 2. Create or switch to a non-main branch before applying changes.
 3. Run the alignment script:
 

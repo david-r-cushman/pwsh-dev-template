@@ -44,6 +44,8 @@ pwsh -NoProfile -File ./scripts/Initialize-DownstreamRepo.ps1 -ProjectType modul
 
 Use audit output to review planned `Remove`, `Rewrite`, `Rename`, `Keep`, and `ManualFollowUp` actions before changing files.
 
+Before apply mode, require a clean tree, fetch and prune the tracking remote, and verify the branch contains the latest `origin/main`. Stop without pulling, rebasing, merging, or editing if the remote is unusable, the branch is behind or diverged, or the tree is dirty.
+
 For automation-friendly inspection, use:
 
 ```powershell

@@ -6,6 +6,12 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.16.0 - 2026-08-29
+
+### Added
+
+- Added layered task-scoped AI guidance, three focused PowerShell skills, path-specific Markdown and PowerShell instructions, mandatory remote-freshness preflight policy, downstream delivery, and ADR 0009.
+
 ### Changed
 
 - Added repository-owned Markdown validation for README workflows, wired it into scripts/Invoke-RepoChecks.ps1, and delivered the new validator through downstream cleanup and guidance sync assets.

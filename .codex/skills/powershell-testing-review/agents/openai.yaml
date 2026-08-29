@@ -1,0 +1,3 @@
+display_name: "PowerShell Testing And Review"
+short_description: "Test and review PowerShell changes"
+default_prompt: "Use $powershell-testing-review to validate this PowerShell change."
