@@ -144,13 +144,15 @@ function Test-PolicyRegexValue {
 }
 
 Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^FROM\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.runtime.dockerImage -Description 'Dev container base image'
+Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+POWERSHELL_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.runtime.powershellVersion -Description 'Dev container PowerShell release branch'
 Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PESTER_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.pesterVersion -Description 'Dev container Pester version'
 Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PSSCRIPTANALYZER_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psScriptAnalyzerVersion -Description 'Dev container PSScriptAnalyzer version'
 Test-PolicyRegexValue -RelativePath '.devcontainer/Dockerfile' -Pattern '^ARG\s+PSREADLINE_VERSION=(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psReadLineVersion -Description 'Dev container PSReadLine version'
-Test-PolicyText -RelativePath '.devcontainer/Dockerfile' -ExpectedText ('PowerShell {0} Template Environment Loaded' -f $policy.runtime.powershellVersion) -Description 'Dev container profile banner'
-Test-PolicyText -RelativePath '.devcontainer/devcontainer.json' -ExpectedText ('PowerShell {0} Template' -f $policy.runtime.powershellVersion) -Description 'Dev container display name'
+Test-PolicyText -RelativePath '.devcontainer/Dockerfile' -ExpectedText '\$(\$PSVersionTable.PSVersion)' -Description 'Dev container dynamic profile banner'
+Test-PolicyText -RelativePath '.devcontainer/devcontainer.json' -ExpectedText 'PowerShell Core Development Environment' -Description 'Dev container display name'
 
 Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*runs-on:\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.githubActions.runnerImage -Description 'GitHub Actions runner image'
+Test-PolicyRegexValue -RelativePath '.github/workflows/devcontainer-validation.yml' -Pattern '^\s*runs-on:\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.githubActions.runnerImage -Description 'Dev container validation runner image'
 Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*Install-Module\s+Pester\s+.*?-RequiredVersion\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.pesterVersion -Description 'CI Pester version'
 Test-PolicyRegexValue -RelativePath '.github/workflows/ci.yml' -Pattern '^\s*Install-Module\s+PSScriptAnalyzer\s+.*?-RequiredVersion\s+(?<Value>\S+)\s*$' -ExpectedValue $policy.tooling.psScriptAnalyzerVersion -Description 'CI PSScriptAnalyzer version'
 

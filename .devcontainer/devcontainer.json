@@ -1,5 +1,5 @@
 {
-    "name": "PowerShell 7.4 Template",
+    "name": "PowerShell Core Development Environment",
     "build": {
         "dockerfile": "Dockerfile"
     },

@@ -1,0 +1,50 @@
+name: Dev Container Validation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  devcontainer:
+    name: Build and smoke test Dev Container
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build and smoke test Dev Container
+        uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            pwsh -NoLogo -NoProfile -Command '
+              $ErrorActionPreference = "Stop"
+              $requiredModules = @{
+                Pester = "6.0.0"
+                PSScriptAnalyzer = "1.25.0"
+                PSReadLine = "2.4.5"
+              }
+
+              if ($PSVersionTable.PSVersion.Major -ne 7 -or $PSVersionTable.PSVersion.Minor -ne 6) {
+                throw "Expected PowerShell 7.6.x; detected $($PSVersionTable.PSVersion)."
+              }
+
+              foreach ($module in $requiredModules.GetEnumerator()) {
+                Import-Module -Name $module.Key -RequiredVersion $module.Value -Force
+                if ((Get-Module -Name $module.Key).Version.ToString() -ne $module.Value) {
+                  throw "Expected $($module.Key) $($module.Value)."
+                }
+              }
+
+              az version | Out-Null
+              git --version | Out-Null
+              $profilePath = $PROFILE.AllUsersAllHosts
+              if (-not (Test-Path -LiteralPath $profilePath)) {
+                throw "All-users PowerShell profile not found: $profilePath"
+              }
+
+              . $profilePath
+            '

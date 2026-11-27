@@ -6,7 +6,7 @@
     CompanyName = 'Template Company'
     Copyright = '(c) Template Author. All rights reserved.'
     Description = 'Module scaffold for repositories created from this template. Rename and update metadata.'
-    PowerShellVersion = '7.4'
+    PowerShellVersion = '7.6'
 
     FunctionsToExport = @()
     CmdletsToExport = @()

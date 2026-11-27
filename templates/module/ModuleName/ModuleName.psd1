@@ -6,7 +6,7 @@
     CompanyName = 'Template Company'
     Copyright = '(c) Template Author. All rights reserved.'
     Description = 'Template module manifest. Replace placeholder values.'
-    PowerShellVersion = '7.4'
+    PowerShellVersion = '7.6'
 
     FunctionsToExport = @()
     CmdletsToExport = @()

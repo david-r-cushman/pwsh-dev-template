@@ -1,7 +1,7 @@
 # {{REPOSITORY_NAME}}
 
 <!-- BEGIN generated:readme-powershell-badge -->
-![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
+![PowerShell 7.6](https://img.shields.io/badge/PowerShell-7.6-blue)
 <!-- END generated:readme-powershell-badge -->
 {{TEMPLATE_VERSION_BADGE}}
 
@@ -15,7 +15,7 @@ Quick navigation:
 - [Repository Structure](#repository-structure)
 
 <!-- BEGIN generated:readme-runtime-focus -->
-- PowerShell 7.4 development
+- PowerShell 7.6 development
 <!-- END generated:readme-runtime-focus -->
 
 ## Portfolio Context
@@ -25,7 +25,7 @@ This repository is part of a PowerShell portfolio built from `pwsh-dev-template`
 ## Engineering Principles in Practice
 
 <!-- BEGIN generated:readme-runtime-philosophy -->
-- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
+- **Deterministic Base Runtime:** The development container is built from a pinned .NET SDK image that provides PowerShell 7.6 on Ubuntu 24.04 to reduce environmental drift
 <!-- END generated:readme-runtime-philosophy -->
 
 - **Deterministic Workflows:** Prefer repeatable scripts, explicit validation, and reviewable changes over one-off manual steps
@@ -46,7 +46,7 @@ For the deeper operating model behind that approach, see [`docs/powershell-ai-op
 ## Runtime And Environment
 
 <!-- BEGIN generated:readme-runtime-stack -->
-- **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
+- **Runtime:** PowerShell 7.6.x (LTS) on Ubuntu 24.04
 <!-- END generated:readme-runtime-stack -->
 
 - **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces
