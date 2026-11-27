@@ -116,7 +116,7 @@ For focused troubleshooting, run the version policy check directly:
 pwsh -NoProfile -File ./scripts/Test-VersionPolicy.ps1
 ```
 
-The validation intentionally focuses on the development environment, CI runner, and pinned tooling. PowerShell module compatibility metadata, such as `PowerShellVersion` in module manifests, remains a compatibility decision for each project and is not automatically changed by this workflow.
+The validation intentionally focuses on the development environment, CI runner, and pinned tooling. When the template's declared PowerShell baseline changes, its source and module-manifest scaffolds change with it; downstream projects remain responsible for their own compatibility decisions.
 
 ## What This Means For Downstream Repositories
 

@@ -2,16 +2,16 @@
 
 [![CI](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml/badge.svg)](https://github.com/david-r-cushman/pwsh-dev-template/actions/workflows/ci.yml)
 <!-- BEGIN generated:readme-powershell-badge -->
-![PowerShell 7.4](https://img.shields.io/badge/PowerShell-7.4-blue)
+![PowerShell 7.6](https://img.shields.io/badge/PowerShell-7.6-blue)
 <!-- END generated:readme-powershell-badge -->
-![Template Version](https://img.shields.io/badge/template-0.16.0-blue)
+![Template Version](https://img.shields.io/badge/template-0.17.0-blue)
 
 A repeatable PowerShell Core development template for building scripts, modules, and automation projects.
 
 This template provides a standardized starting point for PowerShell development with:
 
 <!-- BEGIN generated:readme-runtime-focus -->
-- PowerShell 7.4 development
+- PowerShell 7.6 development
 <!-- END generated:readme-runtime-focus -->
 
 - Pester testing, PSScriptAnalyzer validation, and README Markdown validation
@@ -53,7 +53,7 @@ Downstream portfolio repositories provide the project-specific implementation an
 This template reflects an engineering mindset shaped by the understanding that changes have consequences. Good engineering does not assume that failure can always be prevented. It seeks to make behavior predictable, reduce unnecessary risk, detect failure, and provide a practical path to recovery.
 
 <!-- BEGIN generated:readme-runtime-philosophy -->
-- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell 7.4 on Ubuntu 22.04 base image to reduce environmental drift
+- **Deterministic Base Runtime:** The development container is built from a pinned .NET SDK image that provides PowerShell 7.6 on Ubuntu 24.04 to reduce environmental drift
 <!-- END generated:readme-runtime-philosophy -->
 
 - **Controlled Tooling Baseline:** Core development tools are installed automatically in the container so that new repositories begin from a consistent baseline, even though not every tool is currently version-pinned
@@ -94,7 +94,7 @@ This template gives new PowerShell repositories a ready-to-use development basel
 By using Docker-based development environments, third-party module execution, cloud CLI operations, and script testing can be performed inside a Linux-based workspace instead of directly on the host operating system.
 
 <!-- BEGIN generated:readme-runtime-stack -->
-- **Runtime:** PowerShell 7.4.x (LTS) on Ubuntu 22.04
+- **Runtime:** PowerShell 7.6.x (LTS) on Ubuntu 24.04
 <!-- END generated:readme-runtime-stack -->
 
 - **Development Modes:** Local VS Code, Docker Dev Containers, and GitHub Codespaces

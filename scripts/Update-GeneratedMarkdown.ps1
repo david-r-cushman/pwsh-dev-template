@@ -80,8 +80,8 @@ function Set-GeneratedMarkdownBlock {
 
 $runtimeLine = '- **Runtime:** PowerShell {0} (LTS) on Ubuntu {1}' -f $policy.runtime.powershellVersionLabel, $policy.runtime.ubuntuVersion
 $toolingLine = '- **Tooling:** Azure CLI, Pester {0}, PSScriptAnalyzer {1}, and PSReadLine {2}' -f $policy.tooling.pesterVersion, $policy.tooling.psScriptAnalyzerVersion, $policy.tooling.psReadLineVersion
-$baseRuntimeLine = '- **Deterministic Base Runtime:** The development container is built from a pinned PowerShell {0} on Ubuntu {1} base image to reduce environmental drift' -f $policy.runtime.powershellVersion, $policy.runtime.ubuntuVersion
-$controlledRuntimeLine = '- **Controlled Base Runtime:** The container starts from a pinned PowerShell {0} on Ubuntu {1} base image' -f $policy.runtime.powershellVersion, $policy.runtime.ubuntuVersion
+$baseRuntimeLine = '- **Deterministic Base Runtime:** The development container is built from a pinned .NET SDK image that provides PowerShell {0} on Ubuntu {1} to reduce environmental drift' -f $policy.runtime.powershellVersion, $policy.runtime.ubuntuVersion
+$controlledRuntimeLine = '- **Controlled Base Runtime:** The container starts from a pinned .NET SDK image that provides PowerShell {0} on Ubuntu {1}' -f $policy.runtime.powershellVersion, $policy.runtime.ubuntuVersion
 
 Set-GeneratedMarkdownBlock -RelativePath 'README.md' -BlockName 'readme-powershell-badge' -Lines @(
     '![PowerShell {0}](https://img.shields.io/badge/PowerShell-{0}-blue)' -f $policy.runtime.powershellVersion

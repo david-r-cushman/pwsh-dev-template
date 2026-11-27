@@ -1,12 +1,12 @@
 {
   "runtime": {
-    "powershellVersion": "7.4",
-    "powershellVersionLabel": "7.4.x",
-    "ubuntuVersion": "22.04",
-    "dockerImage": "mcr.microsoft.com/powershell:lts-7.4-ubuntu-22.04"
+    "powershellVersion": "7.6",
+    "powershellVersionLabel": "7.6.x",
+    "ubuntuVersion": "24.04",
+    "dockerImage": "mcr.microsoft.com/dotnet/sdk:10.0-noble@sha256:8c6edfb26c85153f236d26efebd9ad349aec403583f343f201ee67838b23658d"
   },
   "githubActions": {
-    "runnerImage": "ubuntu-22.04"
+    "runnerImage": "ubuntu-24.04"
   },
   "tooling": {
     "pesterVersion": "6.0.0",

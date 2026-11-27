@@ -6,6 +6,18 @@ This project uses Semantic Versioning for the *template itself* (structure, tool
 
 ## Unreleased
 
+## 0.17.0 - 2026-11-27
+
+### Added
+
+- Added a dedicated GitHub Actions validation workflow that builds the complete Dev Container configuration and smoke-tests its essential tooling.
+- Added an ADR for the maintained .NET SDK-based Dev Container runtime and its dependency-governance boundary.
+
+### Changed
+
+- Migrated the PowerShell development baseline, module scaffolds, and CI runner to PowerShell 7.6 LTS, the pinned .NET 10 SDK Ubuntu 24.04 image, and GitHub Actions Ubuntu 24.04.
+- Added build-time enforcement of the PowerShell 7.6 release branch and a dynamic interactive profile banner.
+
 ### Changed
 
 - Reframed the README engineering-principles introduction around respect for consequences and recoverable engineering.
